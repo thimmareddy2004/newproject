@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Contact / Book</title>
+
+  <!-- Tailwind CDN for styling -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    /* small helpers to mimic the Framer Motion animations and toasts */
+    .rotate-slow { animation: rotateSlow 30s linear infinite; }
+    @keyframes rotateSlow { from { transform: rotate(0); } to { transform: rotate(360deg); } }
+
+    .rotate-slow-rev { animation: rotateSlowRev 25s linear infinite; }
+    @keyframes rotateSlowRev { from { transform: rotate(360deg); } to { transform: rotate(0deg); } }
+
+    .floating { animation: floatY 3s ease-in-out infinite; }
+    @keyframes floatY { 0% { transform: translateY(0); } 50% { transform: translateY(-8px); } 100% { transform: translateY(0); } }
+
+    /* toast */
+    #toast {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      z-index: 9999;
+      display: none;
+      min-width: 220px;
+      max-width: 360px;
+    }
+    #toast .toast-inner {
+      padding: .75rem 1rem;
+      border-radius: .5rem;
+      box-shadow: 0 10px 30px rgba(2,6,23,0.6);
+      color: #0f172a;
+    }
+    .toast-success { background: linear-gradient(90deg,#bbf7d0,#86efac); }
+    .toast-error   { background: linear-gradient(90deg,#fecaca,#fda4af); }
+
+    /* small polyfill for backdrop blur appearance */
+    .backdrop-blur-sm { backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }
+  </style>
+</head>
+<body class="bg-gray-900 text-white antialiased">
+
+  <section class="py-12 md:py-20 bg-gradient-to-br from-gray-900 via-black to-gray-900 relative overflow-hidden">
+    <!-- Animated Background (static shapes + rotation) -->
+    <div class="absolute inset-0 opacity-5 pointer-events-none">
+      <div class="absolute top-10 md:top-20 left-10 md:left-20 w-32 h-32 md:w-64 md:h-64 border border-yellow-400 rounded-full rotate-slow"></div>
+      <div class="absolute bottom-10 md:bottom-20 right-10 md:right-20 w-24 h-24 md:w-48 md:h-48 border border-blue-400 rounded-full rotate-slow-rev"></div>
+    </div>
+
+    <div class="container mx-auto px-4 relative z-10">
+      <div class="text-center mb-12 md:mb-16">
+        <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 md:mb-6"
+            style="text-shadow: 0 0 30px rgba(251,191,36,0.5);">
+          Book From <span class="text-yellow-400">Us</span>
+        </h2>
+        <p class="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto">
+          Ready to start your journey? Contact us for bookings, inquiries, or custom travel solutions
+        </p>
+      </div>
+
+      <div class="grid lg:grid-cols-2 gap-8 md:gap-12">
+        <!-- Contact Info Column -->
+        <div class="space-y-6 md:space-y-8">
+          <div class="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-6 md:p-8 shadow-2xl border border-gray-700">
+            <h3 class="text-xl md:text-2xl font-bold text-white mb-4 md:mb-6">Contact Information</h3>
+
+            <div class="space-y-4 md:space-y-6">
+              <!-- Phone -->
+              <div class="flex items-start space-x-4">
+                <div class="bg-gradient-to-r from-yellow-400 to-yellow-500 p-2 md:p-3 rounded-full shadow-lg transform transition-transform">
+                  <!-- Phone SVG -->
+                  <svg class="w-5 h-5 md:w-6 md:h-6 text-gray-900" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M2 6.5C2 5.119 3.12 4 4.5 4h15c1.38 0 2.5 1.119 2.5 2.5V18.5C22 19.881 20.88 21 19.5 21h-15C3.12 21 2 19.881 2 18.5V6.5z" stroke-width="1.2"></path>
+                    <path d="M8 9h8M8 13h8" stroke-width="1.6" stroke-linecap="round"></path>
+                  </svg>
+                </div>
+                <div>
+                  <h4 class="text-white font-semibold mb-1 text-sm md:text-base">Phone</h4>
+                  <p class="text-gray-300 text-sm md:text-base">+91-7013968101</p>
+                  <p class="text-xs md:text-sm text-gray-400">Available 24/7</p>
+                </div>
+              </div>
+
+              <!-- Email -->
+              <div class="flex items-start space-x-4">
+                <div class="bg-gradient-to-r from-yellow-400 to-yellow-500 p-2 md:p-3 rounded-full shadow-lg">
+                  <!-- Mail SVG -->
+                  <svg class="w-5 h-5 md:w-6 md:h-6 text-gray-900" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M3 8.5v7A2.5 2.5 0 0 0 5.5 18h13a2.5 2.5 0 0 0 2.5-2.5v-7" stroke-width="1.4"></path>
+                    <path d="M21 8.5l-9 6-9-6" stroke-width="1.4"></path>
+                  </svg>
+                </div>
+                <div>
+                  <h4 class="text-white font-semibold mb-1 text-sm md:text-base">Email</h4>
+                  <p class="text-gray-300 text-sm md:text-base">gthimmareddyg0@gmail.com</p>
+                  <p class="text-xs md:text-sm text-gray-400">We reply within 2 hours</p>
+                </div>
+              </div>
+
+              <!-- Address -->
+              <div class="flex items-start space-x-4">
+                <div class="bg-gradient-to-r from-yellow-400 to-yellow-500 p-2 md:p-3 rounded-full shadow-lg">
+                  <!-- MapPin SVG -->
+                  <svg class="w-5 h-5 md:w-6 md:h-6 text-gray-900" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M12 21s6-4.686 6-10a6 6 0 0 0-12 0c0 5.314 6 10 6 10z" stroke-width="1.4"></path>
+                    <circle cx="12" cy="11" r="2" stroke-width="1.4"></circle>
+                  </svg>
+                </div>
+                <div>
+                  <h4 class="text-white font-semibold mb-1 text-sm md:text-base">Address</h4>
+                  <p class="text-gray-300 text-sm md:text-base">
+                    Electronic City, Bengaluru
+                  </p>
+                </div>
+              </div>
+
+              <!-- Owner -->
+              <div class="flex items-start space-x-4">
+                <div class="bg-gradient-to-r from-yellow-400 to-yellow-500 p-2 md:p-3 rounded-full shadow-lg">
+                  <!-- User SVG -->
+                  <svg class="w-5 h-5 md:w-6 md:h-6 text-gray-900" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" stroke-width="1.4"></path>
+                    <path d="M4 20a8 8 0 0 1 16 0" stroke-width="1.4"></path>
+                  </svg>
+                </div>
+                <div>
+                  <h4 class="text-white font-semibold mb-1 text-sm md:text-base">Owner</h4>
+                  <p class="text-gray-300 text-sm md:text-base">Mr. Thimma Reddy AI ENTHUSIASTIC</p>
+                  <p class="text-xs md:text-sm text-gray-400">AI ENTHUSIASTIC</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Actions -->
+          <div class="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-6 md:p-8 shadow-2xl border border-gray-700">
+            <h3 class="text-xl md:text-2xl font-bold text-white mb-4 md:mb-6">Quick Actions</h3>
+            <div class="space-y-4">
+              <a href="https://wa.me/917013968101" target="_blank" rel="noopener noreferrer"
+                 class="flex items-center justify-center space-x-2 bg-gradient-to-r from-green-600 to-green-700 text-white py-3 px-4 md:px-6 rounded-lg hover:from-green-500 hover:to-green-600 transition-all duration-300 shadow-lg text-sm md:text-base">
+                <!-- MessageSquare SVG -->
+                <svg class="w-4 h-4 md:w-5 md:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke-width="1.4"></path>
+                </svg>
+                <span>Chat on WhatsApp</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Contact Form Column -->
+        <div class="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-6 md:p-8 shadow-2xl border border-gray-700">
+          <h3 class="text-xl md:text-2xl font-bold text-white mb-4 md:mb-6">Send us a Message</h3>
+
+          <form id="contactForm" class="space-y-4 md:space-y-6" autocomplete="off">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-white font-medium mb-2 text-sm md:text-base">Name *</label>
+                <input id="name" name="name" type="text" required
+                       class="w-full bg-gray-700 text-white px-3 md:px-4 py-2 md:py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 border border-gray-600 text-sm md:text-base"
+                       placeholder="Your full name" />
+                <p id="err-name" class="text-red-400 text-xs mt-1 hidden"></p>
+              </div>
+
+              <div>
+                <label class="block text-white font-medium mb-2 text-sm md:text-base">Phone *</label>
+                <input id="phone" name="phone" type="tel" required
+                       class="w-full bg-gray-700 text-white px-3 md:px-4 py-2 md:py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 border border-gray-600 text-sm md:text-base"
+                       placeholder="Your phone number" />
+                <p id="err-phone" class="text-red-400 text-xs mt-1 hidden"></p>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-white font-medium mb-2 text-sm md:text-base">Email</label>
+              <input id="email" name="email" type="email"
+                     class="w-full bg-gray-700 text-white px-3 md:px-4 py-2 md:py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 border border-gray-600 text-sm md:text-base"
+                     placeholder="Your email address" />
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-white font-medium mb-2 text-sm md:text-base">Service Type *</label>
+                <select id="service" name="service" required
+                        class="w-full bg-gray-700 text-white px-3 md:px-4 py-2 md:py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 border border-gray-600 text-sm md:text-base">
+                  <option value="">Select service</option>
+                  <option value="Taxi Rental">Taxi Rental</option>
+                  <option value="Tour Package">Tour Package</option>
+                  <option value="Airport Transfer">Airport Transfer</option>
+                  <option value="Outstation Trip">Outstation Trip</option>
+                </select>
+                <p id="err-service" class="text-red-400 text-xs mt-1 hidden"></p>
+              </div>
+
+              <div>
+                <label class="block text-white font-medium mb-2 text-sm md:text-base">Destination</label>
+                <input id="destination" name="destination" type="text"
+                       class="w-full bg-gray-700 text-white px-3 md:px-4 py-2 md:py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 border border-gray-600 text-sm md:text-base"
+                       placeholder="Where do you want to go?" />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-white font-medium mb-2 text-sm md:text-base flex items-center">
+                  <!-- Calendar icon --> 
+                  <svg class="w-4 h-4 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="5" width="18" height="16" rx="2" stroke-width="1.4"></rect><path d="M16 3v4M8 3v4" stroke-width="1.4"></path></svg>
+                  Preferred Date
+                </label>
+                <input id="date" name="date" type="date"
+                       class="w-full bg-gray-700 text-white px-3 md:px-4 py-2 md:py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 border border-gray-600 text-sm md:text-base"
+                       min="" />
+              </div>
+
+              <div>
+                <label class="block text-white font-medium mb-2 text-sm md:text-base flex items-center">
+                  <!-- Timer icon -->
+                  <svg class="w-4 h-4 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 8v4l3 3" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></path><path d="M21 12A9 9 0 1 1 3 12a9 9 0 0 1 18 0z" stroke-width="1.4"></path></svg>
+                  Preferred Time
+                </label>
+                <input id="time" name="time" type="time"
+                       class="w-full bg-gray-700 text-white px-3 md:px-4 py-2 md:py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 border border-gray-600 text-sm md:text-base" />
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-white font-medium mb-2 text-sm md:text-base">Message</label>
+              <textarea id="message" name="message" rows="4"
+                        class="w-full bg-gray-700 text-white px-3 md:px-4 py-2 md:py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 border border-gray-600 text-sm md:text-base"
+                        placeholder="Tell us about your travel requirements..."></textarea>
+            </div>
+
+            <button id="submitBtn" type="submit"
+                    class="w-full bg-gradient-to-r from-yellow-400 to-yellow-500 text-gray-900 py-2 md:py-3 rounded-lg font-semibold hover:from-yellow-300 hover:to-yellow-400 transition-all duration-300 shadow-lg text-sm md:text-base">
+              Book Now
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Simple toast container -->
+  <div id="toast"><div class="toast-inner"></div></div>
+
+  <script>
+    // set min date for date input to today
+    (function() {
+      const dateInput = document.getElementById('date');
+      const today = new Date().toISOString().split('T')[0];
+      if (dateInput) dateInput.min = today;
+    })();
+
+    // toast helper
+    function showToast(message, type = 'success') {
+      const toast = document.getElementById('toast');
+      const inner = toast.querySelector('.toast-inner');
+      inner.textContent = message;
+      inner.className = 'toast-inner ' + (type === 'error' ? 'toast-error' : 'toast-success');
+      toast.style.display = 'block';
+      setTimeout(() => { toast.style.opacity = '1'; }, 10);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        setTimeout(() => { toast.style.display = 'none'; }, 400);
+      }, 3500);
+    }
+
+    // form handling
+    document.getElementById('contactForm').addEventListener('submit', function(ev) {
+      ev.preventDefault();
+      const nameEl = document.getElementById('name');
+      const phoneEl = document.getElementById('phone');
+      const emailEl = document.getElementById('email');
+      const serviceEl = document.getElementById('service');
+      const destinationEl = document.getElementById('destination');
+      const dateEl = document.getElementById('date');
+      const timeEl = document.getElementById('time');
+      const messageEl = document.getElementById('message');
+
+      // clear errors
+      function hideErr(id) { const el = document.getElementById(id); if (el) { el.classList.add('hidden'); el.textContent = ''; } }
+      function showErr(id, text) { const el = document.getElementById(id); if (el) { el.classList.remove('hidden'); el.textContent = text; } }
+      hideErr('err-name'); hideErr('err-phone'); hideErr('err-service');
+
+      // simple validation
+      let ok = true;
+      if (!nameEl.value.trim()) { showErr('err-name', 'Name is required'); ok = false; }
+      if (!phoneEl.value.trim()) { showErr('err-phone', 'Phone is required'); ok = false; }
+      if (!serviceEl.value.trim()) { showErr('err-service', 'Please choose a service'); ok = false; }
+
+      if (!ok) {
+        showToast('Please fix the errors and try again.', 'error');
+        return;
+      }
+
+      // disable button while "sending"
+      const submitBtn = document.getElementById('submitBtn');
+      submitBtn.disabled = true;
+      submitBtn.classList.add('opacity-60', 'cursor-not-allowed');
+      submitBtn.textContent = 'Sending...';
+
+      // build message
+      const msgLines = [
+        'New Booking Request:',
+        'Name: ' + nameEl.value.trim(),
+        'Phone: ' + phoneEl.value.trim(),
+        'Email: ' + (emailEl.value.trim() || 'N/A'),
+        'Service: ' + serviceEl.value.trim(),
+        'Destination: ' + (destinationEl.value.trim() || 'N/A'),
+        'Date: ' + (dateEl.value || 'N/A'),
+        'Time: ' + (timeEl.value || 'N/A'),
+        'Message: ' + (messageEl.value.trim() || 'N/A')
+      ];
+      const message = msgLines.join('\\n');
+
+      // open WhatsApp
+  const phoneNumber = '917013968101'; // updated to new number (country code +91, no plus for wa.me)
+      const waUrl = 'https://wa.me/' + phoneNumber + '?text=' + encodeURIComponent(message);
+
+      // small simulated API delay then open whatsapp
+      setTimeout(() => {
+        window.open(waUrl, '_blank');
+
+        showToast('Booking request sent successfully! We will contact you soon.', 'success');
+
+        // reset form
+        document.getElementById('contactForm').reset();
+        submitBtn.disabled = false;
+        submitBtn.classList.remove('opacity-60', 'cursor-not-allowed');
+        submitBtn.textContent = 'Book Now';
+      }, 900);
+    });
+  </script>
+</body>
+</html>

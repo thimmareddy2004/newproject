@@ -1,0 +1,540 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Transport & Route — STEP OUT</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <style>
+    :root{
+      --accent:#0b74de; --muted:#6b7280; --card:#fff;
+    }
+    html,body { height:100%; margin:0; font-family:Inter, Roboto, Arial; background:#f4f7fb; }
+    .wrap { display:flex; gap:16px; height:100vh; padding:18px; box-sizing:border-box; }
+    .sidebar { width:380px; background:var(--card); border-radius:12px; padding:16px; box-shadow:0 12px 30px rgba(11,35,60,0.06); overflow:auto; }
+    #map { flex:1; border-radius:12px; box-shadow:0 12px 30px rgba(11,35,60,0.06); overflow:hidden; }
+    h3 { margin:6px 0 12px 0; }
+    .row { display:flex; gap:8px; align-items:center; }
+    .btn { padding:8px 10px; border-radius:8px; border:none; cursor:pointer; background:#fff; box-shadow:0 6px 14px rgba(11,35,60,0.04); }
+    .btn.active { background:var(--accent); color:#fff; box-shadow:0 10px 28px rgba(11,116,222,0.12); }
+    .input, input, select { padding:8px 10px; border-radius:8px; border:1px solid #e6eef9; width:100%; box-sizing:border-box; }
+    label.small { font-size:13px; color:var(--muted) }
+    .section { margin-bottom:12px; }
+    .muted { color:var(--muted); font-size:13px; }
+    .poi-controls { display:flex; gap:8px; flex-wrap:wrap; margin-top:8px; }
+    .pill { padding:6px 10px; border-radius:999px; background:#f1f7ff; color:var(--accent); font-weight:700; cursor:pointer; border:1px solid rgba(11,116,222,0.06)}
+    .pill.active { background:var(--accent); color:#fff; }
+    .small-muted { font-size:12px; color:#556; margin-top:8px }
+    .calc-row { display:flex; gap:8px; align-items:center; }
+    .calc-row .input { width:auto; flex:1; }
+    .result { margin-top:10px; padding:10px; border-radius:8px; background:#fbfdff; border:1px solid #e7f2ff; font-weight:700; color:#0b74de; }
+    #poiToggle { margin-left:6px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <aside class="sidebar" aria-label="Transport controls">
+      <h3>Transport — choose mode</h3>
+
+      <div class="row section" role="tablist" aria-label="transport-modes">
+        <button id="transportBtn" class="btn">Transport ⌄</button>
+        <!-- quick-show of chosen transport below -->
+        <div id="modeDisplay" style="margin-left:8px" class="muted">Mode: <strong>Car</strong></div>
+      </div>
+
+      <div class="section">
+        <label class="small">Start</label>
+        <input id="startInput" class="input" placeholder="Search start (address or place)"/>
+        <label class="small" style="margin-top:8px">Destination</label>
+        <input id="endInput" class="input" placeholder="Search destination"/>
+        <div class="muted" style="margin-top:8px">Tip: click map to set Start/Destination too.</div>
+      </div>
+
+      <div class="section">
+        <div class="row">
+          <button id="routeBtn" class="btn" style="background:var(--accent);color:#fff">Get Route</button>
+          <button id="clearBtn" class="btn">Clear</button>
+        </div>
+        <div id="routeSummary" class="muted" style="margin-top:8px"></div>
+      </div>
+
+      <div class="section">
+        <h3>Fuel calculator</h3>
+        <label class="small">Vehicle</label>
+        <div style="display:flex;gap:8px;margin-top:6px">
+          <button id="carBtn" class="pill active">Car</button>
+          <button id="bikeBtn" class="pill">Bike</button>
+        </div>
+
+        <div class="calc-row" style="margin-top:10px">
+          <div style="flex:1">
+            <label class="small">Fuel efficiency (km / litre)</label>
+            <input id="efficiency" class="input" value="15" />
+          </div>
+          <div style="width:120px">
+            <label class="small">Fuel ₹/L</label>
+            <input id="fuelPrice" class="input" value="100" />
+          </div>
+        </div>
+
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <div style="flex:1">
+            <label class="small">Passengers</label>
+            <input id="passengers" type="number" class="input" value="1" min="1" />
+          </div>
+          <div style="width:160px">
+            <label class="small">Custom distance (km)</label>
+            <input id="customDistance" class="input" placeholder="leave empty to use route" />
+          </div>
+        </div>
+
+        <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
+          <input id="perPersonToggle" type="checkbox" /> <label class="small" style="margin-left:6px">Show per-person cost</label>
+        </div>
+
+        <div style="margin-top:10px">
+          <button id="calcFuel" class="btn">Calculate fuel cost</button>
+          <div id="fuelResult" class="result" style="display:none"></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h3>POIs near route</h3>
+        <div class="poi-controls">
+          <button class="pill active poi-btn" data-tag='["amenity"="restaurant"]'>Restaurants</button>
+          <button class="pill poi-btn" data-tag='["amenity"="fuel"]'>Fuel</button>
+          <button class="pill poi-btn" data-tag='["tourism"="hotel"]'>Hotels</button>
+        </div>
+        <div style="margin-top:8px">
+          <label class="small">Radius (m)</label>
+          <input id="poiRadius" type="range" min="200" max="3000" step="100" value="800" style="width:100%" />
+          <div class="small-muted">Radius: <span id="radiusVal">800</span> m — toggle POI buttons to show/hide</div>
+        </div>
+
+        <div style="margin-top:8px">
+          <button id="searchPoi" class="btn">Search POIs along route</button>
+          <input id="poiCacheToggle" type="checkbox" checked style="margin-left:8px"/><label class="small" style="margin-left:6px">Use cache (localStorage)</label>
+        </div>
+
+        <div style="margin-top:8px" class="small-muted">
+          Tip: Overpass queries are rate-limited. Caching avoids repeated calls.
+        </div>
+      </div>
+
+      <div class="section">
+        <h3>Advanced</h3>
+        <div class="muted">Show route buffer preview and POI markers. Click POI popup to view tags (opening_hours when available).</div>
+      </div>
+    </aside>
+
+    <div id="map" aria-label="Map" role="application"></div>
+  </div>
+
+  <!-- Leaflet -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <script>
+  // ----------------- Config & state -----------------
+  const GEOCODE_ENDPOINT = "/geocode";  // server proxy
+  const ROUTE_ENDPOINT = "/route";      // server ORS proxy
+  const OVERPASS_ENDPOINT = "https://overpass-api.de/api/interpreter";
+  const map = L.map('map').setView([13.0,76.0], 7);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom:19, attribution:'© OpenStreetMap' }).addTo(map);
+
+  let startMarker = null, endMarker = null;
+  let routeLayer = null, bufferLayer = null;
+  let poiLayers = L.layerGroup().addTo(map);
+  let currentMode = "driving-car"; // ORS profiles: driving-car | cycling-regular | foot-walking
+  let activePoiTags = new Set(['["amenity"="restaurant"]']); // strings as used in buttons
+
+  // defaults for fuel efficiencies (km per litre)
+  const DEFAULT_EFF = { "driving-car": 15, "cycling-regular": 35, "foot-walking": 0 };
+
+  // ----------------- UI hooks -----------------
+  const transportBtn = document.getElementById('transportBtn');
+  const modeDisplay = document.getElementById('modeDisplay');
+  const routeBtn = document.getElementById('routeBtn');
+  const clearBtn = document.getElementById('clearBtn');
+  const startInput = document.getElementById('startInput');
+  const endInput = document.getElementById('endInput');
+  const routeSummary = document.getElementById('routeSummary');
+
+  const carBtn = document.getElementById('carBtn'), bikeBtn = document.getElementById('bikeBtn');
+  const efficiencyEl = document.getElementById('efficiency'), fuelPriceEl = document.getElementById('fuelPrice');
+  const passengersEl = document.getElementById('passengers'), perPersonToggle = document.getElementById('perPersonToggle');
+  const customDistance = document.getElementById('customDistance');
+  const calcFuelBtn = document.getElementById('calcFuel'), fuelResult = document.getElementById('fuelResult');
+
+  const poiBtns = document.querySelectorAll('.poi-btn'), poiRadius = document.getElementById('poiRadius'), radiusVal = document.getElementById('radiusVal');
+  const searchPoiBtn = document.getElementById('searchPoi'), poiCacheToggle = document.getElementById('poiCacheToggle');
+
+  // ----------------- helpers -----------------
+  function setModeDisplay(){
+    modeDisplay.innerHTML = 'Mode: <strong>' + (currentMode === 'driving-car' ? 'Car' : (currentMode === 'cycling-regular' ? 'Bike' : 'Walk')) + '</strong>';
+    // set default efficiency if field empty or unrealistic
+    if (!efficiencyEl.value || Number(efficiencyEl.value) <= 0) {
+      efficiencyEl.value = DEFAULT_EFF[currentMode] || 15;
+    }
+  }
+  setModeDisplay();
+
+  function showToast(msg, time=2200){
+    const d = document.createElement('div');
+    d.textContent = msg;
+    Object.assign(d.style, {position:'fixed',right:'18px',top:'18px',padding:'8px 12px',background:'#15304a',color:'#fff',borderRadius:'8px',zIndex:9999});
+    document.body.appendChild(d);
+    setTimeout(()=>d.remove(), time);
+  }
+
+  // quick geocode helper (calls your /geocode)
+  async function geocode(query){
+    if (!query) return [];
+    const resp = await fetch(GEOCODE_ENDPOINT + '?q=' + encodeURIComponent(query));
+    if (!resp.ok) return [];
+    return await resp.json();
+  }
+
+  // set start/end by latlng
+  function setStart(latlng, label){
+    if (startMarker) map.removeLayer(startMarker);
+    startMarker = L.marker(latlng, { draggable:true, title: 'Start' }).addTo(map).bindPopup('Start: ' + (label||'')).openPopup();
+    startMarker.on('dragend', ()=>{ showToast('Start moved'); });
+  }
+  function setEnd(latlng, label){
+    if (endMarker) map.removeLayer(endMarker);
+    endMarker = L.marker(latlng, { draggable:true, title:'Destination', icon: L.icon({ iconUrl:'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png', iconSize:[25,41] }) }).addTo(map).bindPopup('Destination: ' + (label||'')).openPopup();
+    endMarker.on('dragend', ()=>{ showToast('Destination moved'); });
+  }
+
+  // map click sets start/dest in order
+  map.on('click', function(e){
+    if (!startMarker) { setStart(e.latlng, 'picked'); showToast('Start set'); }
+    else if (!endMarker) { setEnd(e.latlng, 'picked'); showToast('Destination set'); }
+    else { // reset
+      map.removeLayer(startMarker); map.removeLayer(endMarker);
+      startMarker = null; endMarker = null;
+      setStart(e.latlng, 'picked'); showToast('Start reset');
+    }
+  });
+
+  // wire geocode auto-complete minimal (enter triggers pick first result)
+  startInput.addEventListener('keydown', async (ev)=>{
+    if (ev.key === 'Enter') {
+      const q = startInput.value.trim(); if (!q) return;
+      const res = await geocode(q);
+      if (res.length) { setStart([res[0].lat, res[0].lon], res[0].display_name); map.setView([res[0].lat,res[0].lon], 12); }
+    }
+  });
+  endInput.addEventListener('keydown', async (ev)=>{
+    if (ev.key === 'Enter') {
+      const q = endInput.value.trim(); if (!q) return;
+      const res = await geocode(q);
+      if (res.length) { setEnd([res[0].lat, res[0].lon], res[0].display_name); map.setView([res[0].lat,res[0].lon], 12); }
+    }
+  });
+
+  // ----- Request route using server ORS proxy -----
+  async function requestRoute(){
+    if (!startMarker || !endMarker) { showToast('Set both start and destination'); return; }
+    const coords = [
+      [startMarker.getLatLng().lng, startMarker.getLatLng().lat],
+      [endMarker.getLatLng().lng, endMarker.getLatLng().lat]
+    ];
+    // profile mapping (UI sets "car / bike / walk")
+    const payload = { profile: currentMode, coordinates: coords, alternatives: 2 };
+    routeSummary.textContent = 'Routing...';
+    try {
+      const r = await fetch(ROUTE_ENDPOINT, { method:'POST', headers:{ 'Content-Type':'application/json' }, body: JSON.stringify(payload) });
+      const j = await r.json();
+      if (j.error) { routeSummary.textContent = 'Route error: ' + (j.error || ''); return; }
+      // ORS returns GeoJSON feature collection "features" with geometry
+      // We'll draw the first route and optionally show alternatives as lighter lines.
+      drawORSRoute(j);
+    } catch (err) {
+      console.error(err);
+      routeSummary.textContent = 'Routing failed: ' + err.message;
+    }
+  }
+
+  function drawORSRoute(orsJson){
+    // clear old
+    if (routeLayer) { map.removeLayer(routeLayer); routeLayer = null; }
+    if (bufferLayer) { map.removeLayer(bufferLayer); bufferLayer = null; }
+    // ORS returns "features" where each feature is a route (geojson)
+    const features = orsJson.features || (orsJson.routes ? orsJson.routes : null);
+    // some ORS accounts return "features" directly, some return routes in different shapes. We'll try a couple.
+    let routeFeatures = [];
+    if (orsJson.features && Array.isArray(orsJson.features)) routeFeatures = orsJson.features;
+    else if (orsJson.features && orsJson.features[0] && orsJson.features[0].geometry) routeFeatures = orsJson.features;
+    else if (orsJson.routes && Array.isArray(orsJson.routes)) {
+      // convert route objects to geojson-like format if possible
+      routeFeatures = orsJson.routes.map(rt => ({ properties: { summary: rt.summary }, geometry: rt.geometry }));
+    }
+
+    // Add all features — primary in bold, alternatives in thin lines
+    const layers = [];
+    routeFeatures.forEach((f, idx) => {
+      const geom = f.geometry || f;
+      const style = idx === 0 ? { color:'#ff7a59', weight:6, opacity:0.95 } : { color:'#ff7a59', weight:3, dashArray:'6,8', opacity:0.5 };
+      const ly = L.geoJSON(geom, { style }).addTo(map);
+      layers.push(ly);
+    });
+    routeLayer = L.layerGroup(layers).addTo(map);
+
+    // Fit bounds
+    try {
+      const b = routeLayer.getBounds();
+      map.fitBounds(b, { padding:[40,40] });
+      // compute and display distance/duration if available on first feature props
+      // ORS v2 returns properties.summary.distance (meters) and duration (seconds) sometimes in features[0].properties.summary or in top-level
+      let distMeters = null, durSec = null;
+      if (orsJson.features && orsJson.features[0] && orsJson.features[0].properties && orsJson.features[0].properties.summary) {
+        distMeters = orsJson.features[0].properties.summary.distance;
+        durSec = orsJson.features[0].properties.summary.duration;
+      } else if (orsJson.routes && orsJson.routes[0] && orsJson.routes[0].summary) {
+        distMeters = orsJson.routes[0].summary.distance;
+        durSec = orsJson.routes[0].summary.duration;
+      }
+      if (distMeters != null) {
+        const km = (distMeters / 1000).toFixed(2);
+        const mins = Math.round((durSec || 0) / 60);
+        routeSummary.innerHTML = `Route (${currentMode === 'driving-car' ? 'Car' : (currentMode === 'cycling-regular' ? 'Bike' : 'Walk')}): <strong>${km} km</strong> — ${mins} min (approx)`;
+      } else {
+        routeSummary.innerHTML = `Route drawn — zoom to view.`;
+      }
+
+      // create a buffer polygon preview around the first route using simple turf.buffer if available
+      // We'll try to use turf via CDN (if not loaded, fetch) and then show a polygon buffer of the primary geometry
+      ensureTurf().then(()=> {
+        const primary = routeFeatures[0];
+        // convert to FeatureCollection if needed
+        const fc = primary.type === 'FeatureCollection' ? primary : { type:'Feature', geometry: primary.geometry || primary };
+        // buffer in meters (use current poi radius)
+        const rad = Number(poiRadius.value) || 800;
+        try {
+          const poly = turf.buffer(fc, rad, { units: 'meters' });
+          if (bufferLayer) map.removeLayer(bufferLayer);
+          bufferLayer = L.geoJSON(poly, { style: { color:'#2b8bf2', weight:1, fillColor:'#cfe9ff', fillOpacity:0.15 } }).addTo(map);
+        } catch(e) { console.warn('buffer failed', e); }
+      });
+
+    } catch(e){ console.warn('fitBounds failed', e); }
+  }
+
+  // ensure turf is loaded
+  async function ensureTurf(){
+    if (window.turf) return;
+    await new Promise((res, rej) => {
+      const s = document.createElement('script');
+      s.src = 'https://unpkg.com/@turf/turf@6.5.0/turf.min.js';
+      s.onload = res; s.onerror = rej;
+      document.head.appendChild(s);
+    });
+  }
+
+  // ----------------- Fuel calculation -----------------
+  document.getElementById('carBtn').addEventListener('click', ()=>{ carBtn.classList.add('active'); bikeBtn.classList.remove('active'); efficiencyEl.value = DEFAULT_EFF['driving-car']; currentMode='driving-car'; setModeDisplay(); });
+  document.getElementById('bikeBtn').addEventListener('click', ()=>{ bikeBtn.classList.add('active'); carBtn.classList.remove('active'); efficiencyEl.value = DEFAULT_EFF['cycling-regular']; currentMode='cycling-regular'; setModeDisplay(); });
+
+  calcFuelBtn.addEventListener('click', ()=> {
+    let dist = Number(customDistance.value) || null;
+    if (!dist) {
+      // attempt to read from routeSummary (or compute from routeLayer)
+      if (routeLayer) {
+        // measure length using turf if available
+        ensureTurf().then(()=> {
+          try {
+            const fc = routeLayer.toGeoJSON();
+            const len = turf.length(fc, { units: 'kilometers' });
+            computeFuel(len);
+          } catch(e){ console.warn(e); alert('Could not compute distance from route. Enter custom distance.'); }
+        });
+        return;
+      } else {
+        alert('No route available — enter custom distance in km.');
+        return;
+      }
+    } else {
+      computeFuel(Number(dist));
+    }
+  });
+
+  function computeFuel(distanceKm){
+    const eff = Number(efficiencyEl.value) || DEFAULT_EFF[currentMode] || 15;
+    if (eff <= 0) { alert('Enter positive efficiency'); return; }
+    const liters = distanceKm / eff;
+    const price = Number(fuelPriceEl.value) || 0;
+    const totalCost = liters * price;
+    const pax = Math.max(1, Number(passengersEl.value) || 1);
+    const perPerson = perPersonToggle.checked ? (totalCost / pax) : null;
+    let html = `Distance: <strong>${distanceKm.toFixed(2)} km</strong><br>`;
+    html += `Fuel needed: <strong>${liters.toFixed(2)} L</strong><br>`;
+    html += `Estimated fuel cost: <strong>₹${totalCost.toFixed(2)}</strong>`;
+    if (perPersonToggle.checked) html += `<br>Per person (x${pax}): <strong>₹${perPerson.toFixed(2)}</strong>`;
+    fuelResult.innerHTML = html; fuelResult.style.display = 'block';
+  }
+
+  // ----------------- POI Searching using Overpass -----------------
+  radiusVal.textContent = poiRadius.value;
+  poiRadius.addEventListener('input', ()=> radiusVal.textContent = poiRadius.value );
+
+  document.querySelectorAll('.poi-btn').forEach(b=>{
+    b.addEventListener('click', ()=> {
+      const tag = b.dataset.tag;
+      if (b.classList.contains('active')) { b.classList.remove('active'); activePoiTags.delete(tag); }
+      else { b.classList.add('active'); activePoiTags.add(tag); }
+    });
+  });
+
+  async function queryOverpassForPoint(lat, lon, tag, radius){
+    // tag is string like '["amenity"="restaurant"]' — inside the query we use node(around:radius,lat,lon)[amenity=restaurant];
+    // convert tag to key/value pair
+    // naive parse:
+    const m = tag.match(/\["?([^"]+)"?="?([^"]+)"?\]/);
+    let key = null, val = null;
+    if (m) { key = m[1]; val = m[2]; }
+    // assemble Overpass QL
+    const qParts = [];
+    if (key) {
+      qParts.push(`node(around:${radius},${lat},${lon})[${key}=${val}];`);
+      qParts.push(`way(around:${radius},${lat},${lon})[${key}=${val}];`);
+      qParts.push(`relation(around:${radius},${lat},${lon})[${key}=${val}];`);
+    } else {
+      qParts.push(`node(around:${radius},${lat},${lon});`);
+    }
+    const q = `[out:json][timeout:25];(${qParts.join('')});out center geom;`;
+    // use caching: key composed of lat_lon_radius_key_val (rounded)
+    const cacheKey = `op_${Math.round(lat*100)/100}_${Math.round(lon*100)/100}_${radius}_${key || 'any'}_${val || 'any'}`;
+    if (poiCacheToggle.checked) {
+      const cached = localStorage.getItem(cacheKey);
+      if (cached) {
+        try { return JSON.parse(cached); } catch(e){}
+      }
+    }
+    // fetch
+    const resp = await fetch(OVERPASS_ENDPOINT, { method:'POST', body: q });
+    if (!resp.ok) throw new Error('Overpass failed: ' + resp.status);
+    const j = await resp.json();
+    if (poiCacheToggle.checked) localStorage.setItem(cacheKey, JSON.stringify(j));
+    return j;
+  }
+
+  // search POIs along route: we sample route coordinates and query around each sample
+  async function searchPoisAlongRoute(){
+    if (!routeLayer) { alert('Draw a route first'); return; }
+    // clear existing poi layer
+    poiLayers.clearLayers();
+    showToast('Searching POIs (this may take a few seconds)...');
+    // build array of coordinates along route (every ~500m) using turf if available
+    await ensureTurf();
+    const routeGeo = routeLayer.toGeoJSON();
+    // sample every Nth km based on route length
+    const routeLenKm = turf.length(routeGeo, { units: 'kilometers' });
+    const stepKm = Math.max(0.5, Math.min(2.0, routeLenKm / 6)); // sample ~6 points
+    const samplePoints = [];
+    for (let dist = 0; dist <= routeLenKm; dist += stepKm) {
+      try {
+        const pt = turf.along(routeGeo, dist, { units: 'kilometers' });
+        samplePoints.push(pt.geometry.coordinates);
+      } catch(e) { break; }
+    }
+    // ensure we include start and end
+    const start = routeGeo.features ? routeGeo.features[0].geometry.coordinates[0] : routeGeo.geometry.coordinates[0];
+    const end = routeGeo.features ? routeGeo.features[0].geometry.coordinates.slice(-1)[0] : routeGeo.geometry.coordinates.slice(-1)[0];
+    const pointsToQuery = [start, ...samplePoints, end].slice(0, 12); // cap count
+
+    const radius = Number(poiRadius.value) || 800;
+    const tags = Array.from(activePoiTags);
+    if (!tags.length) { alert('Enable at least one POI type (restaurants/fuel/hotels)'); return; }
+
+    // run queries sequentially to be polite to Overpass
+    const foundItems = [];
+    for (let i = 0; i < pointsToQuery.length; i++) {
+      const [lon, lat] = pointsToQuery[i];
+      for (const tag of tags) {
+        try {
+          const res = await queryOverpassForPoint(lat, lon, tag, radius);
+          if (res && res.elements) {
+            res.elements.forEach(el=>{
+              // avoid duplicates: build id key
+              const idkey = `${el.type}_${el.id}`;
+              if (!foundItems.some(x=>x._idkey===idkey)) {
+                el._idkey = idkey;
+                foundItems.push(el);
+              }
+            });
+          }
+        } catch(err){
+          console.warn('Overpass query failed for point', err);
+        }
+      }
+      // small delay to avoid hammering API
+      await new Promise(r => setTimeout(r, 250));
+    }
+
+    // render foundItems as markers
+    foundItems.forEach(el=>{
+      const lat = el.lat || (el.center && el.center.lat) || (el.geometry && el.geometry[0] && el.geometry[0].lat);
+      const lon = el.lon || (el.center && el.center.lon) || (el.geometry && el.geometry[0] && el.geometry[0].lon);
+      if (!lat || !lon) return;
+      const popupHtml = renderPoiPopup(el);
+      const m = L.marker([lat, lon]).bindPopup(popupHtml);
+      poiLayers.addLayer(m);
+    });
+    showToast(`Found ${foundItems.length} POIs (displayed on map)`);
+  }
+
+  function renderPoiPopup(el){
+    const tags = el.tags || {};
+    const name = tags.name || tags['operator'] || 'POI';
+    const lines = [];
+    lines.push(`<strong>${name}</strong>`);
+    if (tags.amenity) lines.push(`<div class="muted">Amenity: ${tags.amenity}</div>`);
+    if (tags.tourism) lines.push(`<div class="muted">Tourism: ${tags.tourism}</div>`);
+    if (tags.opening_hours) lines.push(`<div class="muted">Hours: ${tags.opening_hours}</div>`);
+    if (tags.website) lines.push(`<div><a href="${tags.website}" target="_blank">Website</a></div>`);
+    // encourage show all tags for debugging
+    lines.push(`<pre style="white-space:pre-wrap;max-width:260px;font-size:12px;margin-top:6px;color:#444">${JSON.stringify(tags,null,2)}</pre>`);
+    return lines.join('');
+  }
+
+  // ----------------- UI events -----------------
+  routeBtn.addEventListener('click', requestRoute);
+  clearBtn.addEventListener('click', ()=>{
+    if (routeLayer) { map.removeLayer(routeLayer); routeLayer = null; }
+    if (bufferLayer) { map.removeLayer(bufferLayer); bufferLayer = null; }
+    poiLayers.clearLayers();
+    routeSummary.textContent = '';
+    fuelResult.style.display = 'none';
+    if (startMarker) { map.removeLayer(startMarker); startMarker = null; }
+    if (endMarker) { map.removeLayer(endMarker); endMarker = null; }
+  });
+
+  searchPoiBtn.addEventListener('click', searchPoisAlongRoute);
+
+  // "Transport" button opens two options (Bike / Car) quickly
+  transportBtn.addEventListener('click', (ev)=>{
+    // show a tiny UI with two choices (simple prompt)
+    const choice = prompt('Choose transport: car or bike (enter "car" or "bike")','car');
+    if (!choice) return;
+    if (choice.toLowerCase().startsWith('b')) {
+      currentMode = 'cycling-regular';
+      bikeBtn.classList.add('active'); carBtn.classList.remove('active');
+    } else {
+      currentMode = 'driving-car';
+      carBtn.classList.add('active'); bikeBtn.classList.remove('active');
+    }
+    setModeDisplay();
+    showToast('Mode set to ' + (currentMode === 'driving-car' ? 'Car' : 'Bike'));
+  });
+
+  // set default efficiencies on load
+  window.addEventListener('load', ()=> {
+    efficiencyEl.value = DEFAULT_EFF[currentMode];
+  });
+
+  // allow hitting Enter in inputs to geocode quickly (already done above)
+  // ----------------- END script -----------------
+  </script>
+</body>
+</html>

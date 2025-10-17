@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Step Out - Adventure Awaits</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f4f8fa;
+      color: #23272b;
+    }
+    header {
+      background: #222;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+      /* increase right padding so the signup pill isn't clipped on large screens */
+      padding: 1em 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #ffd600;
+      overflow: visible; /* ensure buttons can overflow if necessary */
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: #ffd600;
+      letter-spacing: 3px;
+    }
+    .brand i {
+      margin-right: 0.5rem;
+      font-size: 1.8rem;
+    }
+    nav a, .help-link {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: color 0.2s;
+      padding: 0.7em 0.9em;
+      border-radius: 5px;
+    }
+    nav a:hover, .help-link:hover {
+      color: #ffd600;
+    }
+    .hero {
+      position: relative;
+      height: 90vh;
+      margin-top: 56px; /* height of header */
+      overflow: hidden;
+    }
+    .slideshow {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+    .slideshow img {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+    }
+    .slideshow img.active {
+      opacity: 1;
+    }
+    .overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(30, 30, 30, 0.5);
+      z-index: 1;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      color: white;
+      text-align: center;
+      top: 50%;
+      transform: translateY(-50%);
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      padding: 0 1rem;
+    }
+    .hero-content h1 {
+      font-size: 3rem;
+      font-weight: 900;
+      letter-spacing: 2px;
+      margin-bottom: 1rem;
+      text-shadow: 0 4px 13px rgba(0,0,0,0.3);
+    }
+    .hero-content p {
+      font-size: 1.25rem;
+      margin-bottom: 2rem;
+    }
+    .btn-discover {
+      padding: 1em 2.5em;
+      font-size: 1.1rem;
+      background: #ffd600;
+      color: #222;
+      border: none;
+      border-radius: 25px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 2px 9px rgba(120,92,7,0.1);
+      transition: background 0.2s, color 0.2s;
+    }
+    .btn-discover:hover {
+      background: #fff;
+      color: #ffd600;
+    }
+    /* prominent signup button in header */
+    .signup-btn {
+      background: #ffd600;
+      color: #222;
+      padding: 0.5rem 1rem;
+      border-radius: 999px;
+      font-weight: 800;
+      text-decoration: none;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      transition: transform 120ms ease, box-shadow 120ms ease;
+      margin-right: 0.5rem; /* keep a small gap from the right edge */
+      white-space: nowrap;
+      position: relative;
+      z-index: 1100;
+    }
+    .signup-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 14px rgba(0,0,0,0.18); }
+
+    /* Responsive: make the pill slightly smaller on narrow screens to avoid clipping */
+    @media (max-width: 600px) {
+      header { padding: 0.6em 1rem; }
+      .signup-btn { padding: 0.4rem 0.8rem; font-size: 0.95rem; }
+    }
+    @media (max-width: 900px) {
+      .hero-content h1 {
+        font-size: 2rem;
+      }
+    }
+    @media (max-width: 600px) {
+      .hero-content h1 {
+        font-size: 1.4rem;
+      }
+      .hero-content p {
+        font-size: 1rem;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <i class="fas fa-globe-americas"></i>
+    STEP OUT
+  </div>
+  <!-- Sign Up removed from header as requested -->
+</header>
+
+<section class="hero">
+  <div class="slideshow">
+   <img src="{{ url_for('static', filename='images/image1.png') }}" alt="Slide 1" class="active" />
+<img src="{{ url_for('static', filename='images/image2.png') }}" alt="Slide 2" />
+<img src="{{ url_for('static', filename='images/image3.png') }}" alt="Slide 3" />
+<img src="{{ url_for('static', filename='images/image4.png') }}" alt="Slide 4" />
+<img src="{{ url_for('static', filename='images/image5.png') }}" alt="Slide 5" />
+<img src="{{ url_for('static', filename='images/image6.png') }}" alt="Slide 6" />
+<img src="{{ url_for('static', filename='images/image7.png') }}" alt="Slide 7" />
+<img src="{{ url_for('static', filename='images/image8.png') }}" alt="Slide 8" />
+<img src="{{ url_for('static', filename='images/image9.png') }}" alt="Slide 9" />
+<img src="{{ url_for('static', filename='images/image10.png') }}" alt="Slide 10" />
+
+  </div>
+  <div class="overlay"></div>
+  <div class="hero-content">
+    <h1>ADVENTURE IS WORTHWHILE</h1>
+    <p>Discover New Places With Us, Adventure Awaits</p>
+  <a class="btn-discover" href="{{ url_for('auth') }}">Discover More</a>
+  </div>
+</section>
+
+<script>
+  let slideIndex = 0;
+  const slides = document.querySelectorAll('.slideshow img');
+
+  function showNextSlide() {
+    slides[slideIndex].classList.remove('active');
+    slideIndex = (slideIndex + 1) % slides.length;
+    slides[slideIndex].classList.add('active');
+  }
+
+  setInterval(showNextSlide, 2500);
+</script>
+
+</body>
+</html>

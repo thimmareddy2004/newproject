@@ -1,0 +1,893 @@
+[
+  {
+    "id": "bengaluru",
+    "name": "Bengaluru (Bangalore)",
+    "lat": 12.9716,
+    "lon": 77.5946,
+    "categories": [
+      "city",
+      "historical",
+      "temple",
+      "park"
+    ],
+    "seasons": [
+      "winter",
+      "summer"
+    ],
+    "short_desc": "Capital city — parks, tech, temples, museums.",
+    "image_filename": "bengaluru.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/9/97/A_photo_of_a_city_scene_in_Bengaluru.jpg",
+    "image_credit": "Matthew T Rader / CC BY-SA 4.0"
+  },
+  {
+    "id": "mysore",
+    "name": "Mysuru (Mysore)",
+    "lat": 12.2958,
+    "lon": 76.6394,
+    "categories": [
+      "city",
+      "historical",
+      "palace",
+      "temple"
+    ],
+    "seasons": [
+      "winter",
+      "monsoon"
+    ],
+    "short_desc": "Famous Mysore Palace, Dasara, sandalwood and silk.",
+    "image_filename": "mysore.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/5/59/Arun_Yogiraj_Statues_Front_View_Mysore_Railway_Station_Apr22_A7C_01916.jpg",
+    "image_credit": "This Photo was taken by Timothy A. Gonsalves.  Feel free to use my photos, but please mention me as the author.  I would much appreciate if you send me an email tagooty@gmail.com or write on my talk page, for my information.  Please contact me before commercial use.\n\n\n\nPlease do not upload an edited image here without consulting me.  I would like to make corrections only at my own source to ensure that the changes improve the image and are preserved.Otherwise you may upload an edited image with a new name. Please use one of the templates derivative or extract. / CC BY-SA 4.0"
+  },
+  {
+    "id": "coorg",
+    "name": "Coorg (Kodagu)",
+    "lat": 12.337,
+    "lon": 75.806,
+    "categories": [
+      "hill",
+      "coffee",
+      "waterfall",
+      "trek"
+    ],
+    "seasons": [
+      "monsoon",
+      "winter"
+    ],
+    "short_desc": "Coffee plantations, waterfalls, misty mornings.",
+    "image_filename": "coorg.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/6/68/Coorg_%28Kodagu%29%2C_Karnataka%2C_India_%282022%29_01.jpg",
+    "image_credit": "Subharnab Majumdar / CC BY 2.0"
+  },
+  {
+    "id": "chikmagalur",
+    "name": "Chikmagalur",
+    "lat": 13.316,
+    "lon": 75.7772,
+    "categories": [
+      "hill",
+      "trek",
+      "coffee"
+    ],
+    "seasons": [
+      "monsoon",
+      "winter"
+    ],
+    "short_desc": "Hills & coffee estates; base for Mullayanagiri.",
+    "image_filename": "chikmagalur.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/5/50/Baba_Budangiri%2C_Chikmagalur_%282024%29_29.jpg",
+    "image_credit": "Gpkp / CC BY-SA 4.0"
+  },
+  {
+    "id": "hampi",
+    "name": "Hampi",
+    "lat": 15.335,
+    "lon": 76.46,
+    "categories": [
+      "historical",
+      "ruins",
+      "temple"
+    ],
+    "seasons": [
+      "winter",
+      "summer"
+    ],
+    "short_desc": "Vijayanagara ruins — UNESCO heritage site.",
+    "image_filename": "hampi.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/7/72/Dancing_Girls_Bath_%28Hampi_water_tank%29%2C_Hampi%2C_Vijayanagara%2C_Karnataka%2C_India_%282012%29.jpg",
+    "image_credit": "Dey.sandip / CC BY-SA 3.0"
+  },
+  {
+    "id": "badami",
+    "name": "Badami Caves",
+    "lat": 15.9189,
+    "lon": 75.756,
+    "categories": [
+      "cave",
+      "historical",
+      "temple"
+    ],
+    "seasons": [
+      "winter",
+      "summer"
+    ],
+    "short_desc": "Rock-cut cave temples of the Chalukya era.",
+    "image_filename": "badami.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/e/ec/Badami_caves_Cave_One_%2812%29.jpg",
+    "image_credit": "Haneeshkm / CC0"
+  },
+  {
+    "id": "pattadakal",
+    "name": "Pattadakal",
+    "lat": 15.8654,
+    "lon": 75.8486,
+    "categories": [
+      "historical",
+      "temple",
+      "unesco"
+    ],
+    "seasons": [
+      "winter",
+      "summer"
+    ],
+    "short_desc": "Group of monuments (UNESCO).",
+    "image_filename": "pattadakal.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/4/48/7th_-_9th_century_Hindu_and_Jain_temples%2C_Pattadakal_monuments_Karnataka_7.jpg",
+    "image_credit": "Ms Sarah Welch / CC BY-SA 4.0"
+  },
+  {
+    "id": "belur",
+    "name": "Belur (Chennakeshava)",
+    "lat": 13.164,
+    "lon": 75.9696,
+    "categories": [
+      "temple",
+      "historical"
+    ],
+    "seasons": [
+      "winter",
+      "summer"
+    ],
+    "short_desc": "Hoysala temple with exquisite sculpture.",
+    "image_filename": "belur.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/f/fe/Belur_Temple_C.jpg",
+    "image_credit": "Raghavendra DS / CC BY-SA 4.0"
+  },
+  {
+    "id": "halebidu",
+    "name": "Halebidu",
+    "lat": 13.2101,
+    "lon": 75.8546,
+    "categories": [
+      "temple",
+      "historical"
+    ],
+    "seasons": [
+      "winter",
+      "summer"
+    ],
+    "short_desc": "Hoysala-era temples near Belur.",
+    "image_filename": "halebidu.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/7/7e/An_entrance_into_the_Hoysaleshwara_temple_in_Halebidu.jpg",
+    "image_credit": "Anks.manuja / CC BY-SA 3.0"
+  },
+  {
+    "id": "jogfalls",
+    "name": "Jog Falls",
+    "lat": 14.2369,
+    "lon": 74.5941,
+    "categories": [
+      "waterfall",
+      "ghat"
+    ],
+    "seasons": [
+      "monsoon"
+    ],
+    "short_desc": "One of India's highest waterfalls; spectacular in monsoon.",
+    "image_filename": "jogfalls.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/8/8e/Jog_Falls%2C_India_-_August_2004.jpg",
+    "image_credit": "Pradeep Kodavoor. E-mail ID of the author: deepkt@yahoo.com. / Public domain"
+  },
+  {
+    "id": "shivanasamudra",
+    "name": "Shivanasamudra (Shivasamudra Falls)",
+    "lat": 12.2919,
+    "lon": 77.1379,
+    "categories": [
+      "waterfall"
+    ],
+    "seasons": [
+      "monsoon",
+      "winter"
+    ],
+    "short_desc": "Divided falls on the Kaveri; close to Mysore.",
+    "image_filename": "shivanasamudra.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/4/4a/Henry_Salt_-_Waterfall_at_Sevasummoodra_%28Shivasamudra_in_Karnataka%29.jpg",
+    "image_credit": "James Fittler / After Henry Salt / Public domain"
+  },
+  {
+    "id": "iruppu",
+    "name": "Iruppu Falls",
+    "lat": 11.9258,
+    "lon": 75.0856,
+    "categories": [
+      "waterfall",
+      "ghat"
+    ],
+    "seasons": [
+      "monsoon"
+    ],
+    "short_desc": "Falls in Kodagu region; scenic in rains.",
+    "image_filename": "iruppu.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/f/f1/..._at_Iruppu_Falls_%2849098451628%29.jpg",
+    "image_credit": "Dinesh Valke from Thane, India / CC BY-SA 2.0"
+  },
+  {
+    "id": "hebbefalls",
+    "name": "Hebbe Falls",
+    "lat": 12.8671,
+    "lon": 75.8121,
+    "categories": [
+      "waterfall",
+      "trek"
+    ],
+    "seasons": [
+      "monsoon"
+    ],
+    "short_desc": "Beautiful waterfall near Kemmangundi region.",
+    "image_filename": "hebbefalls.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/4/4d/Cascade_and_pond_of_Hebbe_falls_Karnataka_India.jpg",
+    "image_credit": "Photos Worldwide / CC0"
+  },
+  {
+    "id": "unchali",
+    "name": "Unchali Falls",
+    "lat": 14.1876,
+    "lon": 74.5852,
+    "categories": [
+      "waterfall",
+      "ghat"
+    ],
+    "seasons": [
+      "monsoon"
+    ],
+    "short_desc": "Powerful falls in Uttara Kannada region.",
+    "image_filename": "unchali.pdf",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/c/c3/L%27op%C3%A9rateur_des_pauvres_ou_la_fleur_d%27operation_necessaire_aux_pauvres_pour_conserver_leur_sant%C3%A9_%26_spy_guerir_%C3%A0_peu_de_frais....reveu_%26_corrig%C3%A9_par_l%27autheur.._%28IA_BIUSante_90958x070x11%29.pdf",
+    "image_credit": "Vaussard, G. / Public domain"
+  },
+  {
+    "id": "barkana",
+    "name": "Barkana Falls",
+    "lat": 13.9668,
+    "lon": 74.8154,
+    "categories": [
+      "waterfall",
+      "ghat"
+    ],
+    "seasons": [
+      "monsoon"
+    ],
+    "short_desc": "Tall waterfall near Agumbe.",
+    "image_filename": "barkana.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/9/97/Barkana_Falls%2C_Agumbe_%2851995005709%29.jpg",
+    "image_credit": "solarisgirl / CC BY-SA 2.0"
+  },
+  {
+    "id": "agumbe",
+    "name": "Agumbe",
+    "lat": 13.503,
+    "lon": 75.18,
+    "categories": [
+      "ghat",
+      "trek",
+      "rainforest"
+    ],
+    "seasons": [
+      "monsoon",
+      "winter"
+    ],
+    "short_desc": "Rainforest, sunsets; 'Cherrapunji of the South'.",
+    "image_filename": "agumbe.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/7/76/Agumbe_%2816016149070%29.jpg",
+    "image_credit": "Dinesh Valke from Thane, India / CC BY-SA 2.0"
+  },
+  {
+    "id": "kudremukh",
+    "name": "Kudremukh",
+    "lat": 13.094,
+    "lon": 75.13,
+    "categories": [
+      "trek",
+      "ghat",
+      "park"
+    ],
+    "seasons": [
+      "monsoon",
+      "winter"
+    ],
+    "short_desc": "Trekking, grasslands and biodiversity.",
+    "image_filename": "kudremukh.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/d/d5/Kudremukh_%2824523362510%29.jpg",
+    "image_credit": "Dhruvaraj S from India / CC BY 2.0"
+  },
+  {
+    "id": "sakleshpur",
+    "name": "Sakleshpur",
+    "lat": 12.692,
+    "lon": 75.524,
+    "categories": [
+      "hill",
+      "rail",
+      "trek"
+    ],
+    "seasons": [
+      "monsoon",
+      "winter"
+    ],
+    "short_desc": "Hills, scenic rail route and trekking.",
+    "image_filename": "sakleshpur.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/7/73/Sakleshpur_%2826335645202%29.jpg",
+    "image_credit": "Ashwin Kumar from Bangalore, India / CC BY-SA 2.0"
+  },
+  {
+    "id": "mullayanagiri",
+    "name": "Mullayanagiri",
+    "lat": 13.3507,
+    "lon": 75.7729,
+    "categories": [
+      "trek",
+      "hill"
+    ],
+    "seasons": [
+      "winter",
+      "monsoon"
+    ],
+    "short_desc": "Highest peak in Karnataka (tough trek).",
+    "image_filename": "mullayanagiri.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/d/d1/..._view_from_Mullayanagiri_%2831155089651%29.jpg",
+    "image_credit": "Dinesh Valke from Thane, India / CC BY-SA 2.0"
+  },
+  {
+    "id": "kumara_parvatha",
+    "name": "Kumara Parvatha",
+    "lat": 12.6354,
+    "lon": 75.4412,
+    "categories": [
+      "trek",
+      "ghat"
+    ],
+    "seasons": [
+      "winter"
+    ],
+    "short_desc": "Challenging trek (Kumara Parvatha).",
+    "image_filename": "kumara_parvatha.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/b/b4/Butterfly_-_kumara_parvatha.jpg",
+    "image_credit": "Aravindant11 / CC BY-SA 4.0"
+  },
+  {
+    "id": "kodachadri",
+    "name": "Kodachadri",
+    "lat": 14.8852,
+    "lon": 74.772,
+    "categories": [
+      "trek",
+      "ghat"
+    ],
+    "seasons": [
+      "monsoon",
+      "winter"
+    ],
+    "short_desc": "Trek with ocean viewpoints.",
+    "image_filename": "kodachadri.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/0/08/Kodachadri%2CKarnataka%2CIndia.jpg",
+    "image_credit": "Rayabhari / CC BY 3.0"
+  },
+  {
+    "id": "tadiandamol",
+    "name": "Tadiandamol",
+    "lat": 12.5176,
+    "lon": 75.5528,
+    "categories": [
+      "trek",
+      "hill"
+    ],
+    "seasons": [
+      "winter",
+      "monsoon"
+    ],
+    "short_desc": "Third highest peak in Karnataka, scenic treks.",
+    "image_filename": "tadiandamol.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/4/4d/Shola_tadiandamol.jpg",
+    "image_credit": "L. Shyamal / CC BY-SA 3.0"
+  },
+  {
+    "id": "gokarna",
+    "name": "Gokarna",
+    "lat": 14.548,
+    "lon": 74.318,
+    "categories": [
+      "beach",
+      "temple"
+    ],
+    "seasons": [
+      "winter",
+      "summer"
+    ],
+    "short_desc": "Temple town and popular beaches (Om, Kudle).",
+    "image_filename": "gokarna.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/b/be/Gokarna%2C_February%2C_2018-5.jpg",
+    "image_credit": "Alexey Komarov / CC BY-SA 4.0"
+  },
+  {
+    "id": "karwar",
+    "name": "Karwar",
+    "lat": 14.804,
+    "lon": 74.129,
+    "categories": [
+      "beach",
+      "port"
+    ],
+    "seasons": [
+      "summer",
+      "winter"
+    ],
+    "short_desc": "Coastal town with quiet beaches and islands.",
+    "image_filename": "karwar.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/6/69/Deputy_Commissioners_Office_Karwar%2C_Uttara_Kannada%2C_Karnataka%2C_India.jpg",
+    "image_credit": "ರವಿಮುಂ / CC BY-SA 4.0"
+  },
+  {
+    "id": "malpe",
+    "name": "Malpe & St. Mary's Island",
+    "lat": 13.354,
+    "lon": 74.7,
+    "categories": [
+      "beach",
+      "island"
+    ],
+    "seasons": [
+      "summer",
+      "winter"
+    ],
+    "short_desc": "Beaches and basalt rock islands near Udupi.",
+    "image_filename": "malpe.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/9/9a/Basiltic_Rock_Formation%2C_ST._MARY_ISLAND%2C.jpg",
+    "image_credit": "Keshu / CC BY-SA 3.0"
+  },
+  {
+    "id": "mangalore",
+    "name": "Mangalore (Mangaluru)",
+    "lat": 12.9141,
+    "lon": 74.856,
+    "categories": [
+      "city",
+      "beach",
+      "temple"
+    ],
+    "seasons": [
+      "summer",
+      "winter"
+    ],
+    "short_desc": "Port city with beaches and coastal cuisine.",
+    "image_filename": "mangalore.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/e/ec/Photos_of_Mangalore_%28Mangaluru%29%2C_Karnataka%2C_India._2024_October_24.jpg",
+    "image_credit": "Fredericknoronha / CC BY-SA 4.0"
+  },
+  {
+    "id": "bandipur",
+    "name": "Bandipur National Park",
+    "lat": 11.714,
+    "lon": 76.102,
+    "categories": [
+      "wildlife",
+      "park"
+    ],
+    "seasons": [
+      "winter",
+      "summer"
+    ],
+    "short_desc": "Famous tiger reserve and safaris.",
+    "image_filename": "bandipur.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/d/d3/A_group_of_dholes_in_Bandipur_national_park.jpg",
+    "image_credit": "Soumendra Kumar Sahoo / CC BY-SA 4.0"
+  },
+  {
+    "id": "nagarhole",
+    "name": "Nagarhole (Raja's seat region)",
+    "lat": 12.051,
+    "lon": 76.249,
+    "categories": [
+      "wildlife",
+      "park"
+    ],
+    "seasons": [
+      "winter"
+    ],
+    "short_desc": "Rich wildlife — part of Nilgiri Biosphere.",
+    "image_filename": "nagarhole.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/3/36/Axis_axis_%28Nagarhole%2C_2010%29.jpg",
+    "image_credit": "Yathin S Krishnappa / CC BY-SA 3.0"
+  },
+  {
+    "id": "kabini",
+    "name": "Kabini",
+    "lat": 11.958,
+    "lon": 76.486,
+    "categories": [
+      "wildlife",
+      "river"
+    ],
+    "seasons": [
+      "winter"
+    ],
+    "short_desc": "River safaris and wildlife lodges.",
+    "image_filename": "kabini.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/6/6c/Brahminy_Kite_Perched_Prey_Kabini_Nagarhole_Dec21_D72_21603.jpg",
+    "image_credit": "This Photo was taken by Timothy A. Gonsalves.  Feel free to use my photos, but please mention me as the author.  I would much appreciate if you send me an email tagooty@gmail.com or write on my talk page, for my information.  Please contact me before commercial use.\n\n\n\nPlease do not upload an edited image here without consulting me.  I would like to make corrections only at my own source to ensure that the changes improve the image and are preserved.Otherwise you may upload an edited image with a new name. Please use one of the templates derivative or extract. / CC BY-SA 4.0"
+  },
+  {
+    "id": "dandeli",
+    "name": "Dandeli",
+    "lat": 15.293,
+    "lon": 74.644,
+    "categories": [
+      "wildlife",
+      "adventure",
+      "river"
+    ],
+    "seasons": [
+      "winter",
+      "monsoon"
+    ],
+    "short_desc": "Whitewater rafting, wildlife & forests.",
+    "image_filename": "dandeli.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/9/9f/Brown_Boobook_at_Dandeli%2C_Karnataka.jpg",
+    "image_credit": "Drashokk / CC BY-SA 4.0"
+  },
+  {
+    "id": "gandikota",
+    "name": "Gandikota",
+    "lat": 14.091,
+    "lon": 78.063,
+    "categories": [
+      "canyon",
+      "fort",
+      "historical"
+    ],
+    "seasons": [
+      "winter",
+      "summer"
+    ],
+    "short_desc": "Gandikota gorge — 'Grand Canyon of India'.",
+    "image_filename": "gandikota.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/1/1f/A_view_of_Gandikota_Canyon_from_Raghunatha_Swamy_Temple.jpg",
+    "image_credit": "Akshat Divya / CC BY-SA 4.0"
+  },
+  {
+    "id": "belgaum",
+    "name": "Belgaum (Belagavi)",
+    "lat": 15.8497,
+    "lon": 74.4977,
+    "categories": [
+      "city",
+      "fort"
+    ],
+    "seasons": [
+      "winter",
+      "summer"
+    ],
+    "short_desc": "Gateway to Konkan and forts in the region.",
+    "image_filename": "belgaum.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/d/d5/Belgaum_city_as_seen_from_a_nearby_hill.jpg",
+    "image_credit": "Arch.ravikiran / CC0"
+  },
+  {
+    "id": "bidar",
+    "name": "Bidar Fort",
+    "lat": 17.9133,
+    "lon": 77.534,
+    "categories": [
+      "fort",
+      "historical"
+    ],
+    "seasons": [
+      "winter",
+      "summer"
+    ],
+    "short_desc": "Large historic fort with Islamic architecture.",
+    "image_filename": "bidar.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/e/ef/Bidar_Fort_02.JPG",
+    "image_credit": "Jayadeep Rajan / CC BY-SA 3.0"
+  },
+  {
+    "id": "chitradurga",
+    "name": "Chitradurga Fort",
+    "lat": 14.2339,
+    "lon": 76.4011,
+    "categories": [
+      "fort",
+      "historical"
+    ],
+    "seasons": [
+      "winter",
+      "summer"
+    ],
+    "short_desc": "Massive hill fort with rocky outcrops and history.",
+    "image_filename": "chitradurga.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/e/ec/Ancient_pillar_in_Chitradurga_fort_Image_%286%29%2C_Karnataka%2C_India.jpg",
+    "image_credit": "Gpkp / CC BY-SA 4.0"
+  },
+  {
+    "id": "bellary",
+    "name": "Bellary / Ballari Fort",
+    "lat": 15.1394,
+    "lon": 76.9214,
+    "categories": [
+      "fort",
+      "historical"
+    ],
+    "seasons": [
+      "winter",
+      "summer"
+    ],
+    "short_desc": "Historic fort & nearby Hampi region access.",
+    "image_filename": "bellary.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/7/77/Ballari-Fort-01.JPG",
+    "image_credit": "Vikashegde / CC BY-SA 4.0"
+  },
+  {
+    "id": "shravanabelagola",
+    "name": "Shravanabelagola",
+    "lat": 13.402,
+    "lon": 76.494,
+    "categories": [
+      "temple",
+      "historical"
+    ],
+    "seasons": [
+      "winter",
+      "monsoon"
+    ],
+    "short_desc": "Famous Jain statue of Gomateshwara.",
+    "image_filename": "shravanabelagola.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/7/7d/Decorative_ceiling_inside_the_Akkana_Basadi_at_Shravanabelagola.jpg",
+    "image_credit": "Ankush Manuja / CC BY-SA 3.0"
+  },
+  {
+    "id": "srirangapatna",
+    "name": "Srirangapatna",
+    "lat": 12.4143,
+    "lon": 76.6948,
+    "categories": [
+      "historical",
+      "temple"
+    ],
+    "seasons": [
+      "winter",
+      "monsoon"
+    ],
+    "short_desc": "Historic island fortress near Mysore.",
+    "image_filename": "srirangapatna.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/6/61/Gardens_Tipu_Summer_Palace_Srirangapatna_Jan24_A7C_08975.jpg",
+    "image_credit": "This Photo was taken by Timothy A. Gonsalves.  Feel free to use my photos, but please mention me as the author.  I would much appreciate if you send me an email tagooty@gmail.com or write on my talk page, for my information.  Please contact me before commercial use.\n\n\n\nPlease do not upload an edited image here without consulting me.  I would like to make corrections only at my own source to ensure that the changes improve the image and are preserved.Otherwise you may upload an edited image with a new name. Please use one of the templates derivative or extract. / CC BY-SA 4.0"
+  },
+  {
+    "id": "pattadakal2",
+    "name": "Pattadakal (again)",
+    "lat": 15.8654,
+    "lon": 75.8486,
+    "categories": [
+      "unesco",
+      "temple",
+      "historical"
+    ],
+    "seasons": [
+      "winter",
+      "summer"
+    ],
+    "short_desc": "UNESCO site of Chalukyan monuments.",
+    "image_filename": "pattadakal2.djvu",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/f/f9/A_Handbook_for_Travellers_in_India%2C_Burma%2C_and_Ceylon.djvu",
+    "image_credit": "John Murray / Public domain"
+  },
+  {
+    "id": "badami2",
+    "name": "Badami Caves (again)",
+    "lat": 15.9189,
+    "lon": 75.756,
+    "categories": [
+      "cave",
+      "historical"
+    ],
+    "seasons": [
+      "winter",
+      "summer"
+    ],
+    "short_desc": "Rock-cut cave temples.",
+    "image_filename": "badami2.djvu",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/f/f9/A_Handbook_for_Travellers_in_India%2C_Burma%2C_and_Ceylon.djvu",
+    "image_credit": "John Murray / Public domain"
+  },
+  {
+    "id": "gulbarga",
+    "name": "Gulbarga (Kalaburagi)",
+    "lat": 17.3297,
+    "lon": 76.8343,
+    "categories": [
+      "historical",
+      "fort",
+      "temple"
+    ],
+    "seasons": [
+      "winter",
+      "summer"
+    ],
+    "short_desc": "Sufi shrines and fort architecture.",
+    "image_filename": "gulbarga.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/5/57/11308_Gulbarga_express-2_290318.jpg",
+    "image_credit": "Nikhil B / CC BY 3.0"
+  },
+  {
+    "id": "bijapur",
+    "name": "Vijayapura (Bijapur)",
+    "lat": 16.8306,
+    "lon": 75.7156,
+    "categories": [
+      "historical",
+      "fort",
+      "tomb"
+    ],
+    "seasons": [
+      "winter",
+      "summer"
+    ],
+    "short_desc": "Famous for Gol Gumbaz and historic monuments.",
+    "image_filename": "bijapur.svg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/c/c2/Bijapur-sultanate-map.svg",
+    "image_credit": "Mlpkr / CC BY-SA 3.0"
+  },
+  {
+    "id": "yellapura",
+    "name": "Yellapura region",
+    "lat": 14.9376,
+    "lon": 74.6138,
+    "categories": [
+      "ghat",
+      "waterfall",
+      "trek"
+    ],
+    "seasons": [
+      "monsoon"
+    ],
+    "short_desc": "Access to many waterfalls in Uttara Kannada.",
+    "image_filename": "yellapura.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/7/71/DIGITAL_LIBRARY_YELLAPUR.jpg",
+    "image_credit": "Shivanna G R / CC BY-SA 4.0"
+  },
+  {
+    "id": "gokak",
+    "name": "Gokak Falls",
+    "lat": 16.1644,
+    "lon": 74.7186,
+    "categories": [
+      "waterfall"
+    ],
+    "seasons": [
+      "monsoon",
+      "winter"
+    ],
+    "short_desc": "Limestone waterfall with scenic vantage.",
+    "image_filename": "gokak.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/f/fa/Factory_outlet_of_Gokak_Textile_Mills%2C_Gokak_Falls.jpg",
+    "image_credit": "Rishi Muni / CC BY-SA 4.0"
+  },
+  {
+    "id": "kudremukh2",
+    "name": "Kudremukh (again)",
+    "lat": 13.094,
+    "lon": 75.13,
+    "categories": [
+      "trek",
+      "park"
+    ],
+    "seasons": [
+      "monsoon",
+      "winter"
+    ],
+    "short_desc": "Biodiversity hotspot & treks.",
+    "image_filename": "kudremukh2.pdf",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/b/bc/Ecology_is_for_the_People.pdf",
+    "image_credit": "Madhav Gadgil / Public domain"
+  },
+  {
+    "id": "kemmanagundi",
+    "name": "Kemmanagundi",
+    "lat": 14.1376,
+    "lon": 75.7401,
+    "categories": [
+      "hill",
+      "garden",
+      "trek"
+    ],
+    "seasons": [
+      "winter",
+      "monsoon"
+    ],
+    "short_desc": "Hill station with gardens and viewpoints.",
+    "image_filename": "kemmanagundi.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/8/85/Kemmanagundi_Hill_Station_-_panoramio.jpg",
+    "image_credit": "Likhith N.P / CC BY-SA 3.0"
+  },
+  {
+    "id": "yana",
+    "name": "Yana Rocks",
+    "lat": 14.9968,
+    "lon": 74.7939,
+    "categories": [
+      "rock",
+      "trek"
+    ],
+    "seasons": [
+      "winter",
+      "monsoon"
+    ],
+    "short_desc": "Karst rock formations & cave shrines.",
+    "image_filename": "yana.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/4/4e/..._at_Yana_Rocks_%288287126188%29.jpg",
+    "image_credit": "Dinesh Valke from Thane, India / CC BY-SA 2.0"
+  },
+  {
+    "id": "maravanthe",
+    "name": "Maravanthe",
+    "lat": 13.6578,
+    "lon": 74.4996,
+    "categories": [
+      "beach",
+      "scenic"
+    ],
+    "seasons": [
+      "winter",
+      "summer"
+    ],
+    "short_desc": "Coastal road with sea on one side and river on the other.",
+    "image_filename": "maravanthe.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/b/be/Maravanthe_Beach_3.jpg",
+    "image_credit": "JosephAssisFernandes / CC BY-SA 4.0"
+  },
+  {
+    "id": "murudeshwar",
+    "name": "Murudeshwar",
+    "lat": 14.0919,
+    "lon": 74.3989,
+    "categories": [
+      "temple",
+      "beach"
+    ],
+    "seasons": [
+      "winter",
+      "summer"
+    ],
+    "short_desc": "Huge Shiva statue and beach.",
+    "image_filename": "murudeshwar.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/6/6c/Mhatobar_Shri_Murudeshwar_Temple%2C_Karnataka_02.jpg",
+    "image_credit": "A.Murali / CC0"
+  },
+  {
+    "id": "kudlu",
+    "name": "Kudlu Falls / Western Ghats spots",
+    "lat": 13.0,
+    "lon": 75.0,
+    "categories": [
+      "waterfall",
+      "ghat"
+    ],
+    "seasons": [
+      "monsoon"
+    ],
+    "short_desc": "Example cluster for many smaller falls (see dataset expansion).",
+    "image_filename": "kudlu.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/c/c2/Kudlu_Gate_metro_station.jpg",
+    "image_credit": "Athulvis / CC BY-SA 4.0"
+  }
+]

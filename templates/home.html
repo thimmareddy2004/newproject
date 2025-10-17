@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Go Around - Adventure Awaits</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    html, body {
+      height: 100%;
+      min-height: 100vh;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #fff;
+      overflow-x: hidden;
+    }
+    .video-background-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      z-index: -1;
+      pointer-events: none;
+    }
+    .video-background-container video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      pointer-events: none;
+    }
+    .overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.4);
+      z-index: 0;
+      pointer-events: none;
+    }
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(26, 26, 26, 0.85);
+      z-index: 1000;  /* ensure header is always on top */
+      padding: 1em 2em;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: #ffd600;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+      pointer-events: all;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: #ffd600;
+      letter-spacing: 3px;
+    }
+    .brand i {
+      margin-right: 0.5rem;
+      font-size: 1.8rem;
+    }
+    header nav a {
+      color: #fff;
+      margin-left: 1.5em;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s ease;
+      font-size: 1rem;
+      display: inline-flex;
+      align-items: center;
+    }
+    header nav a:hover {
+      color: #ffd600;
+    }
+    header nav a i {
+      font-size: 1.2em;
+      margin-left: 0.3em;
+    }
+    main {
+      position: relative;
+      min-height: calc(100vh - 4rem);  /* account for header height */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 0 2rem;
+      z-index: 1;
+      margin-top: 4rem;
+      width: 100%;
+      pointer-events: all;
+    }
+    
+    /* Ensure all sections take full width */
+    section {
+      width: 100%;
+      position: relative;
+      z-index: 2;
+      pointer-events: all;
+    }
+    main h1 {
+      font-size: 3.5rem;
+      font-weight: 900;
+      margin-bottom: 0.5rem;
+      text-shadow: 0 0 15px rgba(0,0,0,0.7);
+    }
+    main p {
+      font-size: 1.5rem;
+      margin-bottom: 2rem;
+      text-shadow: 0 0 12px rgba(0,0,0,0.6);
+    }
+    .btn-discover {
+      padding: 1em 2.5em;
+      font-size: 1.2rem;
+      font-weight: 700;
+      border-radius: 30px;
+      background-color: #ffd600;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 0 12px #ffc107;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      color: #222;
+      text-decoration: none;
+    }
+    .btn-discover:hover {
+      background-color: #ff9800;
+      color: #fff;
+      box-shadow: 0 0 20px #ffb300;
+    }
+    @media (max-width: 768px) {
+      main h1 {
+        font-size: 2.5rem;
+      }
+      main p {
+        font-size: 1.2rem;
+      }
+      header nav a {
+        margin-left: 0.9em;
+        font-size: 0.95rem;
+      }
+      .brand {
+        font-size: 1.4rem;
+      }
+      .brand i {
+        font-size: 1.4rem;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+</head>
+
+<body>
+
+  <div class="video-background-container" aria-hidden="true">
+    <video autoplay muted loop playsinline>
+<source src="{{ url_for('static', filename='video/Dream_fixed.mp4') }}" type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
+  </div>
+
+  <div class="overlay" aria-hidden="true"></div>
+
+  <header role="banner" aria-label="Primary Navigation">
+    <div class="brand">
+      <i class="fas fa-globe-americas"></i>
+      <span>STEP OUT</span>
+    </div>
+    <nav role="navigation" aria-label="Primary">
+      <a href="#">Home</a>
+<!-- Open in same tab -->
+<a class="btn btn-primary" href="{{ url_for('maps') }}">Map</a>
+
+
+<!-- replace your old transport link with this -->
+<a href="{{ url_for('transport') }}">Transport</a>
+  <a href="#">Rentals</a>
+  <a href="packages.html">Packages</a>
+  <a href="{{ url_for('services') }}">Services</a>
+  <a href="{{ url_for('render_template_page', page='Contact_Us') }}">Contact Us</a>
+  <a href="auth.html" title="Logout" id="logout-btn">
+  <i class="fas fa-sign-out-alt"></i>
+</a>
+    </nav>
+  </header>
+  <main role="main">
+    <h1>ADVENTURE IS WORTHWHILE</h1>
+    <p>Discover New Places With Us, Adventure Awaits</p>
+    
+    <!-- Developer Credit -->
+    <div class="developer-credit" style="position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); text-align: center;">
+      <p style="font-size: 0.9rem; color: rgba(255,255,255,0.7); text-shadow: 0 2px 4px rgba(0,0,0,0.3);">
+        Developed with <i class="fas fa-heart" style="color: #ff4444;"></i> by <span style="color: #ffd600;">GitHub Copilot</span>
+      </p>
+    </div>
+  </main>
+</body>
+</html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Customer Reviews</title>
+
+  <!-- Tailwind CDN for styling -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    /* Slide animations */
+    .slides { position: relative; }
+    .slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transform: translateX(30px);
+      transition: opacity 500ms ease, transform 500ms ease;
+      will-change: opacity, transform;
+    }
+    .slide.active {
+      opacity: 1;
+      transform: translateX(0);
+      position: relative;
+    }
+
+    /* Buttons */
+    .nav-btn { 
+      backdrop-filter: blur(6px); 
+      -webkit-backdrop-filter: blur(6px);
+      cursor: pointer;
+      pointer-events: all;
+    }
+    
+    /* Ensure all buttons and links have proper cursor */
+    button, a, .dot {
+      cursor: pointer !important;
+      pointer-events: all !important;
+    }
+
+    /* small helper for quote circle */
+    .quote-circle {
+      width: 48px; height: 48px;
+      display: inline-flex; align-items: center; justify-content: center;
+      border-radius: 9999px;
+    }
+
+    /* dot indicator */
+    .dot { transition: transform 200ms, background-color 200ms; }
+
+    /* responsive tweaks for the slide container height */
+    .slide-wrapper { min-height: 220px; }
+
+    /* subtle shadow similar to component */
+    .card-shadow { box-shadow: 0 20px 40px rgba(2,6,23,0.6); }
+  </style>
+</head>
+<body class="bg-gray-800 text-white antialiased">
+
+  <section class="py-12 md:py-20 bg-gray-800">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-10 md:mb-16">
+        <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
+          What Our <span class="text-yellow-400">Customers Say</span>
+        </h2>
+        <p class="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto">
+          Read genuine reviews from our satisfied customers who have experienced our premium services
+        </p>
+      </div>
+
+      <!-- Reviews Slideshow -->
+      <div class="relative max-w-4xl mx-auto">
+        <div class="overflow-hidden rounded-2xl slide-wrapper card-shadow bg-gradient-to-br from-gray-900 to-gray-800 border border-gray-700 p-6 md:p-8">
+          <!-- slides container -->
+          <div id="slides" class="slides min-h-[180px]">
+            <!-- slides will be rendered by JS -->
+          </div>
+        </div>
+
+        <!-- Prev/Next buttons -->
+        <button id="prevBtn"
+                aria-label="Previous review"
+                class="nav-btn absolute left-2 md:left-4 top-1/2 transform -translate-y-1/2 bg-gray-900/80 hover:bg-gray-800 text-white p-2 md:p-3 rounded-full transition-all duration-200 border border-gray-600 hover:border-yellow-400">
+          <!-- ChevronLeft SVG -->
+          <svg class="w-5 h-5 md:w-6 md:h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M15 18l-6-6 6-6" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+        </button>
+
+        <button id="nextBtn"
+                aria-label="Next review"
+                class="nav-btn absolute right-2 md:right-4 top-1/2 transform -translate-y-1/2 bg-gray-900/80 hover:bg-gray-800 text-white p-2 md:p-3 rounded-full transition-all duration-200 border border-gray-600 hover:border-yellow-400">
+          <!-- ChevronRight SVG -->
+          <svg class="w-5 h-5 md:w-6 md:h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M9 6l6 6-6 6" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+        </button>
+
+        <!-- Dots -->
+        <div id="dots" class="flex justify-center mt-6 md:mt-8 space-x-2"></div>
+      </div>
+
+      <!-- Share CTA -->
+      <div class="text-center mt-8 md:mt-12">
+        <div class="bg-gray-900 rounded-2xl p-6 md:p-8 max-w-2xl mx-auto card-shadow border border-gray-700">
+          <h3 class="text-xl md:text-2xl font-bold text-white mb-4">Share Your Experience</h3>
+          <p class="text-gray-300 mb-6 text-sm md:text-base">
+            We'd love to hear about your journey with Paradise Tours. Your feedback helps us serve you better.
+          </p>
+          <a href="https://wa.me/919935512599" target="_blank" rel="noopener noreferrer"
+             class="inline-block bg-yellow-400 text-gray-900 px-6 md:px-8 py-3 rounded-lg font-semibold hover:bg-yellow-300 transition-colors duration-200 text-sm md:text-base">
+            Share Your Review
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Developer Credit -->
+    <div class="text-center mt-16 mb-4">
+      <div class="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-gray-900 to-gray-800 border border-gray-700 shadow-lg">
+        <span class="text-sm text-gray-400">
+          Developed with 
+          <i class="fas fa-code text-yellow-400 mx-1"></i>
+          by 
+          <span class="text-yellow-400 font-semibold">GitHub Copilot</span>
+          <span class="mx-2">|</span>
+          <i class="fas fa-heart text-red-500"></i>
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // Data (same as your React component)
+    const reviews = [
+      {
+        name: 'Rajesh Kumar',
+        location: 'Varanasi, UP',
+        rating: 5,
+        comment: 'Excellent service! The driver was very professional and the car was clean and comfortable. Highly recommend Paradise Tours for anyone visiting Varanasi.',
+        date: '2 weeks ago'
+      },
+      {
+        name: 'Priya Sharma',
+        location: 'Delhi',
+        rating: 5,
+        comment: 'Amazing tour package to Ayodhya. Everything was well organized and the guide was very knowledgeable. Will definitely book again for our next trip.',
+        date: '1 month ago'
+      },
+      {
+        name: 'Amit Singh',
+        location: 'Mumbai',
+        rating: 4,
+        comment: 'Great experience with Paradise Tours. The Innova was spacious and perfect for our family trip. Driver was punctual and helpful throughout the journey.',
+        date: '3 weeks ago'
+      },
+      {
+        name: 'Sunita Devi',
+        location: 'Varanasi, UP',
+        rating: 5,
+        comment: 'Very reliable service. Used their taxi for airport pickup and they were right on time. Clean vehicle and reasonable pricing. Recommended!',
+        date: '1 week ago'
+      },
+      {
+        name: 'Vikash Gupta',
+        location: 'Lucknow, UP',
+        rating: 5,
+        comment: 'Booked tempo traveller for our group pilgrimage. Excellent service, comfortable journey, and the driver was very cooperative. Thank you Paradise Tours!',
+        date: '2 months ago'
+      },
+      {
+        name: 'Meera Joshi',
+        location: 'Pune',
+        rating: 4,
+        comment: 'Good service overall. The car was in good condition and the driver was polite. Booking process was smooth through WhatsApp. Will use again.',
+        date: '3 weeks ago'
+      }
+    ];
+
+    // References
+    const slidesEl = document.getElementById('slides');
+    const dotsEl = document.getElementById('dots');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+
+    let currentIndex = 0;
+    let autoPlay = true;
+    const AUTOPLAY_INTERVAL = 4000;
+    let autoplayTimer = null;
+
+    // render slides and dots
+    function render() {
+      slidesEl.innerHTML = '';
+      dotsEl.innerHTML = '';
+
+      reviews.forEach((r, i) => {
+        // build stars
+        let starsHtml = '';
+        for (let s = 0; s < 5; s++) {
+          if (s < r.rating) {
+            starsHtml += '<svg class="inline-block w-5 h-5 md:w-6 md:h-6 text-yellow-400 mr-0.5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .587l3.668 7.431 8.2 1.192-5.934 5.788 1.402 8.175L12 18.896 4.664 23.173l1.402-8.175L.132 9.21l8.2-1.192z"/></svg>';
+          } else {
+            starsHtml += '<svg class="inline-block w-5 h-5 md:w-6 md:h-6 text-gray-600 mr-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 .587l3.668 7.431 8.2 1.192-5.934 5.788 1.402 8.175L12 18.896 4.664 23.173l1.402-8.175L.132 9.21l8.2-1.192z" stroke-width="1.2" /></svg>';
+          }
+        }
+
+        const slide = document.createElement('div');
+        slide.className = 'slide rounded-2xl p-6 md:p-8 bg-gradient-to-br from-gray-900 to-gray-800 border border-gray-700';
+        if (i === currentIndex) slide.classList.add('active');
+
+        slide.innerHTML = `
+          <div class="flex items-center justify-between mb-6">
+            <div class="flex items-center">${starsHtml}</div>
+            <div class="quote-circle bg-yellow-400 text-gray-900"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 7v6a2 2 0 0 1-2 2h-4l-3 3v-3H7a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2z" stroke-width="1.4"></path></svg></div>
+          </div>
+
+          <p class="text-gray-300 mb-6 md:mb-8 leading-relaxed text-base md:text-lg">"${escapeHtml(r.comment)}"</p>
+
+          <div class="border-t border-gray-700 pt-4 md:pt-6">
+            <div class="flex justify-between items-center">
+              <div>
+                <h4 class="text-white font-semibold text-lg md:text-xl">${escapeHtml(r.name)}</h4>
+                <p class="text-gray-400 text-sm md:text-base">${escapeHtml(r.location)}</p>
+              </div>
+              <span class="text-gray-500 text-sm md:text-base">${escapeHtml(r.date)}</span>
+            </div>
+          </div>
+        `;
+
+        slidesEl.appendChild(slide);
+
+        // dot
+        const dot = document.createElement('button');
+        dot.className = `dot w-2 h-2 md:w-3 md:h-3 rounded-full ${i === currentIndex ? 'bg-yellow-400 scale-125' : 'bg-gray-600 hover:bg-gray-500'}`;
+        dot.setAttribute('aria-label', 'Go to review ' + (i+1));
+        dot.addEventListener('click', () => {
+          goToReview(i);
+        });
+        dotsEl.appendChild(dot);
+      });
+    }
+
+    // sanitize text for HTML insertion
+    function escapeHtml(text) {
+      if (!text) return '';
+      return text.replaceAll('&', '&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');
+    }
+
+    function nextReview() {
+      currentIndex = (currentIndex + 1) % reviews.length;
+      renderActiveSlide();
+    }
+    function prevReview() {
+      currentIndex = (currentIndex - 1 + reviews.length) % reviews.length;
+      renderActiveSlide();
+    }
+    function goToReview(index) {
+      currentIndex = index;
+      renderActiveSlide();
+    }
+
+    // re-render active classes (without rebuilding entire DOM to keep transitions smooth)
+    function renderActiveSlide() {
+      const slideEls = Array.from(slidesEl.children);
+      slideEls.forEach((el, idx) => {
+        if (idx === currentIndex) {
+          el.classList.add('active');
+        } else {
+          el.classList.remove('active');
+        }
+      });
+
+      // update dots classes
+      const dotEls = Array.from(dotsEl.children);
+      dotEls.forEach((d, idx) => {
+        if (idx === currentIndex) {
+          d.classList.remove('bg-gray-600','hover:bg-gray-500');
+          d.classList.add('bg-yellow-400','scale-125');
+        } else {
+          d.classList.remove('bg-yellow-400','scale-125');
+          d.classList.add('bg-gray-600','hover:bg-gray-500');
+        }
+      });
+    }
+
+    // autoplay controls
+    function startAutoplay() {
+      stopAutoplay();
+      autoplayTimer = setInterval(() => {
+        nextReview();
+      }, AUTOPLAY_INTERVAL);
+    }
+    function stopAutoplay() {
+      if (autoplayTimer) {
+        clearInterval(autoplayTimer);
+        autoplayTimer = null;
+      }
+    }
+
+    // pause on hover
+    const wrapper = document.querySelector('.slide-wrapper');
+    wrapper.addEventListener('mouseenter', () => { stopAutoplay(); });
+    wrapper.addEventListener('mouseleave', () => { if (autoPlay) startAutoplay(); });
+
+    // wire buttons
+    prevBtn.addEventListener('click', () => { prevReview(); });
+    nextBtn.addEventListener('click', () => { nextReview(); });
+
+    // initialize
+    render();
+    renderActiveSlide();
+    startAutoplay();
+
+    // keyboard navigation (optional)
+    document.addEventListener('keydown', (ev) => {
+      if (ev.key === 'ArrowLeft') prevReview();
+      if (ev.key === 'ArrowRight') nextReview();
+    });
+
+    // clean up on page hide/unload
+    window.addEventListener('visibilitychange', () => {
+      if (document.hidden) stopAutoplay(); else if (autoPlay) startAutoplay();
+    });
+
+  </script>
+</body>
+</html>

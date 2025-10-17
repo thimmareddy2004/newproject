@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Paradise Tours — About</title>
+  <!-- Tailwind Play CDN (for demo). In production, use a compiled Tailwind build. -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+
+  <!-- NAVBAR -->
+  <nav class="bg-gray-900 text-white shadow-lg sticky top-0 z-50">
+    <div class="container mx-auto px-4">
+      <div class="flex justify-between items-center py-4">
+        <!-- Brand -->
+        <a href="/" class="flex items-center space-x-2">
+          <!-- simple car icon -->
+          <svg class="w-6 h-6 md:w-8 md:h-8 text-yellow-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 13l1-3h16l1 3M5 16a1 1 0 100 2 1 1 0 000-2zm14 0a1 1 0 100 2 1 1 0 000-2zM6 10V7a2 2 0 012-2h8a2 2 0 012 2v3" />
+          </svg>
+
+          <div>
+            <h1 class="text-lg md:text-2xl font-bold text-yellow-400">Paradise Tours</h1>
+            <p class="text-xs text-gray-300 hidden sm:block">Premium Travel Services</p>
+          </div>
+        </a>
+
+        <!-- Desktop Navigation -->
+        <div class="hidden lg:flex items-center space-x-6 xl:space-x-8">
+          <a href="/" class="hover:text-yellow-400 transition-colors duration-200 font-medium text-sm xl:text-base">Home</a>
+          <a href="/taxi-rental" class="hover:text-yellow-400 transition-colors duration-200 font-medium text-sm xl:text-base">Taxi Rental</a>
+          <a href="/tour-packages" class="hover:text-yellow-400 transition-colors duration-200 font-medium text-sm xl:text-base">Tour Packages</a>
+          
+          <a href="{{ url_for('render_template_page', page='Contact_Us') }}" class="hover:text-yellow-400 transition-colors duration-200 font-medium text-sm xl:text-base">Contact</a>
+
+          <!-- Example: User logged in (replace with server-side rendering or JS checks) -->
+          <div id="desktop-auth" class="flex items-center space-x-4">
+            <a href="/dashboard" class="flex items-center space-x-1 hover:text-yellow-400 transition-colors text-sm xl:text-base">
+              <!-- user icon -->
+              <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                <circle cx="12" cy="8" r="4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M6 20c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              <span>Dashboard</span>
+            </a>
+
+            <button onclick="handleSignOut()" class="flex items-center space-x-1 hover:text-yellow-400 transition-colors text-sm xl:text-base">
+              <!-- logout icon -->
+              <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8v8" />
+              </svg>
+              <span>Sign Out</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Mobile Menu Button -->
+        <button id="mobile-menu-btn" class="lg:hidden focus:outline-none" aria-label="Toggle menu" aria-expanded="false">
+          <!-- hamburger icon (shown by default) -->
+          <svg id="icon-hamburger" class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+          <!-- close icon (hidden by default) -->
+          <svg id="icon-close" class="w-6 h-6 hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Mobile Navigation (hidden by default) -->
+      <div id="mobile-menu" class="lg:hidden hidden pb-4">
+        <a href="/" class="block py-3 hover:text-yellow-400 transition-colors border-b border-gray-700 last:border-b-0" onclick="closeMobileMenu()">Home</a>
+        <a href="/taxi-rental" class="block py-3 hover:text-yellow-400 transition-colors border-b border-gray-700 last:border-b-0" onclick="closeMobileMenu()">Taxi Rental</a>
+        <a href="/tour-packages" class="block py-3 hover:text-yellow-400 transition-colors border-b border-gray-700 last:border-b-0" onclick="closeMobileMenu()">Tour Packages</a>
+        
+        <a href="{{ url_for('render_template_page', page='Contact_Us') }}" class="block py-3 hover:text-yellow-400 transition-colors border-b border-gray-700 last:border-b-0" onclick="closeMobileMenu()">Contact</a>
+
+        <!-- Auth section (mobile) -->
+        <div class="pt-4 border-t border-gray-700 mt-4">
+          <a href="/dashboard" class="block py-3 hover:text-yellow-400 transition-colors" onclick="closeMobileMenu()">Dashboard</a>
+          <button onclick="handleSignOut(); closeMobileMenu();" class="block py-3 hover:text-yellow-400 transition-colors w-full text-left">Sign Out</button>
+
+          <!-- If not logged in, use:
+          <a href="/login" class="block py-3 hover:text-yellow-400 transition-colors" onclick="closeMobileMenu()">Login</a>
+          <a href="/signup" class="block py-3 hover:text-yellow-400 transition-colors" onclick="closeMobileMenu()">Sign Up</a>
+          -->
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- About / Contact content -->
+  <main class="container mx-auto px-4 mt-8">
+    <div class="grid md:grid-cols-3 gap-8 items-start">
+      <div class="md:col-span-2 bg-white rounded-2xl p-8 shadow-lg">
+        <h2 class="text-2xl font-bold text-gray-900 mb-4">About Paradise Tours</h2>
+        <p class="text-gray-700 mb-4">Paradise Tours is dedicated to creating memorable travel experiences across India. We offer taxi rentals, curated tour packages, airport transfers and outstation trips with experienced drivers and carefully maintained vehicles. Our focus is on safety, comfort and personal service.</p>
+
+        <h3 class="text-xl font-semibold text-gray-900 mt-6 mb-2">Our Values</h3>
+        <ul class="list-disc list-inside text-gray-700 space-y-2">
+          <li>Customer-first service with transparent pricing</li>
+          <li>Professional drivers with local knowledge</li>
+          <li>Flexible packages tailored to your needs</li>
+        </ul>
+      </div>
+
+      <aside class="bg-white rounded-2xl p-6 shadow-lg">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">Contact Information</h3>
+
+        <div class="space-y-3 text-gray-700">
+          <div>
+            <h4 class="text-sm text-gray-500">Owner</h4>
+            <p class="font-medium">Mr. Thimma Reddy</p>
+          </div>
+
+          <div>
+            <h4 class="text-sm text-gray-500">Address</h4>
+            <p>Electronic City, Bengaluru</p>
+          </div>
+
+          <div>
+            <h4 class="text-sm text-gray-500">Phone</h4>
+            <p>+91-7013968101</p>
+          </div>
+
+          <div>
+            <h4 class="text-sm text-gray-500">Email</h4>
+            <p><a href="mailto:gthimmareddyg0@gmail.com" class="text-yellow-500">gthimmareddyg0@gmail.com</a></p>
+          </div>
+
+          <div class="mt-4">
+            <a href="{{ url_for('render_template_page', page='Contact_Us') }}" class="inline-block bg-yellow-400 text-gray-900 px-4 py-2 rounded-lg font-semibold hover:bg-yellow-300">Book / Contact</a>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <!-- Minimal JS for menu toggle and sign-out placeholder -->
+  <script>
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const iconHamburger = document.getElementById('icon-hamburger');
+    const iconClose = document.getElementById('icon-close');
+
+    let menuOpen = false;
+
+    mobileMenuBtn.addEventListener('click', () => {
+      menuOpen = !menuOpen;
+      mobileMenu.classList.toggle('hidden', !menuOpen);
+      iconHamburger.classList.toggle('hidden', menuOpen);
+      iconClose.classList.toggle('hidden', !menuOpen);
+      mobileMenuBtn.setAttribute('aria-expanded', String(menuOpen));
+    });
+
+    function closeMobileMenu() {
+      menuOpen = false;
+      mobileMenu.classList.add('hidden');
+      iconHamburger.classList.remove('hidden');
+      iconClose.classList.add('hidden');
+      mobileMenuBtn.setAttribute('aria-expanded', 'false');
+    }
+
+    // Placeholder sign-out function: replace with real sign-out (API / auth cookie clear / redirect)
+    function handleSignOut() {
+      // Example: clear auth token, call sign out endpoint, then redirect.
+      // For demo we just show an alert and redirect to homepage.
+      try {
+        alert('Signed out successfully');
+        window.location.href = '/';
+      } catch (err) {
+        alert('Error signing out');
+      }
+    }
+  </script>
+</body>
+</html>

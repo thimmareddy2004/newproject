@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Tour Packages</title>
+
+  <!-- Tailwind Play CDN for quick styling (production: build your CSS) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    /* small extra styles to improve card shadows and backdrop blur in non-Tailwind env */
+    .backdrop-blur-sm { backdrop-filter: blur(4px); }
+  </style>
+</head>
+<body class="bg-gray-900 text-white">
+
+  <section class="py-12 md:py-20 bg-gradient-to-br from-gray-900 via-black to-gray-900 relative overflow-hidden">
+    <!-- Animated Background Elements (static look) -->
+    <div class="absolute inset-0 opacity-5 pointer-events-none">
+      <div class="absolute top-5 md:top-10 left-5 md:left-10 w-20 h-20 md:w-40 md:h-40 border-2 border-yellow-400 rounded-full"></div>
+      <div class="absolute bottom-5 md:bottom-10 right-5 md:right-10 w-16 h-16 md:w-32 md:h-32 border-2 border-blue-400 rounded-full"></div>
+    </div>
+
+    <div class="container mx-auto px-4 relative z-10">
+      <div class="text-center mb-12 md:mb-16">
+        <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 md:mb-6">
+          Tour <span class="text-yellow-400">Packages</span>
+        </h2>
+        <p class="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto">
+          Discover incredible destinations with our carefully crafted tour packages
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+        <!-- Card 1 -->
+        <div class="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl overflow-hidden transition-all duration-500 group shadow-2xl border border-gray-700 hover:border-yellow-400/50">
+          <div class="relative h-48 md:h-56 overflow-hidden">
+            <img src="{{ url_for('static', filename='images/vnscrop.jpg') }}" alt="Varanasi Spiritual Tour" class="w-full h-full object-cover transition-transform duration-700" />
+            <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/50 to-transparent"></div>
+
+            <!-- Glowing price tag -->
+            <div class="absolute top-3 md:top-4 right-3 md:right-4 bg-gradient-to-r from-yellow-400 to-yellow-500 text-gray-900 px-2 md:px-3 py-1 rounded-full text-xs md:text-sm font-semibold shadow-lg">
+              ₹8,999
+            </div>
+
+            <!-- Floating rating -->
+            <div class="absolute bottom-3 md:bottom-4 left-3 md:left-4 flex items-center text-white bg-black/50 backdrop-blur-sm px-2 md:px-3 py-1 rounded-full">
+              <svg class="w-3 h-3 md:w-4 md:h-4 text-yellow-400 mr-1" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .587l3.668 7.431 8.2 1.192-5.934 5.788 1.402 8.175L12 18.896 4.664 23.173l1.402-8.175L.132 9.21l8.2-1.192z"/></svg>
+              <span class="text-xs md:text-sm font-semibold">4.9</span>
+            </div>
+
+            <!-- Animated corner element -->
+            <div class="absolute top-0 right-0 w-8 h-8 md:w-12 md:h-12 bg-gradient-to-bl from-yellow-400/30 to-transparent"></div>
+          </div>
+
+          <div class="p-4 md:p-6">
+            <div class="flex justify-between items-start mb-2 md:mb-3">
+              <h3 class="text-lg md:text-xl font-bold text-white">Varanasi Spiritual Tour</h3>
+              <div class="flex items-center text-gray-300 bg-gray-800 px-2 py-1 rounded-full">
+                <svg class="w-3 h-3 md:w-4 md:h-4 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <circle cx="12" cy="12" r="9"></circle>
+                  <path d="M12 7v6l4 2"></path>
+                </svg>
+                <span class="text-xs md:text-sm">2 Days / 1 Night</span>
+              </div>
+            </div>
+
+            <div class="mb-3 md:mb-4">
+              <h4 class="text-yellow-400 text-xs md:text-sm font-semibold mb-1 md:mb-2">Destinations:</h4>
+              <div class="flex flex-wrap gap-1">
+                <span class="bg-gradient-to-r from-gray-700 to-gray-600 text-gray-300 px-2 py-1 rounded text-xs border border-gray-600">Kashi Vishwanath</span>
+                <span class="bg-gradient-to-r from-gray-700 to-gray-600 text-gray-300 px-2 py-1 rounded text-xs border border-gray-600">Dashashwamedh Ghat</span>
+                <span class="bg-gradient-to-r from-gray-700 to-gray-600 text-gray-300 px-2 py-1 rounded text-xs border border-gray-600">Sarnath</span>
+              </div>
+            </div>
+
+            <div class="mb-3 md:mb-4">
+              <h4 class="text-yellow-400 text-xs md:text-sm font-semibold mb-1 md:mb-2">Includes:</h4>
+              <div class="flex flex-wrap gap-1">
+                <span class="bg-gradient-to-r from-gray-700 to-gray-600 text-gray-300 px-2 py-1 rounded text-xs border border-gray-600">Accommodation</span>
+                <span class="bg-gradient-to-r from-gray-700 to-gray-600 text-gray-300 px-2 py-1 rounded text-xs border border-gray-600">Meals</span>
+                <span class="bg-gradient-to-r from-gray-700 to-gray-600 text-gray-300 px-2 py-1 rounded text-xs border border-gray-600">Guide</span>
+                <span class="bg-gradient-to-r from-gray-700 to-gray-600 text-gray-300 px-2 py-1 rounded text-xs border border-gray-600">Transportation</span>
+              </div>
+            </div>
+
+            <div>
+              <a href="/taxi-rental" class="w-full bg-gradient-to-r from-yellow-400 to-yellow-500 text-gray-900 py-2 md:py-3 rounded-lg font-semibold hover:from-yellow-300 hover:to-yellow-400 transition-all duration-300 text-center block shadow-lg hover:shadow-yellow-400/25 text-xs md:text-sm">Book Now</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl overflow-hidden transition-all duration-500 group shadow-2xl border border-gray-700 hover:border-yellow-400/50">
+          <div class="relative h-48 md:h-56 overflow-hidden">
+            <img src="{{ url_for('static', filename='images/ayodhya.jpg') }}" alt="Ayodhya Pilgrimage" class="w-full h-full object-cover transition-transform duration-700" />
+            <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/50 to-transparent"></div>
+
+            <div class="absolute top-3 md:top-4 right-3 md:right-4 bg-gradient-to-r from-yellow-400 to-yellow-500 text-gray-900 px-2 md:px-3 py-1 rounded-full text-xs md:text-sm font-semibold shadow-lg">
+              ₹12,999
+            </div>
+
+            <div class="absolute bottom-3 md:bottom-4 left-3 md:left-4 flex items-center text-white bg-black/50 backdrop-blur-sm px-2 md:px-3 py-1 rounded-full">
+              <svg class="w-3 h-3 md:w-4 md:h-4 text-yellow-400 mr-1" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .587l3.668 7.431 8.2 1.192-5.934 5.788 1.402 8.175L12 18.896 4.664 23.173l1.402-8.175L.132 9.21l8.2-1.192z"/></svg>
+              <span class="text-xs md:text-sm font-semibold">4.8</span>
+            </div>
+
+            <div class="absolute top-0 right-0 w-8 h-8 md:w-12 md:h-12 bg-gradient-to-bl from-yellow-400/30 to-transparent"></div>
+          </div>
+
+          <div class="p-4 md:p-6">
+            <div class="flex justify-between items-start mb-2 md:mb-3">
+              <h3 class="text-lg md:text-xl font-bold text-white">Ayodhya Pilgrimage</h3>
+              <div class="flex items-center text-gray-300 bg-gray-800 px-2 py-1 rounded-full">
+                <svg class="w-3 h-3 md:w-4 md:h-4 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <circle cx="12" cy="12" r="9"></circle>
+                  <path d="M12 7v6l4 2"></path>
+                </svg>
+                <span class="text-xs md:text-sm">3 Days / 2 Nights</span>
+              </div>
+            </div>
+
+            <div class="mb-3 md:mb-4">
+              <h4 class="text-yellow-400 text-xs md:text-sm font-semibold mb-1 md:mb-2">Destinations:</h4>
+              <div class="flex flex-wrap gap-1">
+                <span class="bg-gradient-to-r from-gray-700 to-gray-600 text-gray-300 px-2 py-1 rounded text-xs border border-gray-600">Ram Janmabhoomi</span>
+                <span class="bg-gradient-to-r from-gray-700 to-gray-600 text-gray-300 px-2 py-1 rounded text-xs border border-gray-600">Hanuman Garhi</span>
+                <span class="bg-gradient-to-r from-gray-700 to-gray-600 text-gray-300 px-2 py-1 rounded text-xs border border-gray-600">Kanak Bhawan</span>
+              </div>
+            </div>
+
+            <div class="mb-3 md:mb-4">
+              <h4 class="text-yellow-400 text-xs md:text-sm font-semibold mb-1 md:mb-2">Includes:</h4>
+              <div class="flex flex-wrap gap-1">
+                <span class="bg-gradient-to-r from-gray-700 to-gray-600 text-gray-300 px-2 py-1 rounded text-xs border border-gray-600">Accommodation</span>
+                <span class="bg-gradient-to-r from-gray-700 to-gray-600 text-gray-300 px-2 py-1 rounded text-xs border border-gray-600">Meals</span>
+                <span class="bg-gradient-to-r from-gray-700 to-gray-600 text-gray-300 px-2 py-1 rounded text-xs border border-gray-600">Guide</span>
+                <span class="bg-gradient-to-r from-gray-700 to-gray-600 text-gray-300 px-2 py-1 rounded text-xs border border-gray-600">Transportation</span>
+              </div>
+            </div>
+
+            <div>
+              <a href="/taxi-rental" class="w-full bg-gradient-to-r from-yellow-400 to-yellow-500 text-gray-900 py-2 md:py-3 rounded-lg font-semibold hover:from-yellow-300 hover:to-yellow-400 transition-all duration-300 text-center block shadow-lg hover:shadow-yellow-400/25 text-xs md:text-sm">Book Now</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl overflow-hidden transition-all duration-500 group shadow-2xl border border-gray-700 hover:border-yellow-400/50">
+          <div class="relative h-48 md:h-56 overflow-hidden">
+            <img src="{{ url_for('static', filename='images/vrindavancrop.jpg') }}" alt="Mathura Vrindavan" class="w-full h-full object-cover transition-transform duration-700" />
+            <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/50 to-transparent"></div>
+
+            <div class="absolute top-3 md:top-4 right-3 md:right-4 bg-gradient-to-r from-yellow-400 to-yellow-500 text-gray-900 px-2 md:px-3 py-1 rounded-full text-xs md:text-sm font-semibold shadow-lg">
+              ₹9,999
+            </div>
+
+            <div class="absolute bottom-3 md:bottom-4 left-3 md:left-4 flex items-center text-white bg-black/50 backdrop-blur-sm px-2 md:px-3 py-1 rounded-full">
+              <svg class="w-3 h-3 md:w-4 md:h-4 text-yellow-400 mr-1" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .587l3.668 7.431 8.2 1.192-5.934 5.788 1.402 8.175L12 18.896 4.664 23.173l1.402-8.175L.132 9.21l8.2-1.192z"/></svg>
+              <span class="text-xs md:text-sm font-semibold">4.7</span>
+            </div>
+
+            <div class="absolute top-0 right-0 w-8 h-8 md:w-12 md:h-12 bg-gradient-to-bl from-yellow-400/30 to-transparent"></div>
+          </div>
+
+          <div class="p-4 md:p-6">
+            <div class="flex justify-between items-start mb-2 md:mb-3">
+              <h3 class="text-lg md:text-xl font-bold text-white">Mathura Vrindavan</h3>
+              <div class="flex items-center text-gray-300 bg-gray-800 px-2 py-1 rounded-full">
+                <svg class="w-3 h-3 md:w-4 md:h-4 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <circle cx="12" cy="12" r="9"></circle>
+                  <path d="M12 7v6l4 2"></path>
+                </svg>
+                <span class="text-xs md:text-sm">2 Days / 1 Night</span>
+              </div>
+            </div>
+
+            <div class="mb-3 md:mb-4">
+              <h4 class="text-yellow-400 text-xs md:text-sm font-semibold mb-1 md:mb-2">Destinations:</h4>
+              <div class="flex flex-wrap gap-1">
+                <span class="bg-gradient-to-r from-gray-700 to-gray-600 text-gray-300 px-2 py-1 rounded text-xs border border-gray-600">Krishna Janmabhoomi</span>
+                <span class="bg-gradient-to-r from-gray-700 to-gray-600 text-gray-300 px-2 py-1 rounded text-xs border border-gray-600">Banke Bihari</span>
+                <span class="bg-gradient-to-r from-gray-700 to-gray-600 text-gray-300 px-2 py-1 rounded text-xs border border-gray-600">ISKCON Temple</span>
+              </div>
+            </div>
+
+            <div class="mb-3 md:mb-4">
+              <h4 class="text-yellow-400 text-xs md:text-sm font-semibold mb-1 md:mb-2">Includes:</h4>
+              <div class="flex flex-wrap gap-1">
+                <span class="bg-gradient-to-r from-gray-700 to-gray-600 text-gray-300 px-2 py-1 rounded text-xs border border-gray-600">Accommodation</span>
+                <span class="bg-gradient-to-r from-gray-700 to-gray-600 text-gray-300 px-2 py-1 rounded text-xs border border-gray-600">Meals</span>
+                <span class="bg-gradient-to-r from-gray-700 to-gray-600 text-gray-300 px-2 py-1 rounded text-xs border border-gray-600">Guide</span>
+                <span class="bg-gradient-to-r from-gray-700 to-gray-600 text-gray-300 px-2 py-1 rounded text-xs border border-gray-600">Transportation</span>
+              </div>
+            </div>
+
+            <div>
+              <a href="/taxi-rental" class="w-full bg-gradient-to-r from-yellow-400 to-yellow-500 text-gray-900 py-2 md:py-3 rounded-lg font-semibold hover:from-yellow-300 hover:to-yellow-400 transition-all duration-300 text-center block shadow-lg hover:shadow-yellow-400/25 text-xs md:text-sm">Book Now</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl overflow-hidden transition-all duration-500 group shadow-2xl border border-gray-700 hover:border-yellow-400/50">
+          <div class="relative h-48 md:h-56 overflow-hidden">
+            <img src="{{ url_for('static', filename='images/nepal.jpg') }}" alt="Nepal Tour" class="w-full h-full object-cover transition-transform duration-700" />
+            <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/50 to-transparent"></div>
+
+            <div class="absolute top-3 md:top-4 right-3 md:right-4 bg-gradient-to-r from-yellow-400 to-yellow-500 text-gray-900 px-2 md:px-3 py-1 rounded-full text-xs md:text-sm font-semibold shadow-lg">
+              ₹24,999
+            </div>
+
+            <div class="absolute bottom-3 md:bottom-4 left-3 md:left-4 flex items-center text-white bg-black/50 backdrop-blur-sm px-2 md:px-3 py-1 rounded-full">
+              <svg class="w-3 h-3 md:w-4 md:h-4 text-yellow-400 mr-1" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .587l3.668 7.431 8.2 1.192-5.934 5.788 1.402 8.175L12 18.896 4.664 23.173l1.402-8.175L.132 9.21l8.2-1.192z"/></svg>
+              <span class="text-xs md:text-sm font-semibold">4.9</span>
+            </div>
+
+            <div class="absolute top-0 right-0 w-8 h-8 md:w-12 md:h-12 bg-gradient-to-bl from-yellow-400/30 to-transparent"></div>
+          </div>
+
+          <div class="p-4 md:p-6">
+            <div class="flex justify-between items-start mb-2 md:mb-3">
+              <h3 class="text-lg md:text-xl font-bold text-white">Nepal Tour</h3>
+              <div class="flex items-center text-gray-300 bg-gray-800 px-2 py-1 rounded-full">
+                <svg class="w-3 h-3 md:w-4 md:h-4 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <circle cx="12" cy="12" r="9"></circle>
+                  <path d="M12 7v6l4 2"></path>
+                </svg>
+                <span class="text-xs md:text-sm">5 Days / 4 Nights</span>
+              </div>
+            </div>
+
+            <div class="mb-3 md:mb-4">
+              <h4 class="text-yellow-400 text-xs md:text-sm font-semibold mb-1 md:mb-2">Destinations:</h4>
+              <div class="flex flex-wrap gap-1">
+                <span class="bg-gradient-to-r from-gray-700 to-gray-600 text-gray-300 px-2 py-1 rounded text-xs border border-gray-600">Kathmandu</span>
+                <span class="bg-gradient-to-r from-gray-700 to-gray-600 text-gray-300 px-2 py-1 rounded text-xs border border-gray-600">Pokhara</span>
+                <span class="bg-gradient-to-r from-gray-700 to-gray-600 text-gray-300 px-2 py-1 rounded text-xs border border-gray-600">Lumbini</span>
+              </div>
+            </div>
+
+            <div class="mb-3 md:mb-4">
+              <h4 class="text-yellow-400 text-xs md:text-sm font-semibold mb-1 md:mb-2">Includes:</h4>
+              <div class="flex flex-wrap gap-1">
+                <span class="bg-gradient-to-r from-gray-700 to-gray-600 text-gray-300 px-2 py-1 rounded text-xs border border-gray-600">Accommodation</span>
+                <span class="bg-gradient-to-r from-gray-700 to-gray-600 text-gray-300 px-2 py-1 rounded text-xs border border-gray-600">Meals</span>
+                <span class="bg-gradient-to-r from-gray-700 to-gray-600 text-gray-300 px-2 py-1 rounded text-xs border border-gray-600">Guide</span>
+                <span class="bg-gradient-to-r from-gray-700 to-gray-600 text-gray-300 px-2 py-1 rounded text-xs border border-gray-600">Transportation</span>
+              </div>
+            </div>
+
+            <div>
+              <a href="/taxi-rental" class="w-full bg-gradient-to-r from-yellow-400 to-yellow-500 text-gray-900 py-2 md:py-3 rounded-lg font-semibold hover:from-yellow-300 hover:to-yellow-400 transition-all duration-300 text-center block shadow-lg hover:shadow-yellow-400/25 text-xs md:text-sm">Book Now</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 5 -->
+        <div class="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl overflow-hidden transition-all duration-500 group shadow-2xl border border-gray-700 hover:border-yellow-400/50">
+          <div class="relative h-48 md:h-56 overflow-hidden">
+            <img src="{{ url_for('static', filename='images/mp.jpg') }}" alt="Madhya Pradesh Heritage" class="w-full h-full object-cover transition-transform duration-700" />
+            <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/50 to-transparent"></div>
+
+            <div class="absolute top-3 md:top-4 right-3 md:right-4 bg-gradient-to-r from-yellow-400 to-yellow-500 text-gray-900 px-2 md:px-3 py-1 rounded-full text-xs md:text-sm font-semibold shadow-lg">
+              ₹18,999
+            </div>
+
+            <div class="absolute bottom-3 md:bottom-4 left-3 md:left-4 flex items-center text-white bg-black/50 backdrop-blur-sm px-2 md:px-3 py-1 rounded-full">
+              <svg class="w-3 h-3 md:w-4 md:h-4 text-yellow-400 mr-1" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .587l3.668 7.431 8.2 1.192-5.934 5.788 1.402 8.175L12 18.896 4.664 23.173l1.402-8.175L.132 9.21l8.2-1.192z"/></svg>
+              <span class="text-xs md:text-sm font-semibold">4.6</span>
+            </div>
+
+            <div class="absolute top-0 right-0 w-8 h-8 md:w-12 md:h-12 bg-gradient-to-bl from-yellow-400/30 to-transparent"></div>
+          </div>
+
+          <div class="p-4 md:p-6">
+            <div class="flex justify-between items-start mb-2 md:mb-3">
+              <h3 class="text-lg md:text-xl font-bold text-white">Madhya Pradesh Heritage</h3>
+              <div class="flex items-center text-gray-300 bg-gray-800 px-2 py-1 rounded-full">
+                <svg class="w-3 h-3 md:w-4 md:h-4 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <circle cx="12" cy="12" r="9"></circle>
+                  <path d="M12 7v6l4 2"></path>
+                </svg>
+                <span class="text-xs md:text-sm">4 Days / 3 Nights</span>
+              </div>
+            </div>
+
+            <div class="mb-3 md:mb-4">
+              <h4 class="text-yellow-400 text-xs md:text-sm font-semibold mb-1 md:mb-2">Destinations:</h4>
+              <div class="flex flex-wrap gap-1">
+                <span class="bg-gradient-to-r from-gray-700 to-gray-600 text-gray-300 px-2 py-1 rounded text-xs border border-gray-600">Khajuraho</span>
+                <span class="bg-gradient-to-r from-gray-700 to-gray-600 text-gray-300 px-2 py-1 rounded text-xs border border-gray-600">Orchha</span>
+                <span class="bg-gradient-to-r from-gray-700 to-gray-600 text-gray-300 px-2 py-1 rounded text-xs border border-gray-600">Gwalior</span>
+              </div>
+            </div>
+
+            <div class="mb-3 md:mb-4">
+              <h4 class="text-yellow-400 text-xs md:text-sm font-semibold mb-1 md:mb-2">Includes:</h4>
+              <div class="flex flex-wrap gap-1">
+                <span class="bg-gradient-to-r from-gray-700 to-gray-600 text-gray-300 px-2 py-1 rounded text-xs border border-gray-600">Accommodation</span>
+                <span class="bg-gradient-to-r from-gray-700 to-gray-600 text-gray-300 px-2 py-1 rounded text-xs border border-gray-600">Meals</span>
+                <span class="bg-gradient-to-r from-gray-700 to-gray-600 text-gray-300 px-2 py-1 rounded text-xs border border-gray-600">Guide</span>
+                <span class="bg-gradient-to-r from-gray-700 to-gray-600 text-gray-300 px-2 py-1 rounded text-xs border border-gray-600">Transportation</span>
+              </div>
+            </div>
+
+            <div>
+              <a href="/taxi-rental" class="w-full bg-gradient-to-r from-yellow-400 to-yellow-500 text-gray-900 py-2 md:py-3 rounded-lg font-semibold hover:from-yellow-300 hover:to-yellow-400 transition-all duration-300 text-center block shadow-lg hover:shadow-yellow-400/25 text-xs md:text-sm">Book Now</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 6 -->
+        <div class="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl overflow-hidden transition-all duration-500 group shadow-2xl border border-gray-700 hover:border-yellow-400/50">
+          <div class="relative h-48 md:h-56 overflow-hidden">
+            <img src="{{ url_for('static', filename='images/gujcrop.jpg') }}" alt="Gujarat Cultural Tour" class="w-full h-full object-cover transition-transform duration-700" />
+            <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/50 to-transparent"></div>
+
+            <div class="absolute top-3 md:top-4 right-3 md:right-4 bg-gradient-to-r from-yellow-400 to-yellow-500 text-gray-900 px-2 md:px-3 py-1 rounded-full text-xs md:text-sm font-semibold shadow-lg">
+              ₹28,999
+            </div>
+
+            <div class="absolute bottom-3 md:bottom-4 left-3 md:left-4 flex items-center text-white bg-black/50 backdrop-blur-sm px-2 md:px-3 py-1 rounded-full">
+              <svg class="w-3 h-3 md:w-4 md:h-4 text-yellow-400 mr-1" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .587l3.668 7.431 8.2 1.192-5.934 5.788 1.402 8.175L12 18.896 4.664 23.173l1.402-8.175L.132 9.21l8.2-1.192z"/></svg>
+              <span class="text-xs md:text-sm font-semibold">4.8</span>
+            </div>
+
+            <div class="absolute top-0 right-0 w-8 h-8 md:w-12 md:h-12 bg-gradient-to-bl from-yellow-400/30 to-transparent"></div>
+          </div>
+
+          <div class="p-4 md:p-6">
+            <div class="flex justify-between items-start mb-2 md:mb-3">
+              <h3 class="text-lg md:text-xl font-bold text-white">Gujarat Cultural Tour</h3>
+              <div class="flex items-center text-gray-300 bg-gray-800 px-2 py-1 rounded-full">
+                <svg class="w-3 h-3 md:w-4 md:h-4 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <circle cx="12" cy="12" r="9"></circle>
+                  <path d="M12 7v6l4 2"></path>
+                </svg>
+                <span class="text-xs md:text-sm">6 Days / 5 Nights</span>
+              </div>
+            </div>
+
+            <div class="mb-3 md:mb-4">
+              <h4 class="text-yellow-400 text-xs md:text-sm font-semibold mb-1 md:mb-2">Destinations:</h4>
+              <div class="flex flex-wrap gap-1">
+                <span class="bg-gradient-to-r from-gray-700 to-gray-600 text-gray-300 px-2 py-1 rounded text-xs border border-gray-600">Dwarka</span>
+                <span class="bg-gradient-to-r from-gray-700 to-gray-600 text-gray-300 px-2 py-1 rounded text-xs border border-gray-600">Somnath</span>
+                <span class="bg-gradient-to-r from-gray-700 to-gray-600 text-gray-300 px-2 py-1 rounded text-xs border border-gray-600">Rann of Kutch</span>
+              </div>
+            </div>
+
+            <div class="mb-3 md:mb-4">
+              <h4 class="text-yellow-400 text-xs md:text-sm font-semibold mb-1 md:mb-2">Includes:</h4>
+              <div class="flex flex-wrap gap-1">
+                <span class="bg-gradient-to-r from-gray-700 to-gray-600 text-gray-300 px-2 py-1 rounded text-xs border border-gray-600">Accommodation</span>
+                <span class="bg-gradient-to-r from-gray-700 to-gray-600 text-gray-300 px-2 py-1 rounded text-xs border border-gray-600">Meals</span>
+                <span class="bg-gradient-to-r from-gray-700 to-gray-600 text-gray-300 px-2 py-1 rounded text-xs border border-gray-600">Guide</span>
+                <span class="bg-gradient-to-r from-gray-700 to-gray-600 text-gray-300 px-2 py-1 rounded text-xs border border-gray-600">Transportation</span>
+              </div>
+            </div>
+
+            <div>
+              <a href="/taxi-rental" class="w-full bg-gradient-to-r from-yellow-400 to-yellow-500 text-gray-900 py-2 md:py-3 rounded-lg font-semibold hover:from-yellow-300 hover:to-yellow-400 transition-all duration-300 text-center block shadow-lg hover:shadow-yellow-400/25 text-xs md:text-sm">Book Now</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</body>
+</html>

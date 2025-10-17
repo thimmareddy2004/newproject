@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Karnataka — Full Map (seasons & categories & routing)</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+  <!-- Leaflet core -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <!-- MarkerCluster -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
+  <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+
+  <!-- GeoSearch (search box) -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-geosearch@3.1.0/dist/geosearch.css"/>
+  <script src="https://unpkg.com/leaflet-geosearch@3.1.0/dist/bundle.min.js"></script>
+
+  <style>
+    html,body { height:100%; margin:0; font-family:Inter, Roboto, Arial, sans-serif; background:#f4f7fb;}
+    #app { height:100vh; display:flex; align-items:stretch; }
+    .sidebar { width:360px; min-width:300px; padding:18px; box-sizing:border-box; background:#fff; margin:18px; border-radius:12px; box-shadow:0 12px 30px rgba(17,24,39,0.06); overflow:auto; z-index:40; }
+    #map { flex:1; margin:18px; border-radius:12px; box-shadow:0 12px 30px rgba(17,24,39,0.06); position:relative; }
+    h2{ margin:0 0 8px 0; font-size:18px;}
+    .season-toggle{ display:flex; gap:8px; margin:8px 0; }
+    .season-btn{ padding:8px 10px; border-radius:8px; border:none; cursor:pointer; font-weight:700; }
+    .season-btn.active{ box-shadow:0 12px 30px rgba(11,116,222,0.12); transform:translateY(-2px); }
+    .filters{ display:flex; gap:6px; flex-wrap:wrap; margin:8px 0; }
+    .chip{ padding:8px 10px; border-radius:8px; background:#eef4ff; color:#0b5fd3; cursor:pointer; font-weight:700; border:1px solid rgba(11,116,222,0.08); }
+    .chip.active{ background:#0b74de; color:white; }
+    .search { margin:8px 0; display:flex; gap:8px; }
+    .search input{ flex:1; padding:8px 10px; border-radius:8px; border:1px solid #e6eef9; }
+    .controls { display:flex; gap:8px; margin-top:8px; }
+    .small-btn{ padding:8px 10px; border-radius:8px; background:#fff; border:1px solid #e8f0ff; cursor:pointer; font-weight:700; }
+    .places { margin-top:10px; display:grid; gap:8px; }
+    .place-card{ display:flex; gap:8px; padding:8px; border-radius:10px; background:#fff; align-items:center; box-shadow:0 6px 16px rgba(14,24,35,0.04); cursor:pointer; }
+    .place-card img{ width:94px; height:64px; object-fit:cover; border-radius:8px; flex-shrink:0; }
+    .meta h4{ margin:0; font-size:14px; }
+    .meta p{ margin:3px 0 0 0; font-size:12px; color:#556; }
+    .route-info{ margin-top:8px; font-size:13px; color:#1f2b3a; }
+    .routing-controls{ display:flex; gap:8px; margin-top:10px; align-items:center; }
+    .mode-btn{ padding:6px 8px; border-radius:8px; border:1px solid #e6eef9; background:#fff; cursor:pointer; }
+    .footer-note{ margin-top:12px; font-size:12px; color:#556; }
+
+    /* Geosearch control placement tweak */
+    .leaflet-control-geosearch { margin-top: 8px; border-radius: 8px; box-shadow: 0 6px 18px rgba(20,30,60,0.08); }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <aside class="sidebar">
+      <h2>Karnataka — Explore by season & category</h2>
+      <div class="season-toggle">
+        <button class="season-btn active" data-season="all">All</button>
+        <button class="season-btn" data-season="monsoon" style="background:#2aa3c2;color:white">Monsoon</button>
+        <button class="season-btn" data-season="summer" style="background:#ff8c42;color:white">Summer</button>
+        <button class="season-btn" data-season="winter" style="background:#2eb872;color:white">Winter</button>
+      </div>
+
+      <div style="margin-top:6px">
+        <strong>Categories</strong>
+        <div class="filters" id="categories"></div>
+      </div>
+
+      <div class="search">
+        <input id="searchBox" placeholder="Search place or category (e.g., Hampi, waterfall)"/>
+        <button id="searchBtn" class="small-btn">Search</button>
+      </div>
+
+      <div class="controls">
+        <button id="fitAll" class="small-btn">Fit all visible</button>
+        <button id="clearRoute" class="small-btn">Clear route</button>
+        <button id="exportMap" class="small-btn">Export PNG</button>
+      </div>
+
+      <div class="routing-controls">
+        <div><strong>Route:</strong></div>
+        <button class="mode-btn" data-mode="driving">Car</button>
+        <button class="mode-btn" data-mode="cycling">Bike</button>
+        <button class="mode-btn" data-mode="walking">Walk</button>
+      </div>
+
+      <div class="route-info" id="routeInfo" aria-live="polite"></div>
+
+      <div class="places" id="placesList" role="list" aria-live="polite"></div>
+
+      <div class="footer-note">
+        Tip: Click a card to center & open popup. Click the map to set start/destination (or use card menu). Routing uses OSRM demo endpoints (public) — for production get your own routing service.
+      </div>
+    </aside>
+
+    <div id="map"></div>
+  </div>
+
+  <script>
+  // Config
+  const DATA_URL = "/static/data/karnataka_places.json"; // JSON dataset
+  const IMAGE_PREFIX_LOCAL = "/static/images/"; // local images prefix
+  const PLACEHOLDER = "/static/images/placeholder.png"; // placeholder in static/images/
+
+  // State
+  let allPlaces = [];
+  let filtered = [];
+  const activeCategories = new Set();
+  let activeSeason = "all";
+  let map, markersCluster;
+  let startPoint = null, endPoint = null;
+  let currentRouteLayer = null;
+  let currentMode = "driving"; // driving|cycling|walking
+
+  // Nice category color mapping
+  function categoryColor(cat){
+    cat = String(cat || '').toLowerCase();
+    if (cat.includes('waterfall')) return '#2aa3c2';
+    if (cat.includes('beach') || cat.includes('island')) return '#ff8c42';
+    if (cat.includes('fort') || cat.includes('historical') || cat.includes('temple')) return '#7b5cff';
+    if (cat.includes('trek') || cat.includes('ghat') || cat.includes('hill')) return '#2eb872';
+    if (cat.includes('wildlife') || cat.includes('park')) return '#6aa84f';
+    return '#ff7a59';
+  }
+
+  // Create a small circle icon (divIcon) for markers — crisp modern look
+  function iconForPlace(p){
+    const color = categoryColor(p.categories && p.categories[0] || '');
+    // create an SVG pin inside a circle for crispness at any zoom / retina
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 24 24" fill="none">
+      <circle cx="12" cy="10" r="7" fill="${color}" stroke="white" stroke-width="2"/>
+      <path d="M12 17.5c0-1.2 0-3.5 0-4.5" stroke="white" stroke-width="1.2" stroke-linecap="round"/>
+    </svg>`;
+    return L.divIcon({ html: svg, className: '', iconSize: [34,34], iconAnchor: [17,34] });
+  }
+
+  // Initialize map
+  function initMap(){
+    map = L.map('map', { preferCanvas:true, zoomControl:true }).setView([14.5,76.0], 7);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom:19, attribution:'© OpenStreetMap' }).addTo(map);
+
+    // marker cluster group
+    markersCluster = L.markerClusterGroup({ chunkedLoading:true, spiderfyOnMaxZoom:true, showCoverageOnHover:false });
+    map.addLayer(markersCluster);
+
+    // Add geosearch control (OpenStreetMap provider)
+    try {
+      const provider = new window.GeoSearch.OpenStreetMapProvider();
+      const searchControl = new window.GeoSearch.GeoSearchControl({
+        provider: provider, style: 'bar', showMarker: false, autoComplete: true, autoCompleteDelay: 250
+      });
+      map.addControl(searchControl);
+
+      // listen for result selection and present popup with Set Start/End buttons
+      window.GeoSearch.events.on('result', function(event) {
+        if (event && event.result && event.result.x && event.result.y) {
+          const lat = event.result.y, lon = event.result.x;
+          map.setView([lat, lon], 12, { animate:true });
+          L.popup({ maxWidth: 360 })
+            .setLatLng([lat, lon])
+            .setContent(`<div style="max-width:300px"><strong>${event.result.label}</strong>
+               <div style="margin-top:8px"><button onclick="setAsStart(${lat},${lon},'${event.result.label}')">Set Start</button>
+               <button onclick="setAsEnd(${lat},${lon},'${event.result.label}')">Set Destination</button></div></div>`)
+            .openOn(map);
+        }
+      });
+    } catch(e){
+      console.warn('Geosearch not available', e);
+    }
+
+    // allow clicking map to set start/destination
+    map.on('click', e => {
+      if (!startPoint) {
+        startPoint = [e.latlng.lat, e.latlng.lng];
+        showToast("Start set. Click map again to set destination.");
+        addTempMarker(e.latlng, "Start", "green");
+      } else if (!endPoint) {
+        endPoint = [e.latlng.lat, e.latlng.lng];
+        addTempMarker(e.latlng, "Destination", "red");
+        requestRoute();
+      } else {
+        clearTempMarkers();
+        startPoint = [e.latlng.lat, e.latlng.lng];
+        endPoint = null;
+        addTempMarker(e.latlng, "Start", "green");
+      }
+    });
+  }
+
+  // toast helper
+  function showToast(txt){
+    const el = document.createElement('div');
+    el.textContent = txt;
+    Object.assign(el.style, { position:'fixed', right:'18px', top:'18px', background:'#15304a', color:'#fff', padding:'8px 12px', borderRadius:'8px', zIndex:9999 });
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(), 2200);
+  }
+
+  // Temporary start/destination markers
+  const tempMarkers = [];
+  function addTempMarker(latlng, title, color){
+    const m = L.circleMarker(latlng, { radius:8, color: color, fillColor: color, fillOpacity:0.9 });
+    m.bindTooltip(title, {permanent:true, direction:'right'});
+    m.addTo(map);
+    tempMarkers.push(m);
+  }
+  function clearTempMarkers(){
+    tempMarkers.forEach(m=>map.removeLayer(m));
+    tempMarkers.length = 0;
+  }
+
+  // Load dataset and build UI
+  async function loadData(){
+    try {
+      const r = await fetch(DATA_URL);
+      allPlaces = await r.json();
+    } catch(err){
+      console.error("Failed to load dataset:", err);
+      alert("Failed to load data. Make sure static/data/karnataka_places.json exists.");
+      return;
+    }
+    buildCategoryFilters();
+    applyFiltersAndRender();
+  }
+
+  // Build category filter chips
+  function buildCategoryFilters(){
+    const set = new Set();
+    allPlaces.forEach(p => (p.categories || []).forEach(c => set.add(c)));
+    const container = document.getElementById('categories');
+    container.innerHTML = '';
+    Array.from(set).sort().forEach(cat => {
+      const btn = document.createElement('button');
+      btn.className = 'chip';
+      btn.textContent = cat;
+      btn.dataset.cat = cat;
+      btn.addEventListener('click', () => {
+        if (activeCategories.has(cat)) { activeCategories.delete(cat); btn.classList.remove('active'); }
+        else { activeCategories.add(cat); btn.classList.add('active'); }
+        applyFiltersAndRender();
+      });
+      container.appendChild(btn);
+    });
+  }
+
+  // Apply filters
+  function applyFiltersAndRender(){
+    filtered = allPlaces.filter(p => {
+      if (activeSeason !== 'all' && !((p.seasons||[]).includes(activeSeason))) return false;
+      if (activeCategories.size > 0) {
+        return (p.categories || []).some(c => activeCategories.has(c));
+      }
+      return true;
+    });
+    renderListAndMarkers();
+  }
+
+  // render markers (clustered) and sidebar list
+  function renderListAndMarkers(){
+    markersCluster.clearLayers();
+    const list = document.getElementById('placesList');
+    list.innerHTML = '';
+
+    filtered.forEach(p => {
+      // marker with nice divIcon
+      const m = L.marker([p.lat, p.lon], { icon: iconForPlace(p), title: p.name });
+      const imgUrl = IMAGE_PREFIX_LOCAL + p.id + ".jpg";
+      const popupHtml = `<div style="max-width:340px"><h3 style="margin:4px 0">${p.name}</h3>
+        <img src="${imgUrl}" alt="${p.name}" style="width:100%;height:160px;object-fit:cover;border-radius:8px" onerror="this.src='${PLACEHOLDER}'" />
+        <p style="margin:8px 0 0 0;color:#333">${p.short_desc || ''}</p>
+        <div style="margin-top:8px;font-size:13px;color:#556">Categories: ${(p.categories||[]).join(', ')}</div>
+        <div style="margin-top:6px;font-size:13px;color:#556">Seasons: ${(p.seasons||[]).join(', ')}</div>
+        <div style="margin-top:8px"><button onclick="setAsStart(${p.lat},${p.lon},'${escapeHtml(p.name)}')" style="margin-right:6px">Set Start</button>
+        <button onclick="setAsEnd(${p.lat},${p.lon},'${escapeHtml(p.name)}')">Set Destination</button></div>
+        </div>`;
+      m.bindPopup(popupHtml, {maxWidth:360});
+      m.on('click', () => {
+        map.setView([p.lat,p.lon], 12, { animate:true });
+      });
+      markersCluster.addLayer(m);
+
+      // sidebar card (lazy load images)
+      const card = document.createElement('div');
+      card.className = 'place-card';
+      const img = document.createElement('img');
+      img.dataset.src = imgUrl;
+      img.loading = 'lazy';
+      img.src = imgUrl; // use src so browser fetches; onerror fallback will handle
+      img.onerror = () => { img.src = PLACEHOLDER; };
+      const meta = document.createElement('div');
+      meta.className = 'meta';
+      meta.innerHTML = `<h4>${p.name}</h4><p>${p.short_desc || ''}</p><small style="color:#556">${(p.categories||[]).join(', ')} • Best: ${(p.seasons||[]).join('/')}</small>`;
+      card.appendChild(img);
+      card.appendChild(meta);
+
+      card.addEventListener('click', () => {
+        map.flyTo([p.lat, p.lon], 12, { animate:true });
+        m.openPopup();
+      });
+
+      // context menu to set start/destination quickly
+      card.addEventListener('contextmenu', (ev) => {
+        ev.preventDefault();
+        if (!startPoint) {
+          startPoint = [p.lat, p.lon];
+          clearTempMarkers();
+          addTempMarker({lat:p.lat, lng:p.lon}, "Start", "green");
+          showToast("Start point set to " + p.name);
+        } else if (!endPoint) {
+          endPoint = [p.lat, p.lon];
+          addTempMarker({lat:p.lat, lng:p.lon}, "Destination", "red");
+          showToast("Destination set to " + p.name);
+          requestRoute();
+        } else {
+          clearTempMarkers();
+          startPoint = [p.lat, p.lon];
+          endPoint = null;
+          addTempMarker({lat:p.lat, lng:p.lon}, "Start", "green");
+          showToast("Start reset to " + p.name);
+        }
+      });
+
+      list.appendChild(card);
+    });
+
+    // update count
+    document.getElementById('countSpan')?.remove();
+    const chip = document.createElement('div');
+    chip.id = 'countSpan';
+    chip.style.marginTop = '6px';
+    chip.style.fontSize = '13px';
+    chip.textContent = filtered.length + " places shown";
+    document.querySelector('.sidebar')?.appendChild(chip);
+  }
+
+  function escapeHtml(str){ return String(str).replace(/'/g, "\\'"); }
+
+  // popup action helpers for start/end (called from popup buttons)
+  window.setAsStart = function(lat,lon,name){
+    startPoint = [lat,lon];
+    clearTempMarkers();
+    addTempMarker({lat, lng: lon}, "Start", "green");
+    showToast("Start set to " + name);
+    map.closePopup();
+  };
+  window.setAsEnd = function(lat,lon,name){
+    endPoint = [lat,lon];
+    addTempMarker({lat, lng: lon}, "Destination", "red");
+    showToast("Destination set to " + name);
+    map.closePopup();
+    requestRoute();
+  };
+
+  // OSRM routing (public demo)
+  async function requestRoute(){
+    if (!startPoint || !endPoint) return showToast("Set both start and destination first.");
+    if (currentRouteLayer) { map.removeLayer(currentRouteLayer); currentRouteLayer = null; }
+    const osrmProfile = (currentMode === 'cycling') ? 'cycling' : (currentMode === 'walking') ? 'walking' : 'driving';
+    const coords = `${startPoint[1]},${startPoint[0]};${endPoint[1]},${endPoint[0]}`;
+    const url = `https://router.project-osrm.org/route/v1/${osrmProfile}/${coords}?overview=full&geometries=geojson&steps=false`;
+    try {
+      const r = await fetch(url);
+      const j = await r.json();
+      if (j.code !== 'Ok' || !j.routes || !j.routes.length) {
+        document.getElementById('routeInfo').innerText = 'Routing failed: ' + (j.message || 'no route');
+        return;
+      }
+      const route = j.routes[0];
+      const geom = route.geometry;
+      currentRouteLayer = L.geoJSON(geom, { style: { color:'#ff7a59', weight:5, opacity:0.9 } }).addTo(map);
+      map.fitBounds(currentRouteLayer.getBounds(), { padding:[40,40] });
+      const distKm = (route.distance/1000).toFixed(2);
+      const durMin = Math.round(route.duration/60);
+      document.getElementById('routeInfo').innerText = `Route (${currentMode}): ${distKm} km — ${durMin} min (approx)`;
+    } catch(err){
+      console.error("Route error", err);
+      document.getElementById('routeInfo').innerText = 'Routing error: ' + err.message;
+    }
+  }
+
+  function clearRoute(){
+    if (currentRouteLayer) { map.removeLayer(currentRouteLayer); currentRouteLayer = null; }
+    startPoint = null; endPoint = null; clearTempMarkers();
+    document.getElementById('routeInfo').innerText = '';
+  }
+
+  // UI wiring
+  function wireUI(){
+    document.querySelectorAll('.season-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.season-btn').forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+        activeSeason = btn.dataset.season === 'all' ? 'all' : btn.dataset.season;
+        applyFiltersAndRender();
+      });
+    });
+
+    document.getElementById('searchBtn').addEventListener('click', () => {
+      const q = document.getElementById('searchBox').value.trim().toLowerCase();
+      if (!q) return;
+      filtered = allPlaces.filter(p => {
+        const matchesName = p.name.toLowerCase().includes(q);
+        const matchesCat = p.categories.join(' ').toLowerCase().includes(q);
+        const seasonOk = (activeSeason === 'all') || (p.seasons||[]).includes(activeSeason);
+        const catOk = activeCategories.size === 0 || p.categories.some(c => activeCategories.has(c));
+        return seasonOk && catOk && (matchesName || matchesCat);
+      });
+      renderListAndMarkers();
+    });
+
+    document.getElementById('fitAll').addEventListener('click', () => {
+      const coords = filtered.map(p => [p.lat, p.lon]);
+      if (coords.length) map.fitBounds(coords, { padding:[40,40]});
+    });
+    document.getElementById('clearRoute').addEventListener('click', clearRoute);
+    document.getElementById('exportMap').addEventListener('click', () => {
+      try {
+        const url = map.getContainer().querySelector('canvas').toDataURL('image/png');
+        const a = document.createElement('a'); a.href = url; a.download = 'karnataka_map.png'; a.click();
+      } catch(e) { alert('Export not supported in this browser.'); }
+    });
+
+    document.querySelectorAll('.mode-btn').forEach(b => {
+      b.addEventListener('click', () => {
+        document.querySelectorAll('.mode-btn').forEach(x=>x.classList.remove('active'));
+        b.classList.add('active');
+        currentMode = b.dataset.mode;
+        if (startPoint && endPoint) requestRoute();
+      });
+    });
+  }
+
+  // Boot sequence
+  (async function(){
+    initMap();
+    wireUI();
+    await loadData();
+  })();
+
+  </script>
+</body>
+</html>
+
