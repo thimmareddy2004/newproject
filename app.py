@@ -484,7 +484,6 @@ def signup():
         flash("Error during signup!", "error")
         return redirect(url_for('auth'))
 
-
 @app.route('/signin', methods=['POST'])
 def signin():
     data = request.form
