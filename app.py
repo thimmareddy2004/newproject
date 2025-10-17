@@ -484,6 +484,7 @@ def signup():
         flash("Error during signup!", "error")
         return redirect(url_for('auth'))
 
+
 @app.route('/signin', methods=['POST'])
 def signin():
     data = request.form
@@ -602,7 +603,7 @@ def packages_view(package_id):
 @app.route('/static/images/<path:filename>')
 def static_images(filename):
     return send_from_directory(os.path.join(app.static_folder, 'images'), filename)
-
+bbbbbbbbbbbbbbbbbbbb
 # keep app run as before
 if __name__ == '__main__':
     app.run(debug=True)
