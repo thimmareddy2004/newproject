@@ -1,0 +1,104 @@
+<!-- templates/bike_rental.html -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Bike Rentals</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #0b1220;
+      --card: #0f172a;
+      --muted: #94a3b8;
+      --border: #1f2937;
+      --chip: #111827;
+      --brand: #facc15;
+      --text: #e5e7eb;
+    }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji"; background: var(--bg); color: var(--text); }
+    .container { max-width: 1120px; margin: 0 auto; padding: 2.5rem 1rem; }
+    .title { text-align: center; margin: 0 0 0.5rem; font-weight: 800; font-size: clamp(1.75rem, 2.2vw, 2.25rem); letter-spacing: -0.02em; }
+    .subtitle { text-align: center; color: var(--muted); margin-bottom: 2rem; }
+    .tabs { display:flex; gap:1rem; justify-content:center; margin-bottom:2rem; }
+    .chip { display:inline-flex; align-items:center; gap:.5rem; padding: .9rem 1.6rem; border-radius: 999px; font-weight:700; font-size:1rem; text-decoration:none; 
+            background: linear-gradient(135deg, #374151, #4b5563); color:#d1d5db; border:2px solid #4b5563; box-shadow: 0 8px 25px rgba(0,0,0,0.25); }
+    .chip:hover { background: linear-gradient(135deg, #4b5563, #6b7280); border-color: rgba(251,191,36,0.5); transform: translateY(-1px); transition: all .25s ease; }
+    .chip--on { background: linear-gradient(135deg, #fbbf24, #f59e0b); color:#1f2937; border-color:#fbbf24; box-shadow: 0 10px 30px rgba(251, 191, 36, .45); }
+    .chip .ico { font-size:1.05rem; }
+    .grid { display:grid; gap: 1.25rem; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+    .card { position: relative; background: var(--card); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; }
+    .badge { position: absolute; top: .75rem; right: .75rem; background: var(--brand); color:#111; font-weight:700; font-size:.9rem; padding:.3rem .65rem; border-radius:999px; }
+    .imgwrap { aspect-ratio: 16 / 10; background:#0b0f19; overflow:hidden; }
+    .imgwrap img { width:100%; height:100%; object-fit:cover; transition: transform .3s ease; display:block; }
+    .imgwrap:hover img { transform: scale(1.04); }
+    .body { padding: 1rem; }
+    .row { display:flex; align-items:flex-start; justify-content:space-between; gap:.75rem; }
+    .name { font-weight: 700; font-size: 1.05rem; margin:0; }
+    .type { margin:.25rem 0 0; color: var(--muted); font-size: .8rem; }
+    .rating { background: rgba(0,0,0,.35); color: #fbbf24; border-radius: 999px; padding: .2rem .45rem; font-weight: 700; font-size: .9rem; }
+    .blurb { color: #d1d5db; font-size: .9rem; margin: .6rem 0 0; min-height: 2.5em; }
+    .meta { margin-top:.6rem; display:flex; flex-wrap:wrap; gap:.5rem .8rem; color:#d1d5db; font-size:.9rem; }
+    .features { display:flex; flex-wrap:wrap; gap:.4rem .5rem; margin-top:.7rem; }
+    .chip2 { background: var(--chip); color:#e5e7eb; border:1px solid var(--border); padding:.25rem .55rem; border-radius:999px; font-size:.78rem; }
+    .cta { margin-top: .8rem; display:flex; align-items:center; justify-content:space-between; }
+    .price { font-weight: 700; }
+    .book-btn { width:auto; background: linear-gradient(135deg, #fbbf24, #f59e0b); color:#1f2937; padding: 0.7rem 1.2rem; border:none; border-radius:0.75rem; font-weight:700; font-size:.95rem; cursor:pointer; transition:all .25s ease; text-decoration:none; display:inline-block; box-shadow:0 4px 15px rgba(251,191,36,.3); }
+    .book-btn:hover { background: linear-gradient(135deg, #f59e0b, #d97706); transform: translateY(-1px); box-shadow:0 8px 25px rgba(251,191,36,.5); }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="title">Our Premium Bikes</h1>
+    <p class="subtitle">Choose from our diverse range of well-maintained bikes for every travel need</p>
+
+    <div class="tabs" aria-label="Vehicle type tabs">
+      <a href="/rentals" class="chip"><span class="ico">🚗</span> Cars</a>
+      <span class="chip chip--on" aria-current="page"><span class="ico">🏍️</span> Bikes</span>
+    </div>
+
+    <div class="grid">
+      {% for b in bikes %}
+      <article class="card">
+        <span class="badge">{{ b.price_per_km }}/km</span>
+        <div class="imgwrap">
+          <img
+            src="{{ url_for('static', filename='bikes/' ~ b.image) }}"
+            alt="{{ b.name }}"
+            onerror="this.src='{{ url_for('static', filename='bikes/placeholder-bike.jpg') }}';"
+          />
+        </div>
+        <div class="body">
+          <div class="row">
+            <div>
+              <h3 class="name">{{ b.name }}</h3>
+              <p class="type">{{ b.type }}</p>
+            </div>
+            <div class="rating">★ {{ '%.1f'|format(b.rating) }}</div>
+          </div>
+
+          {% if b.blurb %}<p class="blurb">{{ b.blurb }}</p>{% endif %}
+
+          <div class="meta">
+            <span>👥 {{ b.capacity }}</span>
+            <span>🧭 {{ b.cc }}</span>
+            <span>⛽ {{ b.mileage }}</span>
+          </div>
+
+          <div class="features">
+            {% for f in b.features %}
+              <span class="chip2">{{ f }}</span>
+            {% endfor %}
+          </div>
+
+          <div class="cta">
+            <p class="price">From {{ b.price_per_km }} per km</p>
+            <a class="book-btn" href="/taxi-rental?vehicle={{ b.name|replace(' ', '-')|lower }}&type=bikes">Book Now</a>
+          </div>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+  </div>
+</body>
+</html>

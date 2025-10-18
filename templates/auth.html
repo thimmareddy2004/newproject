@@ -154,6 +154,18 @@
   </style>
 </head>
 <body>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div style="position:fixed;top:70px;left:50%;transform:translateX(-50%);z-index:2000;max-width:90vw;">
+        {% for category, message in messages %}
+          <div style="margin:6px 0;padding:10px 14px;border-radius:8px;box-shadow:0 0 12px #ffc107;"
+               class="flash {{ category }}">
+            {{ message }}
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
   <video autoplay muted loop playsinline id="signup-bg-video">
     <source src="{{ url_for('static', filename='video/forest.mp4') }}" type="video/mp4" />
   </video>
@@ -165,7 +177,7 @@
       <video class="side-video" autoplay muted loop playsinline>
         <source src="{{ url_for('static', filename='video/forest.mp4') }}" type="video/mp4" />
       </video>
-      <img src=+ class="side-img" alt="Travel Pic Left" />
+      <img src="{{ url_for('static', filename='images/falls.png') }}" class="side-img" alt="Travel Pic Left" />
     </div>
 
     <div class="auth-panel">

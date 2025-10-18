@@ -436,11 +436,11 @@
 
         <!-- Vehicle Type Toggle -->
         <div class="vehicle-type-toggle">
-            <button class="toggle-btn active" data-type="cars" id="carsToggle">
+            <button class="toggle-btn active" data-type="cars" id="carsToggle" onclick="toggleVehicleType('cars')">
                 <span class="toggle-icon">🚗</span>
                 Cars
             </button>
-            <button class="toggle-btn" data-type="bikes" id="bikesToggle">
+            <button class="toggle-btn" data-type="bikes" id="bikesToggle" onclick="location.href='/bike-rental'">
                 <span class="toggle-icon">🏍️</span>
                 Bikes
             </button>
@@ -712,7 +712,8 @@
             return `
                 <div class="vehicle-card fade-in" style="transition-delay: ${index * 0.1}s" data-vehicle="${vehicle.id}">
                     <div class="vehicle-image">
-                        <img src="${vehicle.image}" alt="${vehicle.name}" loading="lazy">
+                        <img src="${vehicle.image}" alt="${vehicle.name}" loading="lazy" onerror="this.src='/static/images/rent.jpg'">
+
                         <div class="price-badge">${vehicle.localRate}</div>
                         <div class="rating-badge">
                             <span class="star">★</span>

@@ -1,3 +1,8 @@
+# Bikes dataset for bike rentals page
+try:
+    from data.bikes import BIKES
+except Exception:
+    BIKES = []
 from flask import Flask, redirect, render_template, request, jsonify, url_for, flash, session
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -8,7 +13,7 @@ app = Flask(__name__)
 app.secret_key = 'your_secret_key_here'  # Needed for flashing messages
 
 # Update with your MySQL credentials and database name
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://myuser:mypassword@localhost/myappdb?charset=utf8'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///userlogins.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -304,6 +309,35 @@ def maps():
 def transport():
     # this renders templates/transport.html — make sure that file exists
     return render_template('transport.html')
+
+@app.route('/bike-rental')
+def bike_rental():
+    """Render the Bike Rentals page with dataset from data/bikes.py."""
+    return render_template('bike_rental_v2.html', bikes=BIKES)
+
+@app.route('/api/bikes')
+def api_bikes():
+    """Return bikes as JSON formatted for the booking page cards."""
+    def slugify(text: str) -> str:
+        import re
+        return re.sub(r'-{2,}', '-', re.sub(r'[^a-z0-9]+', '-', (text or '').lower())).strip('-')
+
+    items = []
+    for b in BIKES:
+        items.append({
+            "id": slugify(b.get("name", "")),
+            "name": b.get("name"),
+            "type": b.get("type"),
+            "capacity": int(str(b.get("capacity", "2")).split()[0] or 2),
+            "image": f"/static/bikes/{b.get('image')}",
+            "features": b.get("features", []),
+            # Use price_per_km for both local/outstation to keep UI consistent
+            "localRate": b.get("price_per_km", "₹0"),
+            "outstationRate": b.get("price_per_km", "₹0"),
+            "rating": b.get("rating", 4.6),
+            "description": b.get("blurb", "")
+        })
+    return jsonify(items)
 
 @app.route("/admin/refresh-geojson", methods=["POST"])
 def refresh_geojson():

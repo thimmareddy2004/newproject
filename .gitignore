@@ -106,3 +106,19 @@ Thumbs.db
 
 # OneDrive temp files
 ~$*
+
+# Local databases and backups
+*.db
+*.bak
+
+# Editor settings
+.vscode/
+
+# Videos: ignore all mp4 except the two used ones
+*.mp4
+!static/video/Dream_fixed.mp4
+!static/video/forest.mp4
+
+# Binary docs not needed in repo
+*.pdf
+*.djvu

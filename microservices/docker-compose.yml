@@ -1,0 +1,93 @@
+version: '3.8'
+
+services:
+  # Database
+  mysql:
+    image: mysql:8.0
+    container_name: goaround_mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: myappdb
+      MYSQL_USER: myuser
+      MYSQL_PASSWORD: mypassword
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - goaround_network
+
+  # Authentication Service
+  auth-service:
+    build: ./auth-service
+    container_name: goaround_auth
+    restart: always
+    environment:
+      - DATABASE_URL=mysql+pymysql://myuser:mypassword@mysql/myappdb?charset=utf8
+      - SECRET_KEY=your_secret_key_here
+    ports:
+      - "5001:5001"
+    depends_on:
+      - mysql
+    networks:
+      - goaround_network
+
+  # Package Service
+  package-service:
+    build: ./package-service
+    container_name: goaround_packages
+    restart: always
+    environment:
+      - DATABASE_URL=mysql+pymysql://myuser:mypassword@mysql/myappdb?charset=utf8
+      - SECRET_KEY=your_secret_key_here
+    ports:
+      - "5002:5002"
+    depends_on:
+      - mysql
+    volumes:
+      - ../static:/app/static:ro
+    networks:
+      - goaround_network
+
+  # Maps Service
+  maps-service:
+    build: ./maps-service
+    container_name: goaround_maps
+    restart: always
+    environment:
+      - SECRET_KEY=your_secret_key_here
+      - ORS_API_KEY=${ORS_API_KEY}  # Set this in your environment
+    ports:
+      - "5003:5003"
+    networks:
+      - goaround_network
+
+  # API Gateway
+  api-gateway:
+    build: ./api-gateway
+    container_name: goaround_gateway
+    restart: always
+    environment:
+      - SECRET_KEY=your_secret_key_here
+      - AUTH_SERVICE_URL=http://auth-service:5001
+      - PACKAGE_SERVICE_URL=http://package-service:5002
+      - MAPS_SERVICE_URL=http://maps-service:5003
+    ports:
+      - "5000:5000"
+    depends_on:
+      - auth-service
+      - package-service
+      - maps-service
+    volumes:
+      - ../templates:/app/templates:ro
+      - ../static:/app/static:ro
+    networks:
+      - goaround_network
+
+volumes:
+  mysql_data:
+
+networks:
+  goaround_network:
+    driver: bridge

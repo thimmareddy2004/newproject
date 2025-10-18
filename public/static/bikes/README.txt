@@ -1,0 +1,33 @@
+Place the following images here (exact filenames) to match src/components/BikeFleet.jsx:
+- panigale-v4.jpg
+- bmw-s1000rr.jpg
+- zx10r.jpg
+- hayabusa.jpg
+- streetfighter-v4.jpg
+- aprilia-rsv4.jpg
+- r1250gsa.jpg
+- multistrada-v4s.jpg
+- tiger-1200-rally-pro.jpg
+- rocket-3r.jpg
+- fatboy-114.jpg
+- ktm-790-duke.jpg
+- re-classic350.jpg
+- re-bullet350.jpg
+- re-meteor350.jpg
+- re-hunter350.jpg
+- re-himalayan450.jpg
+- re-interceptor650.jpg
+- re-continental-gt650.jpg
+- hero-splendor.jpg
+- honda-shine125.jpg
+- tvs-apache-160-4v.jpg
+- pulsar-150.jpg
+- honda-unicorn.jpg
+- yamaha-fzs-v3.jpg
+- yamaha-mt15.jpg
+- activa6g.jpg
+- tvs-jupiter.jpg
+- suzuki-access125.jpg
+
+Optional placeholder used on load error:
+- placeholder-bike.jpg
