@@ -1,4 +1,4 @@
-from flask import Flask, redirect, render_template, request, jsonify, url_for, flash
+from flask import Flask, redirect, render_template, request, jsonify, url_for, flash, session
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
@@ -60,11 +60,36 @@ def render_template_page(page):
 def auth():
     return render_template('auth.html')
 
+@app.route('/logout')
+def logout():
+    try:
+        session.clear()
+    except Exception:
+        pass
+    flash('You have been logged out.', 'info')
+    return redirect(url_for('auth'))
+
 
 # Explicit services route (render services page)
 @app.route('/services')
 def services():
     return render_template('services.html')
+
+@app.route('/fuel-calculator')
+def fuel_calculator():
+    return render_template('fuel_calculator.html')
+
+@app.route('/rentals')
+def rentals():
+    return render_template('rentals.html')
+
+@app.route('/taxi-rental')
+def taxi_rental():
+    return render_template('taxi_rental.html')
+
+@app.route('/packages')
+def packages():
+    return render_template('packages.html')
 
 @app.route('/signup', methods=['POST'])
 def signup():
@@ -102,6 +127,8 @@ def signin():
         login_entry = LoginTracking(user_id=user.id)
         db.session.add(login_entry)
         db.session.commit()
+        session['user_id'] = user.id
+        session['user_email'] = user.email
         return redirect(url_for('home'))
     flash("Invalid email or password!", "error")
     return redirect(url_for('auth'))
@@ -126,6 +153,17 @@ import json
 from pathlib import Path
 from datetime import timedelta
 import requests
+
+# Fuel calculator integration
+import sys
+import os
+sys.path.append(os.path.join(os.path.dirname(__file__), 'microservices'))
+try:
+    from microservices.fuel_api import integrate_fuel_calculator
+    FUEL_CALCULATOR_AVAILABLE = True
+except ImportError as e:
+    print(f"Fuel calculator import failed: {e}")
+    FUEL_CALCULATOR_AVAILABLE = False
 
 # GeoJSON cache configuration (creates data/ folder in project root)
 APP_ROOT = Path(__file__).parent
@@ -375,48 +413,11 @@ def route():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 # --- end appended code ---
-from flask import Flask, redirect, render_template, request, jsonify, url_for, flash, send_from_directory
-from flask_sqlalchemy import SQLAlchemy
-from werkzeug.security import generate_password_hash, check_password_hash
-from datetime import datetime
-import os
-import json
 
-app = Flask(__name__)
-app.secret_key = 'your_secret_key_here'  # Needed for flashing messages
+# Import send_from_directory for favicon handling
+from flask import send_from_directory
 
-# Update with your MySQL credentials and database name
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://myuser:mypassword@localhost/myappdb?charset=utf8'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-db = SQLAlchemy(app)
-
-# ---------- Existing models ----------
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    first_name = db.Column(db.String(100), nullable=False)
-    last_name = db.Column(db.String(100), nullable=False)
-    email = db.Column(db.String(255), unique=True, nullable=False)
-    phone = db.Column(db.String(20))
-    password_hash = db.Column(db.String(255), nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-
-    def set_password(self, password):
-        self.password_hash = generate_password_hash(password)
-
-    def check_password(self, password):
-        return check_password_hash(self.password_hash, password)
-
-class LoginTracking(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    login_time = db.Column(db.DateTime, default=datetime.utcnow)
-
-    user = db.relationship('User', backref='logins')
-
-# ---------- New package models ----------
-# Many-to-many relationship between Package and Place (places are referenced by id string from dataset)
+# ---------- Package models for travel packages ----------
 class Package(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
@@ -437,77 +438,13 @@ class PackagePlace(db.Model):
 
     package = db.relationship('Package', back_populates='places')
 
-# Create tables on app startup
-with app.app_context():
-    db.create_all()
+# Add favicon route to prevent 404 errors
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join(app.root_path, 'static'), 
+                              'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
-# ---------- Existing routes (unchanged) ----------
-@app.route('/')
-def index():
-    return render_template('index.html')
-
-@app.route('/<page>.html')
-def render_template_page_early(page):
-    try:
-        return render_template(f"{page}.html")
-    except Exception:
-        return redirect('/auth')
-
-@app.route('/auth')
-def auth():
-    return render_template('auth.html')
-
-@app.route('/signup', methods=['POST'])
-def signup():
-    try:
-        data = request.form
-        email = data.get('email')
-        if not email:
-            flash("Email is required!", "error")
-            return redirect(url_for('auth'))
-        if User.query.filter_by(email=email).first():
-            flash("Email already registered!", "error")
-            return redirect(url_for('auth'))
-        user = User(
-            first_name=data.get('first_name'),
-            last_name=data.get('last_name'),
-            email=email,
-            phone=data.get('phone', ''),
-        )
-        user.set_password(data.get('password'))
-        db.session.add(user)
-        db.session.commit()
-        flash("Account created successfully! Please sign in.", "success")
-        return redirect(url_for('auth'))
-    except Exception as e:
-        print("Signup error:", e)
-        flash("Error during signup!", "error")
-        return redirect(url_for('auth'))
-
-@app.route('/signin', methods=['POST'])
-def signin():
-    data = request.form
-    user = User.query.filter_by(email=data.get('email')).first()
-    if user and user.check_password(data.get('password')):
-        # Record login event
-        login_entry = LoginTracking(user_id=user.id)
-        db.session.add(login_entry)
-        db.session.commit()
-        return redirect(url_for('home'))
-    flash("Invalid email or password!", "error")
-    return redirect(url_for('auth'))
-
-@app.route('/home')
-def home():
-    return render_template('home.html')
-
-@app.route('/admin')
-def admin():
-    # Fetch all logins with user info ordered by login_time desc
-    logins = LoginTracking.query.join(User).order_by(LoginTracking.login_time.desc()).all()
-    return render_template('admin.html', logins=logins)
-
-# ---------- New package & API routes ----------
+# ---------- Package & API routes ----------
 
 # Serve places dataset (the map & the packages page will call this)
 # Make sure you saved your places JSON at static/data/karnataka_places.json
@@ -524,10 +461,7 @@ def api_places():
         places = json.load(f)
     return jsonify(places)
 
-# Page: list packages
-@app.route('/packages')
-def packages():
-    return render_template('packages.html')
+# Package listing page (defined earlier in core routes)
 
 # Page: create new package (shows map + place selection UI)
 @app.route('/packages/new')
@@ -601,21 +535,104 @@ def packages_view(package_id):
 # Static route to allow direct image files if needed (optional)
 @app.route('/static/images/<path:filename>')
 def static_images(filename):
+    from flask import send_from_directory
     return send_from_directory(os.path.join(app.static_folder, 'images'), filename)
-bbbbbbbbbbbbbbbbbbbb
+
+# Fuel Calculator API Routes (Direct Integration)
+@app.route('/api/fuel/detailed-calculation', methods=['POST'])
+def fuel_detailed_calculation():
+    """Detailed fuel cost calculation with breakdown"""
+    try:
+        from microservices.fuel_calculator import IndiaFuelCalculator
+        
+        data = request.get_json()
+        distance = float(data.get('distance_km', 0))
+        vehicle_key = data.get('vehicle_key', 'hatchback_petrol')
+        location = data.get('location', 'karnataka')
+        city_percentage = float(data.get('city_percentage', 30))
+        road_condition = data.get('road_condition', 'good_highway')
+        
+        if distance <= 0:
+            return jsonify({"error": "Distance must be greater than 0"}), 400
+        
+        calculator = IndiaFuelCalculator(location)
+        result = calculator.calculate_fuel_cost(
+            distance, vehicle_key, city_percentage, road_condition
+        )
+        
+        return jsonify(result)
+        
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/fuel/compare-vehicles', methods=['POST'])
+def fuel_compare_vehicles():
+    """Compare fuel costs across different vehicles"""
+    try:
+        from microservices.fuel_calculator import IndiaFuelCalculator
+        
+        data = request.get_json()
+        distance = float(data.get('distance_km', 0))
+        vehicle_keys = data.get('vehicle_keys', ['hatchback_petrol', 'hatchback_diesel', 'bike_150cc'])
+        location = data.get('location', 'karnataka')
+        
+        if distance <= 0:
+            return jsonify({"error": "Distance must be greater than 0"}), 400
+        
+        calculator = IndiaFuelCalculator(location)
+        result = calculator.compare_vehicles(distance, vehicle_keys)
+        
+        return jsonify(result)
+        
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/fuel/vehicles', methods=['GET'])
+def fuel_get_vehicles():
+    """Get list of available vehicles"""
+    try:
+        from microservices.fuel_calculator import IndiaFuelCalculator
+        
+        calculator = IndiaFuelCalculator()
+        vehicles = calculator.get_available_vehicles()
+        
+        return jsonify({
+            "vehicles": vehicles,
+            "total_count": len(vehicles)
+        })
+        
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/fuel/quick-estimate', methods=['POST'])
+def fuel_quick_estimate():
+    """Quick fuel cost estimate for distance and vehicle type"""
+    try:
+        from microservices.fuel_calculator import quick_fuel_cost
+        
+        data = request.get_json()
+        distance = float(data.get('distance_km', 0))
+        vehicle_type = data.get('vehicle_type', 'hatchback_petrol')
+        location = data.get('location', 'karnataka')
+        
+        if distance <= 0:
+            return jsonify({"error": "Distance must be greater than 0"}), 400
+        
+        cost = quick_fuel_cost(distance, vehicle_type, location)
+        
+        return jsonify({
+            "distance_km": distance,
+            "vehicle_type": vehicle_type,
+            "location": location,
+            "estimated_fuel_cost": cost,
+            "status": "success"
+        })
+        
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+print("Fuel calculator API routes added successfully!")
+
 # keep app run as before
 if __name__ == '__main__':
     app.run(debug=True)
-from flask import send_from_directory
-
-# serve react build for client-side routes (only if you built the react app into client/build)
-REACT_BUILD_DIR = os.path.join(os.path.dirname(__file__), "client", "build")
-
-@app.route("/", defaults={"path": ""})
-@app.route("/<path:path>")
-def serve_spa(path):
-    # serve static files if requested directly
-    if path != "" and os.path.exists(os.path.join(REACT_BUILD_DIR, path)):
-        return send_from_directory(REACT_BUILD_DIR, path)
-    # otherwise serve index.html so React Router handles the route
-    return send_from_directory(REACT_BUILD_DIR, "index.html")

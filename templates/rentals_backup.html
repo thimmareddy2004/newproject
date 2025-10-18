@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vehicle Fleet - GoAround</title>
+    <script src="https://unpkg.com/framer-motion@10.0.0/dist/framer-motion.umd.js"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
     <style>
         * {
             margin: 0;
@@ -73,48 +75,6 @@
             margin: 0 auto;
         }
 
-        /* Vehicle Type Toggle */
-        .vehicle-type-toggle {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-bottom: 3rem;
-        }
-
-        .toggle-btn {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 1rem 2rem;
-            background: linear-gradient(135deg, #374151, #4b5563);
-            color: #d1d5db;
-            border: 2px solid #4b5563;
-            border-radius: 1.5rem;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            min-width: 140px;
-            justify-content: center;
-        }
-
-        .toggle-btn:hover {
-            background: linear-gradient(135deg, #4b5563, #6b7280);
-            border-color: rgba(251, 191, 36, 0.5);
-            transform: translateY(-2px);
-        }
-
-        .toggle-btn.active {
-            background: linear-gradient(135deg, #fbbf24, #f59e0b);
-            color: #1f2937;
-            border-color: #fbbf24;
-            box-shadow: 0 8px 25px rgba(251, 191, 36, 0.4);
-        }
-
-        .toggle-icon {
-            font-size: 1.5rem;
-        }
-
         /* Vehicle Grid */
         .vehicle-grid {
             display: grid;
@@ -151,7 +111,6 @@
             position: relative;
             height: 250px;
             overflow: hidden;
-            background: #374151;
         }
 
         .vehicle-image img {
@@ -169,7 +128,7 @@
             content: '';
             position: absolute;
             inset: 0;
-            background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.6) 100%);
+            background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.8) 100%);
         }
 
         /* Price Badge */
@@ -340,40 +299,6 @@
             color: #fbbf24;
         }
 
-        /* Loading Animation */
-        .loading {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 200px;
-        }
-
-        .spinner {
-            width: 3rem;
-            height: 3rem;
-            border: 3px solid #374151;
-            border-top: 3px solid #fbbf24;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Fade-in animation */
-        .fade-in {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s ease;
-        }
-
-        .fade-in.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
         /* Responsive Design */
         @media (max-width: 768px) {
             .container {
@@ -420,27 +345,103 @@
                 min-width: auto;
             }
         }
+
+        /* Loading Animation */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+        }
+
+        .spinner {
+            width: 3rem;
+            height: 3rem;
+            border: 3px solid #374151;
+            border-top: 3px solid #fbbf24;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Vehicle Type Toggle */
+        .vehicle-type-toggle {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .toggle-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, #374151, #4b5563);
+            color: #d1d5db;
+            border: 2px solid #4b5563;
+            border-radius: 1.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 140px;
+            justify-content: center;
+        }
+
+        .toggle-btn:hover {
+            background: linear-gradient(135deg, #4b5563, #6b7280);
+            border-color: rgba(251, 191, 36, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .toggle-btn.active {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: #1f2937;
+            border-color: #fbbf24;
+            box-shadow: 0 8px 25px rgba(251, 191, 36, 0.4);
+        }
+
+        .toggle-icon {
+            font-size: 1.5rem;
+        }
+
+        /* Fade-in animation */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
     </style>
 </head>
 <body>
     <div class="bg-grid"></div>
     
-    {% include 'partials/header_authenticated.html' %}
+    <a href="/" class="nav-home">← Back to Home</a>
     
     <div class="container">
         <!-- Header Section -->
         <div class="header fade-in">
-            <h1 id="mainTitle">Our Premium <span class="accent">Fleet</span></h1>
-            <p id="mainSubtitle">Choose from our diverse range of well-maintained vehicles for every travel need</p>
+            <h1>Our Premium <span class="accent">Fleet</span></h1>
+            <p>Choose from our diverse range of well-maintained vehicles for every travel need</p>
         </div>
 
         <!-- Vehicle Type Toggle -->
         <div class="vehicle-type-toggle">
-            <button class="toggle-btn active" data-type="cars" id="carsToggle">
+            <button class="toggle-btn active" data-type="cars">
                 <span class="toggle-icon">🚗</span>
                 Cars
             </button>
-            <button class="toggle-btn" data-type="bikes" id="bikesToggle">
+            <button class="toggle-btn" data-type="bikes">
                 <span class="toggle-icon">🏍️</span>
                 Bikes
             </button>
@@ -456,14 +457,14 @@
     </div>
 
     <script>
-        // Cars Data
+        // Vehicle data with Paradise Tours styling
         const carsData = [
             {
                 id: 'swift-dzire',
                 name: 'Swift Dzire',
                 type: 'Sedan',
                 capacity: 4,
-                image: '/static/images/dzire.jpg',
+                image: '/static/images/swift.jpg',
                 features: ['AC', 'Music System', 'GPS', 'Comfortable Seats'],
                 localRate: '₹12/km',
                 outstationRate: '₹10/km',
@@ -520,187 +521,78 @@
             }
         ];
 
-        // Comprehensive Indian Bikes Data
         const bikesData = [
             {
-                id: 'royal-enfield-classic-350',
+                id: 'royal-enfield-classic',
                 name: 'Royal Enfield Classic 350',
                 type: 'Cruiser',
                 capacity: 2,
                 image: '/static/images/bikes/royal_enfield_classic.jpg',
-                features: ['Electric Start', 'Chrome Finish', 'Comfortable Ride', 'Vintage Look'],
+                features: ['Kick Start', 'Electric Start', 'Fuel Efficient', 'Comfortable Ride'],
                 localRate: '₹8/km',
                 outstationRate: '₹6/km',
                 rating: 4.7,
                 description: 'Classic cruiser for city and highway rides'
             },
             {
-                id: 'bajaj-pulsar-ns200',
+                id: 'bajaj-pulsar',
                 name: 'Bajaj Pulsar NS200',
                 type: 'Sports',
                 capacity: 2,
                 image: '/static/images/bikes/bajaj_pulsar.jpg',
-                features: ['Digital Display', 'LED DRL', 'Sporty Design', 'High Performance'],
+                features: ['Digital Display', 'LED Lights', 'Sporty Design', 'High Performance'],
                 localRate: '₹10/km',
                 outstationRate: '₹8/km',
                 rating: 4.5,
                 description: 'Sporty bike for adventure enthusiasts'
             },
             {
-                id: 'hero-splendor-plus',
+                id: 'hero-splendor',
                 name: 'Hero Splendor Plus',
                 type: 'Commuter',
                 capacity: 2,
                 image: '/static/images/bikes/hero_splendor.jpg',
-                features: ['Fuel Efficient', 'Easy Maintenance', 'i3S Technology', 'Tubeless Tyres'],
+                features: ['Fuel Efficient', 'Easy Maintenance', 'Reliable', 'Affordable'],
                 localRate: '₹5/km',
                 outstationRate: '₹4/km',
                 rating: 4.3,
                 description: 'Most fuel-efficient bike for daily commute'
             },
             {
-                id: 'honda-activa-6g',
+                id: 'honda-activa',
                 name: 'Honda Activa 6G',
                 type: 'Scooter',
                 capacity: 2,
                 image: '/static/images/bikes/honda_activa.jpg',
-                features: ['Automatic', 'Storage Space', 'Silent Start', 'LED Headlamp'],
+                features: ['Automatic', 'Storage Space', 'Easy Handling', 'Comfortable'],
                 localRate: '₹6/km',
                 outstationRate: '₹5/km',
                 rating: 4.6,
                 description: 'Perfect automatic scooter for city rides'
             },
             {
-                id: 'yamaha-fz-v3',
+                id: 'yamaha-fz',
                 name: 'Yamaha FZ-S Fi V3',
                 type: 'Street',
                 capacity: 2,
                 image: '/static/images/bikes/yamaha_fz.jpg',
-                features: ['Fuel Injection', 'LED Lights', 'Digital Console', 'ABS'],
+                features: ['Fuel Injection', 'LED Lights', 'Digital Console', 'Stylish Design'],
                 localRate: '₹9/km',
                 outstationRate: '₹7/km',
                 rating: 4.4,
                 description: 'Stylish street bike with modern features'
             },
             {
-                id: 'ktm-duke-200',
+                id: 'ktm-duke',
                 name: 'KTM Duke 200',
                 type: 'Naked Sport',
                 capacity: 2,
                 image: '/static/images/bikes/ktm_duke.jpg',
-                features: ['High Performance', 'Aggressive Styling', 'WP Suspension', 'Digital Display'],
+                features: ['High Performance', 'Aggressive Styling', 'Premium Build', 'Digital Display'],
                 localRate: '₹12/km',
                 outstationRate: '₹10/km',
                 rating: 4.8,
                 description: 'Premium naked sport bike for thrill seekers'
-            },
-            {
-                id: 'honda-shine-125',
-                name: 'Honda Shine 125',
-                type: 'Commuter',
-                capacity: 2,
-                image: '/static/images/bikes/honda_shine.jpg',
-                features: ['HET Engine', 'Comfortable Seat', 'Good Mileage', 'Reliable'],
-                localRate: '₹6/km',
-                outstationRate: '₹4/km',
-                rating: 4.4,
-                description: 'Reliable commuter bike with excellent mileage'
-            },
-            {
-                id: 'tvs-apache-rtr-160',
-                name: 'TVS Apache RTR 160',
-                type: 'Sports',
-                capacity: 2,
-                image: '/static/images/bikes/tvs_apache.jpg',
-                features: ['Racing Throttle', 'Digital Console', 'LED DRL', 'Dual Channel ABS'],
-                localRate: '₹8/km',
-                outstationRate: '₹6/km',
-                rating: 4.3,
-                description: 'Performance-oriented bike with racing heritage'
-            },
-            {
-                id: 'bajaj-avenger-220',
-                name: 'Bajaj Avenger Street 220',
-                type: 'Cruiser',
-                capacity: 2,
-                image: '/static/images/bikes/bajaj_avenger.jpg',
-                features: ['Cruising Comfort', 'Digital Console', 'LED DRL', 'Chrome Details'],
-                localRate: '₹9/km',
-                outstationRate: '₹7/km',
-                rating: 4.2,
-                description: 'Comfortable cruiser for long rides'
-            },
-            {
-                id: 'suzuki-gixxer-155',
-                name: 'Suzuki Gixxer 155',
-                type: 'Street',
-                capacity: 2,
-                image: '/static/images/bikes/suzuki_gixxer.jpg',
-                features: ['SEP Engine', 'MRF Tyres', 'Digital Console', 'LED Tail Light'],
-                localRate: '₹8/km',
-                outstationRate: '₹6/km',
-                rating: 4.1,
-                description: 'Sporty commuter with excellent handling'
-            },
-            {
-                id: 'honda-cb-hornet-160r',
-                name: 'Honda CB Hornet 160R',
-                type: 'Street',
-                capacity: 2,
-                image: '/static/images/bikes/honda_hornet.jpg',
-                features: ['HET Engine', 'LED Headlamp', 'Digital Console', 'Muscular Design'],
-                localRate: '₹9/km',
-                outstationRate: '₹7/km',
-                rating: 4.2,
-                description: 'Powerful street bike with aggressive styling'
-            },
-            {
-                id: 'tvs-jupiter-125',
-                name: 'TVS Jupiter 125',
-                type: 'Scooter',
-                capacity: 2,
-                image: '/static/images/bikes/tvs_jupiter.jpg',
-                features: ['ET-Fi Engine', 'External Fuel Fill', 'Mobile Charger', 'LED Headlamp'],
-                localRate: '₹6/km',
-                outstationRate: '₹5/km',
-                rating: 4.3,
-                description: 'Family scooter with premium features'
-            },
-            {
-                id: 'hero-xtreme-160r',
-                name: 'Hero Xtreme 160R',
-                type: 'Street',
-                capacity: 2,
-                image: '/static/images/bikes/hero_xtreme.jpg',
-                features: ['LED Lighting', 'Digital Console', 'Single Channel ABS', 'Premium Finish'],
-                localRate: '₹8/km',
-                outstationRate: '₹6/km',
-                rating: 4.0,
-                description: 'Premium street bike with modern design'
-            },
-            {
-                id: 'bajaj-ct-110',
-                name: 'Bajaj CT 110',
-                type: 'Commuter',
-                capacity: 2,
-                image: '/static/images/bikes/bajaj_ct.jpg',
-                features: ['ExhausTEC', 'SNS Suspension', 'Nitrox Shock', 'Anti-Skid Grip'],
-                localRate: '₹4/km',
-                outstationRate: '₹3/km',
-                rating: 4.1,
-                description: 'Rugged commuter bike for all terrains'
-            },
-            {
-                id: 'yamaha-r15-v4',
-                name: 'Yamaha R15 V4',
-                type: 'Sports',
-                capacity: 2,
-                image: '/static/images/bikes/yamaha_r15.jpg',
-                features: ['VVA Engine', 'Quickshifter', 'Traction Control', 'Racing DNA'],
-                localRate: '₹15/km',
-                outstationRate: '₹12/km',
-                rating: 4.7,
-                description: 'Premium sports bike with racing technology'
             }
         ];
 
@@ -753,10 +645,6 @@
             const grid = document.getElementById('vehicleGrid');
             const loading = document.getElementById('loading');
             
-            // Show loading
-            loading.style.display = 'flex';
-            grid.innerHTML = '<div class="loading" id="loading"><div class="spinner"></div></div>';
-            
             setTimeout(() => {
                 loading.style.display = 'none';
                 grid.innerHTML = vehicles.map((vehicle, index) => 
@@ -771,54 +659,20 @@
                 
                 // Add click handlers
                 addClickHandlers();
-            }, 800);
+            }, 1000);
         }
 
         // Add click handlers for vehicle selection
         function addClickHandlers() {
             const cards = document.querySelectorAll('.vehicle-card');
             cards.forEach(card => {
-                card.addEventListener('click', function(e) {
-                    if (!e.target.classList.contains('book-btn')) {
-                        // Remove selected class from all cards
-                        cards.forEach(c => c.classList.remove('selected'));
-                        // Add selected class to clicked card
-                        this.classList.add('selected');
-                    }
+                card.addEventListener('click', function() {
+                    // Remove selected class from all cards
+                    cards.forEach(c => c.classList.remove('selected'));
+                    // Add selected class to clicked card
+                    this.classList.add('selected');
                 });
             });
-        }
-
-        // Toggle between cars and bikes
-        function toggleVehicleType(type) {
-            currentVehicleType = type;
-            vehicles = type === 'cars' ? carsData : bikesData;
-            
-            // Update toggle buttons
-            document.querySelectorAll('.toggle-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.dataset.type === type);
-            });
-            
-            // Update header text
-            const mainTitle = document.getElementById('mainTitle');
-            const mainSubtitle = document.getElementById('mainSubtitle');
-            
-            if (type === 'cars') {
-                mainTitle.innerHTML = 'Our Premium <span class="accent">Fleet</span>';
-                mainSubtitle.textContent = 'Choose from our diverse range of well-maintained vehicles for every travel need';
-            } else {
-                mainTitle.innerHTML = 'Our Premium <span class="accent">Bikes</span>';
-                mainSubtitle.textContent = 'Choose from our diverse range of well-maintained bikes for every travel need';
-            }
-            
-            // Re-render vehicles
-            renderVehicles();
-        }
-        
-        // Setup toggle event listeners
-        function setupToggleListeners() {
-            document.getElementById('carsToggle').addEventListener('click', () => toggleVehicleType('cars'));
-            document.getElementById('bikesToggle').addEventListener('click', () => toggleVehicleType('bikes'));
         }
 
         // Initialize fade-in animation observer
@@ -836,14 +690,52 @@
             observer.observe(header);
         }
 
+        // Toggle between cars and bikes
+        function toggleVehicleType(type) {
+            currentVehicleType = type;
+            vehicles = type === 'cars' ? carsData : bikesData;
+            
+            // Update toggle buttons
+            document.querySelectorAll('.toggle-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.type === type);
+            });
+            
+            // Update header text
+            const headerText = type === 'cars' ? 'Our Premium <span class="accent">Fleet</span>' : 'Our Premium <span class="accent">Bikes</span>';
+            document.querySelector('.header h1').innerHTML = headerText;
+            
+            // Re-render vehicles
+            renderVehicles();
+        }
+        
+        // Setup toggle event listeners
+        function setupToggleListeners() {
+            document.querySelectorAll('.toggle-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const type = this.dataset.type;
+                    toggleVehicleType(type);
+                });
+            });
+        }
+
         // Initialize everything
         document.addEventListener('DOMContentLoaded', function() {
             setupToggleListeners();
             renderVehicles();
             initializeAnimations();
-            
-            console.log('Cars data:', carsData.length);
-            console.log('Bikes data:', bikesData.length);
+        });
+
+        // Add some interactive effects
+        document.addEventListener('mousemove', function(e) {
+            const cards = document.querySelectorAll('.vehicle-card:hover');
+            cards.forEach(card => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+            });
         });
     </script>
 </body>

@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Fuel Calculator - Go Around</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    html, body {
+      height: 100%;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #fff;
+      overflow-x: hidden;
+    }
+    
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(26, 26, 26, 0.95);
+      z-index: 1000;
+      padding: 1em 2em;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: #ffd600;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+      backdrop-filter: blur(8px);
+    }
+    
+    .brand {
+      display: flex;
+      align-items: center;
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: #ffd600;
+      letter-spacing: 3px;
+    }
+    
+    .brand i {
+      margin-right: 0.5rem;
+      font-size: 1.8rem;
+    }
+    
+    header nav a {
+      color: #fff;
+      margin-left: 1.5em;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s ease;
+      font-size: 1rem;
+    }
+    
+    header nav a:hover, header nav a.active {
+      color: #ffd600;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 120px 2rem 2rem;
+      min-height: 100vh;
+    }
+    
+    .fuel-calc-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    
+    .fuel-calc-header h1 {
+      font-size: 3rem;
+      font-weight: 900;
+      margin-bottom: 1rem;
+      text-shadow: 0 0 15px rgba(0,0,0,0.5);
+    }
+    
+    .fuel-calc-header p {
+      font-size: 1.2rem;
+      opacity: 0.9;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    .calc-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    .calc-form {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 2rem;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .results-panel {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 2rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: #ffd600;
+    }
+    
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+    }
+    
+    .form-group input:focus, .form-group select:focus {
+      outline: none;
+      border-color: #ffd600;
+    }
+    
+    .form-group select option {
+      background: #333;
+      color: #fff;
+    }
+    
+    .calc-btn {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(45deg, #ffd600, #ff9800);
+      border: none;
+      border-radius: 10px;
+      color: #333;
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    
+    .calc-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(255, 214, 0, 0.3);
+    }
+    
+    .result-card {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .result-card h3 {
+      color: #ffd600;
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+    }
+    
+    .result-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .result-item:last-child {
+      border-bottom: none;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: #ffd600;
+    }
+    
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    
+    .vehicle-card {
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 1rem;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+    
+    .vehicle-card:hover {
+      transform: translateY(-3px);
+      border-color: #ffd600;
+    }
+    
+    .vehicle-card.best {
+      border-color: #4CAF50;
+      background: rgba(76, 175, 80, 0.1);
+    }
+    
+    .vehicle-card h4 {
+      color: #ffd600;
+      margin-bottom: 0.5rem;
+      font-size: 1rem;
+    }
+    
+    .vehicle-card.best h4 {
+      color: #4CAF50;
+    }
+    
+    .vehicle-cost {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    
+    .best-badge {
+      background: #4CAF50;
+      color: white;
+      padding: 0.2rem 0.6rem;
+      border-radius: 15px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      display: inline-block;
+    }
+    
+    .loading {
+      text-align: center;
+      padding: 2rem;
+      opacity: 0.7;
+    }
+    
+    .error {
+      background: rgba(244, 67, 54, 0.1);
+      border: 1px solid #f44336;
+      color: #f44336;
+      padding: 1rem;
+      border-radius: 10px;
+      margin: 1rem 0;
+    }
+    
+    @media (max-width: 768px) {
+      .calc-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .fuel-calc-header h1 {
+        font-size: 2rem;
+      }
+      
+      .comparison-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+</head>
+
+<body>
+  {% include 'partials/header.html' %}
+
+  <div class="container">
+    <div class="fuel-calc-header">
+      <h1>🚗 Fuel Cost Calculator</h1>
+      <p>Calculate accurate fuel costs for your trips across India. Get estimates for different vehicles and road conditions.</p>
+    </div>
+
+    <div class="calc-grid">
+      <!-- Calculator Form -->
+      <div class="calc-form">
+        <h2>Trip Details</h2>
+        
+        <div class="form-group">
+          <label for="startLocation">From (Start Location)</label>
+          <select id="startLocation" required>
+            <option value="">Select starting point</option>
+            <!-- North India -->
+            <optgroup label="North India">
+              <option value="new-delhi">New Delhi</option>
+              <option value="mumbai">Mumbai</option>
+              <option value="kolkata">Kolkata</option>
+              <option value="agra">Agra</option>
+              <option value="jaipur">Jaipur</option>
+              <option value="lucknow">Lucknow</option>
+              <option value="kanpur">Kanpur</option>
+              <option value="gurgaon">Gurgaon</option>
+              <option value="noida">Noida</option>
+              <option value="faridabad">Faridabad</option>
+              <option value="ghaziabad">Ghaziabad</option>
+              <option value="meerut">Meerut</option>
+              <option value="varanasi">Varanasi</option>
+              <option value="allahabad">Allahabad (Prayagraj)</option>
+              <option value="dehradun">Dehradun</option>
+              <option value="haridwar">Haridwar</option>
+              <option value="rishikesh">Rishikesh</option>
+              <option value="shimla">Shimla</option>
+              <option value="manali">Manali</option>
+              <option value="dharamshala">Dharamshala</option>
+              <option value="amritsar">Amritsar</option>
+              <option value="chandigarh">Chandigarh</option>
+              <option value="ludhiana">Ludhiana</option>
+              <option value="jalandhar">Jalandhar</option>
+            </optgroup>
+            <!-- South India -->
+            <optgroup label="South India">
+              <option value="bangalore">Bangalore</option>
+              <option value="chennai">Chennai</option>
+              <option value="hyderabad">Hyderabad</option>
+              <option value="kochi">Kochi</option>
+              <option value="thiruvananthapuram">Thiruvananthapuram</option>
+              <option value="mysore">Mysore</option>
+              <option value="mangalore">Mangalore</option>
+              <option value="coimbatore">Coimbatore</option>
+              <option value="madurai">Madurai</option>
+              <option value="tiruchirappalli">Tiruchirappalli</option>
+              <option value="salem">Salem</option>
+              <option value="vellore">Vellore</option>
+              <option value="pondicherry">Pondicherry</option>
+              <option value="vijayawada">Vijayawada</option>
+              <option value="visakhapatnam">Visakhapatnam</option>
+              <option value="warangal">Warangal</option>
+              <option value="tirupati">Tirupati</option>
+              <option value="calicut">Calicut</option>
+              <option value="thrissur">Thrissur</option>
+              <option value="ooty">Ooty</option>
+              <option value="kodaikanal">Kodaikanal</option>
+              <option value="munnar">Munnar</option>
+              <option value="alleppey">Alleppey</option>
+              <option value="kumbakonam">Kumbakonam</option>
+            </optgroup>
+            <!-- West India -->
+            <optgroup label="West India">
+              <option value="pune">Pune</option>
+              <option value="nagpur">Nagpur</option>
+              <option value="nashik">Nashik</option>
+              <option value="aurangabad">Aurangabad</option>
+              <option value="kolhapur">Kolhapur</option>
+              <option value="solapur">Solapur</option>
+              <option value="ahmedabad">Ahmedabad</option>
+              <option value="surat">Surat</option>
+              <option value="vadodara">Vadodara</option>
+              <option value="rajkot">Rajkot</option>
+              <option value="gandhinagar">Gandhinagar</option>
+              <option value="bhavnagar">Bhavnagar</option>
+              <option value="jamnagar">Jamnagar</option>
+              <option value="dwarka">Dwarka</option>
+              <option value="mount-abu">Mount Abu</option>
+              <option value="udaipur">Udaipur</option>
+              <option value="jodhpur">Jodhpur</option>
+              <option value="bikaner">Bikaner</option>
+              <option value="ajmer">Ajmer</option>
+              <option value="pushkar">Pushkar</option>
+              <option value="jaisalmer">Jaisalmer</option>
+            </optgroup>
+            <!-- East India -->
+            <optgroup label="East India">
+              <option value="bhubaneswar">Bhubaneswar</option>
+              <option value="cuttack">Cuttack</option>
+              <option value="puri">Puri</option>
+              <option value="konark">Konark</option>
+              <option value="guwahati">Guwahati</option>
+              <option value="shillong">Shillong</option>
+              <option value="darjeeling">Darjeeling</option>
+              <option value="siliguri">Siliguri</option>
+              <option value="durgapur">Durgapur</option>
+              <option value="asansol">Asansol</option>
+              <option value="ranchi">Ranchi</option>
+              <option value="jamshedpur">Jamshedpur</option>
+              <option value="dhanbad">Dhanbad</option>
+              <option value="patna">Patna</option>
+              <option value="gaya">Gaya</option>
+              <option value="bhagalpur">Bhagalpur</option>
+              <option value="muzaffarpur">Muzaffarpur</option>
+            </optgroup>
+            <!-- Central India -->
+            <optgroup label="Central India">
+              <option value="bhopal">Bhopal</option>
+              <option value="indore">Indore</option>
+              <option value="gwalior">Gwalior</option>
+              <option value="jabalpur">Jabalpur</option>
+              <option value="ujjain">Ujjain</option>
+              <option value="raipur">Raipur</option>
+              <option value="bilaspur">Bilaspur</option>
+              <option value="khajuraho">Khajuraho</option>
+              <option value="orchha">Orchha</option>
+              <option value="pachmarhi">Pachmarhi</option>
+            </optgroup>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="endLocation">To (Destination)</label>
+          <select id="endLocation" required>
+            <option value="">Select destination</option>
+            <!-- Same options as start location -->
+            <!-- North India -->
+            <optgroup label="North India">
+              <option value="new-delhi">New Delhi</option>
+              <option value="mumbai">Mumbai</option>
+              <option value="kolkata">Kolkata</option>
+              <option value="agra">Agra</option>
+              <option value="jaipur">Jaipur</option>
+              <option value="lucknow">Lucknow</option>
+              <option value="kanpur">Kanpur</option>
+              <option value="gurgaon">Gurgaon</option>
+              <option value="noida">Noida</option>
+              <option value="faridabad">Faridabad</option>
+              <option value="ghaziabad">Ghaziabad</option>
+              <option value="meerut">Meerut</option>
+              <option value="varanasi">Varanasi</option>
+              <option value="allahabad">Allahabad (Prayagraj)</option>
+              <option value="dehradun">Dehradun</option>
+              <option value="haridwar">Haridwar</option>
+              <option value="rishikesh">Rishikesh</option>
+              <option value="shimla">Shimla</option>
+              <option value="manali">Manali</option>
+              <option value="dharamshala">Dharamshala</option>
+              <option value="amritsar">Amritsar</option>
+              <option value="chandigarh">Chandigarh</option>
+              <option value="ludhiana">Ludhiana</option>
+              <option value="jalandhar">Jalandhar</option>
+            </optgroup>
+            <!-- South India -->
+            <optgroup label="South India">
+              <option value="bangalore">Bangalore</option>
+              <option value="chennai">Chennai</option>
+              <option value="hyderabad">Hyderabad</option>
+              <option value="kochi">Kochi</option>
+              <option value="thiruvananthapuram">Thiruvananthapuram</option>
+              <option value="mysore">Mysore</option>
+              <option value="mangalore">Mangalore</option>
+              <option value="coimbatore">Coimbatore</option>
+              <option value="madurai">Madurai</option>
+              <option value="tiruchirappalli">Tiruchirappalli</option>
+              <option value="salem">Salem</option>
+              <option value="vellore">Vellore</option>
+              <option value="pondicherry">Pondicherry</option>
+              <option value="vijayawada">Vijayawada</option>
+              <option value="visakhapatnam">Visakhapatnam</option>
+              <option value="warangal">Warangal</option>
+              <option value="tirupati">Tirupati</option>
+              <option value="calicut">Calicut</option>
+              <option value="thrissur">Thrissur</option>
+              <option value="ooty">Ooty</option>
+              <option value="kodaikanal">Kodaikanal</option>
+              <option value="munnar">Munnar</option>
+              <option value="alleppey">Alleppey</option>
+              <option value="kumbakonam">Kumbakonam</option>
+            </optgroup>
+            <!-- West India -->
+            <optgroup label="West India">
+              <option value="pune">Pune</option>
+              <option value="nagpur">Nagpur</option>
+              <option value="nashik">Nashik</option>
+              <option value="aurangabad">Aurangabad</option>
+              <option value="kolhapur">Kolhapur</option>
+              <option value="solapur">Solapur</option>
+              <option value="ahmedabad">Ahmedabad</option>
+              <option value="surat">Surat</option>
+              <option value="vadodara">Vadodara</option>
+              <option value="rajkot">Rajkot</option>
+              <option value="gandhinagar">Gandhinagar</option>
+              <option value="bhavnagar">Bhavnagar</option>
+              <option value="jamnagar">Jamnagar</option>
+              <option value="dwarka">Dwarka</option>
+              <option value="mount-abu">Mount Abu</option>
+              <option value="udaipur">Udaipur</option>
+              <option value="jodhpur">Jodhpur</option>
+              <option value="bikaner">Bikaner</option>
+              <option value="ajmer">Ajmer</option>
+              <option value="pushkar">Pushkar</option>
+              <option value="jaisalmer">Jaisalmer</option>
+            </optgroup>
+            <!-- East India -->
+            <optgroup label="East India">
+              <option value="bhubaneswar">Bhubaneswar</option>
+              <option value="cuttack">Cuttack</option>
+              <option value="puri">Puri</option>
+              <option value="konark">Konark</option>
+              <option value="guwahati">Guwahati</option>
+              <option value="shillong">Shillong</option>
+              <option value="darjeeling">Darjeeling</option>
+              <option value="siliguri">Siliguri</option>
+              <option value="durgapur">Durgapur</option>
+              <option value="asansol">Asansol</option>
+              <option value="ranchi">Ranchi</option>
+              <option value="jamshedpur">Jamshedpur</option>
+              <option value="dhanbad">Dhanbad</option>
+              <option value="patna">Patna</option>
+              <option value="gaya">Gaya</option>
+              <option value="bhagalpur">Bhagalpur</option>
+              <option value="muzaffarpur">Muzaffarpur</option>
+            </optgroup>
+            <!-- Central India -->
+            <optgroup label="Central India">
+              <option value="bhopal">Bhopal</option>
+              <option value="indore">Indore</option>
+              <option value="gwalior">Gwalior</option>
+              <option value="jabalpur">Jabalpur</option>
+              <option value="ujjain">Ujjain</option>
+              <option value="raipur">Raipur</option>
+              <option value="bilaspur">Bilaspur</option>
+              <option value="khajuraho">Khajuraho</option>
+              <option value="orchha">Orchha</option>
+              <option value="pachmarhi">Pachmarhi</option>
+            </optgroup>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="distance">Distance (km)</label>
+          <input type="number" id="distance" placeholder="Auto-calculated or enter manually" min="1" max="5000" required>
+          <small style="color: #ffd600; font-size: 0.9rem; display: block; margin-top: 0.5rem;">
+            💡 Distance will be auto-calculated when you select start and destination
+          </small>
+        </div>
+        
+        <div class="form-group">
+          <label for="vehicle">Vehicle Type</label>
+          <select id="vehicle" required>
+            <option value="">Select vehicle type</option>
+            
+            <!-- Cars - Hatchbacks -->
+            <optgroup label="🚗 Cars - Hatchbacks">
+              <option value="maruti_swift_petrol">Maruti Swift Petrol</option>
+              <option value="maruti_swift_diesel">Maruti Swift Diesel</option>
+              <option value="hyundai_i20_petrol">Hyundai i20 Petrol</option>
+              <option value="hyundai_i20_diesel">Hyundai i20 Diesel</option>
+              <option value="tata_altroz_petrol">Tata Altroz Petrol</option>
+              <option value="tata_altroz_diesel">Tata Altroz Diesel</option>
+              <option value="maruti_baleno_petrol">Maruti Baleno Petrol</option>
+              <option value="maruti_baleno_diesel">Maruti Baleno Diesel</option>
+              <option value="honda_jazz_petrol">Honda Jazz Petrol</option>
+              <option value="volkswagen_polo_petrol">Volkswagen Polo Petrol</option>
+              <option value="ford_figo_petrol">Ford Figo Petrol</option>
+              <option value="ford_figo_diesel">Ford Figo Diesel</option>
+              <option value="nissan_micra_petrol">Nissan Micra Petrol</option>
+              <option value="hatchback_petrol">Generic Hatchback Petrol</option>
+              <option value="hatchback_diesel">Generic Hatchback Diesel</option>
+            </optgroup>
+            
+            <!-- Cars - Sedans -->
+            <optgroup label="🚙 Cars - Sedans">
+              <option value="maruti_dzire_petrol">Maruti Dzire Petrol</option>
+              <option value="maruti_dzire_diesel">Maruti Dzire Diesel</option>
+              <option value="hyundai_verna_petrol">Hyundai Verna Petrol</option>
+              <option value="hyundai_verna_diesel">Hyundai Verna Diesel</option>
+              <option value="honda_city_petrol">Honda City Petrol</option>
+              <option value="honda_city_diesel">Honda City Diesel</option>
+              <option value="tata_tigor_petrol">Tata Tigor Petrol</option>
+              <option value="tata_tigor_diesel">Tata Tigor Diesel</option>
+              <option value="volkswagen_vento_petrol">Volkswagen Vento Petrol</option>
+              <option value="volkswagen_vento_diesel">Volkswagen Vento Diesel</option>
+              <option value="skoda_rapid_petrol">Skoda Rapid Petrol</option>
+              <option value="skoda_rapid_diesel">Skoda Rapid Diesel</option>
+              <option value="toyota_yaris_petrol">Toyota Yaris Petrol</option>
+              <option value="honda_amaze_petrol">Honda Amaze Petrol</option>
+              <option value="honda_amaze_diesel">Honda Amaze Diesel</option>
+              <option value="sedan_petrol">Generic Sedan Petrol</option>
+              <option value="sedan_diesel">Generic Sedan Diesel</option>
+            </optgroup>
+            
+            <!-- Cars - SUVs/MUVs -->
+            <optgroup label="🚐 SUVs & MUVs">
+              <option value="maruti_ertiga_petrol">Maruti Ertiga Petrol</option>
+              <option value="maruti_ertiga_diesel">Maruti Ertiga Diesel</option>
+              <option value="hyundai_creta_petrol">Hyundai Creta Petrol</option>
+              <option value="hyundai_creta_diesel">Hyundai Creta Diesel</option>
+              <option value="tata_safari_diesel">Tata Safari Diesel</option>
+              <option value="tata_harrier_diesel">Tata Harrier Diesel</option>
+              <option value="mahindra_xuv500_diesel">Mahindra XUV500 Diesel</option>
+              <option value="mahindra_scorpio_diesel">Mahindra Scorpio Diesel</option>
+              <option value="ford_ecosport_petrol">Ford EcoSport Petrol</option>
+              <option value="ford_ecosport_diesel">Ford EcoSport Diesel</option>
+              <option value="renault_duster_petrol">Renault Duster Petrol</option>
+              <option value="renault_duster_diesel">Renault Duster Diesel</option>
+              <option value="toyota_innova_diesel">Toyota Innova Diesel</option>
+              <option value="toyota_fortuner_diesel">Toyota Fortuner Diesel</option>
+              <option value="kia_seltos_petrol">Kia Seltos Petrol</option>
+              <option value="kia_seltos_diesel">Kia Seltos Diesel</option>
+              <option value="nissan_terrano_petrol">Nissan Terrano Petrol</option>
+              <option value="nissan_terrano_diesel">Nissan Terrano Diesel</option>
+              <option value="suv_petrol">Generic SUV Petrol</option>
+              <option value="suv_diesel">Generic SUV Diesel</option>
+            </optgroup>
+            
+            <!-- Bikes -->
+            <optgroup label="🏍️ Motorcycles">
+              <option value="hero_splendor_100cc">Hero Splendor (100cc)</option>
+              <option value="bajaj_pulsar_150cc">Bajaj Pulsar 150cc</option>
+              <option value="bajaj_pulsar_220cc">Bajaj Pulsar 220cc</option>
+              <option value="hero_passion_110cc">Hero Passion (110cc)</option>
+              <option value="tvs_apache_160cc">TVS Apache 160cc</option>
+              <option value="yamaha_fz_150cc">Yamaha FZ 150cc</option>
+              <option value="honda_cb_shine_125cc">Honda CB Shine 125cc</option>
+              <option value="royal_enfield_350cc">Royal Enfield 350cc</option>
+              <option value="royal_enfield_500cc">Royal Enfield 500cc</option>
+              <option value="ktm_duke_200cc">KTM Duke 200cc</option>
+              <option value="ktm_duke_390cc">KTM Duke 390cc</option>
+              <option value="bajaj_dominar_400cc">Bajaj Dominar 400cc</option>
+              <option value="honda_unicorn_150cc">Honda Unicorn 150cc</option>
+              <option value="suzuki_gixxer_155cc">Suzuki Gixxer 155cc</option>
+              <option value="tvs_ntorq_125cc">TVS Ntorq 125cc</option>
+              <option value="bike_150cc">Generic 150cc Bike</option>
+              <option value="bike_250cc">Generic 250cc Bike</option>
+            </optgroup>
+            
+            <!-- Scooters -->
+            <optgroup label="🛵 Scooters">
+              <option value="honda_activa_110cc">Honda Activa 110cc</option>
+              <option value="honda_activa_125cc">Honda Activa 125cc</option>
+              <option value="tvs_jupiter_110cc">TVS Jupiter 110cc</option>
+              <option value="suzuki_access_125cc">Suzuki Access 125cc</option>
+              <option value="yamaha_fascino_113cc">Yamaha Fascino 113cc</option>
+              <option value="hero_maestro_110cc">Hero Maestro 110cc</option>
+              <option value="bajaj_chetak_electric">Bajaj Chetak Electric</option>
+              <option value="ather_450x_electric">Ather 450X Electric</option>
+              <option value="scooter">Generic Scooter</option>
+            </optgroup>
+            
+            <!-- Commercial Vehicles -->
+            <optgroup label="🚛 Commercial Vehicles">
+              <option value="auto_cng">Auto Rickshaw (CNG)</option>
+              <option value="auto_petrol">Auto Rickshaw (Petrol)</option>
+              <option value="tata_ace_diesel">Tata Ace (Diesel)</option>
+              <option value="mahindra_bolero_pickup_diesel">Mahindra Bolero Pickup</option>
+              <option value="force_tempo_traveller_diesel">Force Tempo Traveller</option>
+              <option value="bus_diesel">Bus (Diesel)</option>
+              <option value="truck_diesel">Truck (Diesel)</option>
+              <option value="mini_truck_diesel">Mini Truck (Diesel)</option>
+            </optgroup>
+            
+            <!-- Electric Vehicles -->
+            <optgroup label="⚡ Electric Vehicles">
+              <option value="tata_nexon_ev">Tata Nexon EV</option>
+              <option value="mahindra_e2o_electric">Mahindra e2o Plus</option>
+              <option value="hyundai_kona_electric">Hyundai Kona Electric</option>
+              <option value="mg_zs_ev">MG ZS EV</option>
+              <option value="ola_s1_electric">Ola S1 Electric Scooter</option>
+              <option value="tvs_iqube_electric">TVS iQube Electric</option>
+              <option value="generic_electric_car">Generic Electric Car</option>
+              <option value="generic_electric_bike">Generic Electric Bike</option>
+            </optgroup>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="location">Fuel Price Region</label>
+          <select id="location">
+            <option value="karnataka">Karnataka</option>
+            <option value="maharashtra">Maharashtra</option>
+            <option value="delhi">Delhi</option>
+            <option value="tamil_nadu">Tamil Nadu</option>
+            <option value="kerala">Kerala</option>
+            <option value="gujarat">Gujarat</option>
+            <option value="rajasthan">Rajasthan</option>
+            <option value="andhra_pradesh">Andhra Pradesh</option>
+            <option value="telangana">Telangana</option>
+            <option value="west_bengal">West Bengal</option>
+            <option value="punjab">Punjab</option>
+            <option value="haryana">Haryana</option>
+            <option value="uttar_pradesh">Uttar Pradesh</option>
+            <option value="madhya_pradesh">Madhya Pradesh</option>
+            <option value="bihar">Bihar</option>
+            <option value="odisha">Odisha</option>
+            <option value="assam">Assam</option>
+            <option value="jharkhand">Jharkhand</option>
+            <option value="himachal_pradesh">Himachal Pradesh</option>
+            <option value="uttarakhand">Uttarakhand</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="roadCondition">Road Condition</label>
+          <select id="roadCondition">
+            <option value="good_highway">Good Highway</option>
+            <option value="excellent_highway">Express Highway</option>
+            <option value="city_traffic">City Traffic</option>
+            <option value="average_road">Average Road</option>
+            <option value="hill_station">Hill Station</option>
+            <option value="rural_road">Rural Road</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="cityPercent">City Driving (%)</label>
+          <input type="range" id="cityPercent" min="0" max="100" value="30">
+          <span id="cityPercentValue">30%</span>
+        </div>
+        
+        <button class="calc-btn" onclick="calculateFuel()">
+          <i class="fas fa-calculator"></i> Calculate Fuel Cost
+        </button>
+        
+        <button class="calc-btn" onclick="compareVehicles()" style="margin-top: 1rem; background: linear-gradient(45deg, #4CAF50, #45a049);">
+          <i class="fas fa-balance-scale"></i> Compare Vehicles
+        </button>
+      </div>
+
+      <!-- Results Panel -->
+      <div class="results-panel">
+        <h2>Results</h2>
+        <div id="results">
+          <div style="text-align: center; padding: 2rem; opacity: 0.7;">
+            <i class="fas fa-gas-pump" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+            <p>Enter your trip details and click "Calculate" to see fuel cost estimates.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Distance database for major Indian routes (approximate distances in km)
+    const routeDistances = {
+      // From Delhi
+      'new-delhi,mumbai': 1400, 'new-delhi,bangalore': 2150, 'new-delhi,chennai': 2200, 'new-delhi,kolkata': 1500,
+      'new-delhi,hyderabad': 1570, 'new-delhi,pune': 1450, 'new-delhi,ahmedabad': 950, 'new-delhi,jaipur': 280,
+      'new-delhi,agra': 230, 'new-delhi,lucknow': 550, 'new-delhi,chandigarh': 250, 'new-delhi,shimla': 360,
+      'new-delhi,manali': 550, 'new-delhi,dharamshala': 480, 'new-delhi,amritsar': 450, 'new-delhi,dehradun': 250,
+      'new-delhi,haridwar': 220, 'new-delhi,rishikesh': 240, 'new-delhi,varanasi': 820, 'new-delhi,goa': 1900,
+      
+      // From Mumbai
+      'mumbai,pune': 150, 'mumbai,bangalore': 980, 'mumbai,chennai': 1340, 'mumbai,hyderabad': 720,
+      'mumbai,ahmedabad': 530, 'mumbai,surat': 280, 'mumbai,nashik': 180, 'mumbai,aurangabad': 340,
+      'mumbai,kolhapur': 380, 'mumbai,goa': 460, 'mumbai,udaipur': 680, 'mumbai,jodhpur': 780,
+      'mumbai,jaipur': 1150, 'mumbai,indore': 590, 'mumbai,bhopal': 780, 'mumbai,nagpur': 830,
+      
+      // From Bangalore
+      'bangalore,chennai': 350, 'bangalore,hyderabad': 570, 'bangalore,mysore': 150, 'bangalore,mangalore': 350,
+      'bangalore,kochi': 460, 'bangalore,coimbatore': 360, 'bangalore,ooty': 270, 'bangalore,kodaikanal': 470,
+      'bangalore,thiruvananthapuram': 690, 'bangalore,pondicherry': 310, 'bangalore,vijayawada': 430,
+      'bangalore,tirupati': 250, 'bangalore,salem': 200, 'bangalore,vellore': 220, 'bangalore,madurai': 460,
+      'bangalore,munnar': 480, 'bangalore,alleppey': 620, 'bangalore,calicut': 570, 'bangalore,thrissur': 540,
+      
+      // From Chennai
+      'chennai,pondicherry': 160, 'chennai,tiruchirappalli': 320, 'chennai,madurai': 460, 'chennai,coimbatore': 500,
+      'chennai,salem': 340, 'chennai,vellore': 140, 'chennai,tirupati': 150, 'chennai,vijayawada': 430,
+      'chennai,kochi': 680, 'chennai,thiruvananthapuram': 770, 'chennai,ooty': 560, 'chennai,kodaikanal': 520,
+      
+      // From Kolkata
+      'kolkata,bhubaneswar': 440, 'kolkata,puri': 500, 'kolkata,guwahati': 1000, 'kolkata,darjeeling': 630,
+      'kolkata,siliguri': 560, 'kolkata,patna': 590, 'kolkata,ranchi': 420, 'kolkata,jamshedpur': 290,
+      
+      // Popular tourist routes
+      'agra,jaipur': 240, 'jaipur,udaipur': 400, 'udaipur,jodhpur': 250, 'jodhpur,jaisalmer': 290,
+      'shimla,manali': 250, 'delhi,manali': 550, 'chandigarh,manali': 310, 'mumbai,goa': 460,
+      'bangalore,ooty': 270, 'kochi,munnar': 130, 'chennai,ooty': 560, 'mysore,ooty': 120,
+      
+      // Golden Triangle
+      'delhi,agra': 230, 'agra,jaipur': 240, 'jaipur,delhi': 280,
+      
+      // South India Circuit
+      'bangalore,mysore': 150, 'mysore,ooty': 120, 'ooty,kodaikanal': 270, 'kodaikanal,madurai': 120,
+      'madurai,rameshwaram': 170, 'rameshwaram,kanyakumari': 300, 'kanyakumari,thiruvananthapuram': 90,
+      
+      // Kerala Circuit
+      'kochi,munnar': 130, 'munnar,thekkady': 90, 'thekkady,alleppey': 160, 'alleppey,thiruvananthapuram': 160,
+      'thiruvananthapuram,kanyakumari': 90, 'kochi,calicut': 200, 'calicut,wayanad': 100,
+      
+      // Rajasthan Circuit
+      'jaipur,jodhpur': 330, 'jodhpur,udaipur': 250, 'udaipur,mount-abu': 180, 'mount-abu,ahmedabad': 220,
+      'jaipur,bikaner': 330, 'bikaner,jaisalmer': 330, 'jaisalmer,jodhpur': 290, 'pushkar,ajmer': 15,
+      'ajmer,jaipur': 130, 'jaipur,pushkar': 145,
+      
+      // Gujarat Circuit
+      'ahmedabad,rajkot': 220, 'rajkot,dwarka': 140, 'dwarka,somnath': 230, 'somnath,sasan-gir': 60,
+      'sasan-gir,bhavnagar': 180, 'bhavnagar,ahmedabad': 200, 'vadodara,ahmedabad': 110,
+      
+      // Hill Stations
+      'delhi,shimla': 360, 'chandigarh,shimla': 120, 'shimla,manali': 250, 'manali,dharamshala': 220,
+      'dharamshala,amritsar': 200, 'delhi,nainital': 320, 'delhi,mussoorie': 280, 'dehradun,mussoorie': 35,
+      'haridwar,rishikesh': 25, 'rishikesh,dehradun': 45, 'darjeeling,gangtok': 100
+    };
+    
+    // Update city percentage display
+    document.getElementById('cityPercent').addEventListener('input', function() {
+      document.getElementById('cityPercentValue').textContent = this.value + '%';
+    });
+    
+    // Auto-calculate distance when start and end locations are selected
+    document.getElementById('startLocation').addEventListener('change', calculateDistance);
+    document.getElementById('endLocation').addEventListener('change', calculateDistance);
+    
+    function calculateDistance() {
+      const startLocation = document.getElementById('startLocation').value;
+      const endLocation = document.getElementById('endLocation').value;
+      const distanceInput = document.getElementById('distance');
+      
+      if (startLocation && endLocation && startLocation !== endLocation) {
+        // Try both directions for the route
+        const route1 = `${startLocation},${endLocation}`;
+        const route2 = `${endLocation},${startLocation}`;
+        
+        let distance = routeDistances[route1] || routeDistances[route2];
+        
+        if (distance) {
+          distanceInput.value = distance;
+          distanceInput.style.background = 'rgba(76, 175, 80, 0.2)';
+          distanceInput.style.borderColor = '#4CAF50';
+          
+          // Show success message
+          const hint = distanceInput.nextElementSibling;
+          hint.textContent = `✅ Distance auto-calculated: ${distance} km`;
+          hint.style.color = '#4CAF50';
+        } else {
+          // Estimate based on region (rough estimation)
+          const estimatedDistance = estimateDistance(startLocation, endLocation);
+          if (estimatedDistance) {
+            distanceInput.value = estimatedDistance;
+            distanceInput.style.background = 'rgba(255, 193, 7, 0.2)';
+            distanceInput.style.borderColor = '#ffc107';
+            
+            const hint = distanceInput.nextElementSibling;
+            hint.textContent = `⚠️ Estimated distance: ${estimatedDistance} km (please verify)`;
+            hint.style.color = '#ffc107';
+          } else {
+            distanceInput.style.background = 'rgba(255, 255, 255, 0.1)';
+            distanceInput.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+            
+            const hint = distanceInput.nextElementSibling;
+            hint.textContent = '💡 Please enter distance manually';
+            hint.style.color = '#ffd600';
+          }
+        }
+      }
+    }
+    
+    function estimateDistance(start, end) {
+      // Simple region-based estimation (very rough)
+      const regions = {
+        north: ['new-delhi', 'gurgaon', 'noida', 'faridabad', 'ghaziabad', 'meerut', 'agra', 'lucknow', 'kanpur', 
+               'varanasi', 'allahabad', 'jaipur', 'jodhpur', 'udaipur', 'bikaner', 'ajmer', 'pushkar', 'jaisalmer',
+               'chandigarh', 'amritsar', 'ludhiana', 'jalandhar', 'shimla', 'manali', 'dharamshala', 'dehradun', 
+               'haridwar', 'rishikesh'],
+        west: ['mumbai', 'pune', 'nagpur', 'nashik', 'aurangabad', 'kolhapur', 'solapur', 'ahmedabad', 'surat', 
+               'vadodara', 'rajkot', 'gandhinagar', 'bhavnagar', 'jamnagar', 'dwarka', 'mount-abu'],
+        south: ['bangalore', 'chennai', 'hyderabad', 'kochi', 'thiruvananthapuram', 'mysore', 'mangalore', 
+               'coimbatore', 'madurai', 'tiruchirappalli', 'salem', 'vellore', 'pondicherry', 'vijayawada', 
+               'visakhapatnam', 'warangal', 'tirupati', 'calicut', 'thrissur', 'ooty', 'kodaikanal', 'munnar', 'alleppey'],
+        east: ['kolkata', 'bhubaneswar', 'cuttack', 'puri', 'konark', 'guwahati', 'shillong', 'darjeeling', 
+               'siliguri', 'durgapur', 'asansol', 'ranchi', 'jamshedpur', 'dhanbad', 'patna', 'gaya', 'bhagalpur', 'muzaffarpur'],
+        central: ['bhopal', 'indore', 'gwalior', 'jabalpur', 'ujjain', 'raipur', 'bilaspur', 'khajuraho', 'orchha', 'pachmarhi']
+      };
+      
+      function getRegion(city) {
+        for (let region in regions) {
+          if (regions[region].includes(city)) return region;
+        }
+        return null;
+      }
+      
+      const startRegion = getRegion(start);
+      const endRegion = getRegion(end);
+      
+      if (startRegion && endRegion) {
+        if (startRegion === endRegion) {
+          return 300; // Same region
+        } else {
+          // Cross-region estimates
+          const crossRegionDistances = {
+            'north,west': 1200, 'north,south': 1800, 'north,east': 1400, 'north,central': 800,
+            'west,south': 1000, 'west,east': 1600, 'west,central': 600,
+            'south,east': 1200, 'south,central': 800,
+            'east,central': 700
+          };
+          
+          const route = [startRegion, endRegion].sort().join(',');
+          return crossRegionDistances[route] || 1000;
+        }
+      }
+      
+      return null;
+    }
+
+    // Vehicle database with mileage data
+    const vehicleData = {
+      // Cars - Hatchbacks
+      'maruti_swift_petrol': { type: 'car', fuel: 'petrol', cityMileage: 16.5, highwayMileage: 21.5, tankCapacity: 37 },
+      'maruti_swift_diesel': { type: 'car', fuel: 'diesel', cityMileage: 20.0, highwayMileage: 26.0, tankCapacity: 37 },
+      'hyundai_i20_petrol': { type: 'car', fuel: 'petrol', cityMileage: 15.5, highwayMileage: 20.5, tankCapacity: 37 },
+      'hyundai_i20_diesel': { type: 'car', fuel: 'diesel', cityMileage: 19.5, highwayMileage: 25.0, tankCapacity: 37 },
+      'tata_altroz_petrol': { type: 'car', fuel: 'petrol', cityMileage: 16.0, highwayMileage: 21.0, tankCapacity: 37 },
+      'tata_altroz_diesel': { type: 'car', fuel: 'diesel', cityMileage: 20.5, highwayMileage: 25.5, tankCapacity: 37 },
+      'maruti_baleno_petrol': { type: 'car', fuel: 'petrol', cityMileage: 17.0, highwayMileage: 22.0, tankCapacity: 37 },
+      'maruti_baleno_diesel': { type: 'car', fuel: 'diesel', cityMileage: 21.0, highwayMileage: 27.0, tankCapacity: 37 },
+      'honda_jazz_petrol': { type: 'car', fuel: 'petrol', cityMileage: 15.0, highwayMileage: 19.0, tankCapacity: 40 },
+      'volkswagen_polo_petrol': { type: 'car', fuel: 'petrol', cityMileage: 14.5, highwayMileage: 18.5, tankCapacity: 45 },
+      'ford_figo_petrol': { type: 'car', fuel: 'petrol', cityMileage: 15.5, highwayMileage: 20.0, tankCapacity: 40 },
+      'ford_figo_diesel': { type: 'car', fuel: 'diesel', cityMileage: 18.5, highwayMileage: 24.0, tankCapacity: 40 },
+      'nissan_micra_petrol': { type: 'car', fuel: 'petrol', cityMileage: 16.0, highwayMileage: 20.5, tankCapacity: 41 },
+      'hatchback_petrol': { type: 'car', fuel: 'petrol', cityMileage: 15.0, highwayMileage: 20.0, tankCapacity: 40 },
+      'hatchback_diesel': { type: 'car', fuel: 'diesel', cityMileage: 18.0, highwayMileage: 24.0, tankCapacity: 40 },
+      
+      // Cars - Sedans
+      'maruti_dzire_petrol': { type: 'car', fuel: 'petrol', cityMileage: 16.0, highwayMileage: 21.0, tankCapacity: 37 },
+      'maruti_dzire_diesel': { type: 'car', fuel: 'diesel', cityMileage: 20.0, highwayMileage: 26.0, tankCapacity: 37 },
+      'hyundai_verna_petrol': { type: 'car', fuel: 'petrol', cityMileage: 13.5, highwayMileage: 18.0, tankCapacity: 45 },
+      'hyundai_verna_diesel': { type: 'car', fuel: 'diesel', cityMileage: 17.0, highwayMileage: 22.5, tankCapacity: 45 },
+      'honda_city_petrol': { type: 'car', fuel: 'petrol', cityMileage: 14.0, highwayMileage: 18.5, tankCapacity: 40 },
+      'honda_city_diesel': { type: 'car', fuel: 'diesel', cityMileage: 17.5, highwayMileage: 23.0, tankCapacity: 40 },
+      'tata_tigor_petrol': { type: 'car', fuel: 'petrol', cityMileage: 16.5, highwayMileage: 21.5, tankCapacity: 35 },
+      'tata_tigor_diesel': { type: 'car', fuel: 'diesel', cityMileage: 20.0, highwayMileage: 25.5, tankCapacity: 35 },
+      'volkswagen_vento_petrol': { type: 'car', fuel: 'petrol', cityMileage: 13.0, highwayMileage: 17.5, tankCapacity: 50 },
+      'volkswagen_vento_diesel': { type: 'car', fuel: 'diesel', cityMileage: 16.5, highwayMileage: 21.5, tankCapacity: 50 },
+      'skoda_rapid_petrol': { type: 'car', fuel: 'petrol', cityMileage: 13.5, highwayMileage: 18.0, tankCapacity: 50 },
+      'skoda_rapid_diesel': { type: 'car', fuel: 'diesel', cityMileage: 17.0, highwayMileage: 22.0, tankCapacity: 50 },
+      'toyota_yaris_petrol': { type: 'car', fuel: 'petrol', cityMileage: 13.0, highwayMileage: 17.5, tankCapacity: 42 },
+      'honda_amaze_petrol': { type: 'car', fuel: 'petrol', cityMileage: 15.5, highwayMileage: 20.0, tankCapacity: 35 },
+      'honda_amaze_diesel': { type: 'car', fuel: 'diesel', cityMileage: 18.5, highwayMileage: 24.0, tankCapacity: 35 },
+      'sedan_petrol': { type: 'car', fuel: 'petrol', cityMileage: 13.0, highwayMileage: 18.0, tankCapacity: 45 },
+      'sedan_diesel': { type: 'car', fuel: 'diesel', cityMileage: 16.0, highwayMileage: 22.0, tankCapacity: 45 },
+      
+      // SUVs & MUVs
+      'maruti_ertiga_petrol': { type: 'car', fuel: 'petrol', cityMileage: 12.0, highwayMileage: 16.5, tankCapacity: 45 },
+      'maruti_ertiga_diesel': { type: 'car', fuel: 'diesel', cityMileage: 16.0, highwayMileage: 21.0, tankCapacity: 45 },
+      'hyundai_creta_petrol': { type: 'car', fuel: 'petrol', cityMileage: 11.0, highwayMileage: 15.5, tankCapacity: 50 },
+      'hyundai_creta_diesel': { type: 'car', fuel: 'diesel', cityMileage: 15.0, highwayMileage: 19.5, tankCapacity: 50 },
+      'tata_safari_diesel': { type: 'car', fuel: 'diesel', cityMileage: 12.0, highwayMileage: 16.0, tankCapacity: 50 },
+      'tata_harrier_diesel': { type: 'car', fuel: 'diesel', cityMileage: 12.5, highwayMileage: 16.5, tankCapacity: 50 },
+      'mahindra_xuv500_diesel': { type: 'car', fuel: 'diesel', cityMileage: 11.0, highwayMileage: 15.0, tankCapacity: 60 },
+      'mahindra_scorpio_diesel': { type: 'car', fuel: 'diesel', cityMileage: 10.5, highwayMileage: 14.5, tankCapacity: 60 },
+      'ford_ecosport_petrol': { type: 'car', fuel: 'petrol', cityMileage: 12.5, highwayMileage: 16.5, tankCapacity: 52 },
+      'ford_ecosport_diesel': { type: 'car', fuel: 'diesel', cityMileage: 16.0, highwayMileage: 21.0, tankCapacity: 52 },
+      'renault_duster_petrol': { type: 'car', fuel: 'petrol', cityMileage: 11.5, highwayMileage: 15.5, tankCapacity: 50 },
+      'renault_duster_diesel': { type: 'car', fuel: 'diesel', cityMileage: 15.0, highwayMileage: 19.5, tankCapacity: 50 },
+      'toyota_innova_diesel': { type: 'car', fuel: 'diesel', cityMileage: 10.0, highwayMileage: 14.0, tankCapacity: 55 },
+      'toyota_fortuner_diesel': { type: 'car', fuel: 'diesel', cityMileage: 9.0, highwayMileage: 12.5, tankCapacity: 80 },
+      'kia_seltos_petrol': { type: 'car', fuel: 'petrol', cityMileage: 11.5, highwayMileage: 16.0, tankCapacity: 50 },
+      'kia_seltos_diesel': { type: 'car', fuel: 'diesel', cityMileage: 15.5, highwayMileage: 20.0, tankCapacity: 50 },
+      'nissan_terrano_petrol': { type: 'car', fuel: 'petrol', cityMileage: 11.0, highwayMileage: 15.0, tankCapacity: 60 },
+      'nissan_terrano_diesel': { type: 'car', fuel: 'diesel', cityMileage: 15.0, highwayMileage: 19.0, tankCapacity: 60 },
+      'suv_petrol': { type: 'car', fuel: 'petrol', cityMileage: 10.0, highwayMileage: 14.0, tankCapacity: 60 },
+      'suv_diesel': { type: 'car', fuel: 'diesel', cityMileage: 13.0, highwayMileage: 17.0, tankCapacity: 60 },
+      
+      // Motorcycles
+      'hero_splendor_100cc': { type: 'bike', fuel: 'petrol', cityMileage: 65.0, highwayMileage: 75.0, tankCapacity: 11 },
+      'bajaj_pulsar_150cc': { type: 'bike', fuel: 'petrol', cityMileage: 45.0, highwayMileage: 55.0, tankCapacity: 15 },
+      'bajaj_pulsar_220cc': { type: 'bike', fuel: 'petrol', cityMileage: 35.0, highwayMileage: 45.0, tankCapacity: 15 },
+      'hero_passion_110cc': { type: 'bike', fuel: 'petrol', cityMileage: 60.0, highwayMileage: 70.0, tankCapacity: 10 },
+      'tvs_apache_160cc': { type: 'bike', fuel: 'petrol', cityMileage: 40.0, highwayMileage: 50.0, tankCapacity: 16 },
+      'yamaha_fz_150cc': { type: 'bike', fuel: 'petrol', cityMileage: 42.0, highwayMileage: 52.0, tankCapacity: 13 },
+      'honda_cb_shine_125cc': { type: 'bike', fuel: 'petrol', cityMileage: 55.0, highwayMileage: 65.0, tankCapacity: 10.5 },
+      'royal_enfield_350cc': { type: 'bike', fuel: 'petrol', cityMileage: 30.0, highwayMileage: 40.0, tankCapacity: 20 },
+      'royal_enfield_500cc': { type: 'bike', fuel: 'petrol', cityMileage: 25.0, highwayMileage: 35.0, tankCapacity: 20 },
+      'ktm_duke_200cc': { type: 'bike', fuel: 'petrol', cityMileage: 30.0, highwayMileage: 40.0, tankCapacity: 13.5 },
+      'ktm_duke_390cc': { type: 'bike', fuel: 'petrol', cityMileage: 25.0, highwayMileage: 35.0, tankCapacity: 13.5 },
+      'bajaj_dominar_400cc': { type: 'bike', fuel: 'petrol', cityMileage: 26.0, highwayMileage: 36.0, tankCapacity: 13 },
+      'honda_unicorn_150cc': { type: 'bike', fuel: 'petrol', cityMileage: 50.0, highwayMileage: 60.0, tankCapacity: 13 },
+      'suzuki_gixxer_155cc': { type: 'bike', fuel: 'petrol', cityMileage: 40.0, highwayMileage: 50.0, tankCapacity: 12 },
+      'tvs_ntorq_125cc': { type: 'bike', fuel: 'petrol', cityMileage: 45.0, highwayMileage: 55.0, tankCapacity: 5.8 },
+      'bike_150cc': { type: 'bike', fuel: 'petrol', cityMileage: 45.0, highwayMileage: 55.0, tankCapacity: 15 },
+      'bike_250cc': { type: 'bike', fuel: 'petrol', cityMileage: 35.0, highwayMileage: 45.0, tankCapacity: 20 },
+      
+      // Scooters
+      'honda_activa_110cc': { type: 'scooter', fuel: 'petrol', cityMileage: 50.0, highwayMileage: 60.0, tankCapacity: 5.3 },
+      'honda_activa_125cc': { type: 'scooter', fuel: 'petrol', cityMileage: 48.0, highwayMileage: 58.0, tankCapacity: 5.3 },
+      'tvs_jupiter_110cc': { type: 'scooter', fuel: 'petrol', cityMileage: 52.0, highwayMileage: 62.0, tankCapacity: 5.0 },
+      'suzuki_access_125cc': { type: 'scooter', fuel: 'petrol', cityMileage: 50.0, highwayMileage: 60.0, tankCapacity: 5.6 },
+      'yamaha_fascino_113cc': { type: 'scooter', fuel: 'petrol', cityMileage: 52.0, highwayMileage: 62.0, tankCapacity: 5.2 },
+      'hero_maestro_110cc': { type: 'scooter', fuel: 'petrol', cityMileage: 51.0, highwayMileage: 61.0, tankCapacity: 5.4 },
+      'bajaj_chetak_electric': { type: 'scooter', fuel: 'electric', cityMileage: 90.0, highwayMileage: 95.0, tankCapacity: 2.9 },
+      'ather_450x_electric': { type: 'scooter', fuel: 'electric', cityMileage: 85.0, highwayMileage: 90.0, tankCapacity: 2.9 },
+      'scooter': { type: 'scooter', fuel: 'petrol', cityMileage: 50.0, highwayMileage: 60.0, tankCapacity: 7 },
+      
+      // Commercial Vehicles
+      'auto_cng': { type: 'auto', fuel: 'cng', cityMileage: 25.0, highwayMileage: 30.0, tankCapacity: 8 },
+      'auto_petrol': { type: 'auto', fuel: 'petrol', cityMileage: 20.0, highwayMileage: 25.0, tankCapacity: 8 },
+      'tata_ace_diesel': { type: 'truck', fuel: 'diesel', cityMileage: 12.0, highwayMileage: 16.0, tankCapacity: 30 },
+      'mahindra_bolero_pickup_diesel': { type: 'truck', fuel: 'diesel', cityMileage: 11.0, highwayMileage: 15.0, tankCapacity: 60 },
+      'force_tempo_traveller_diesel': { type: 'bus', fuel: 'diesel', cityMileage: 8.0, highwayMileage: 12.0, tankCapacity: 60 },
+      'bus_diesel': { type: 'bus', fuel: 'diesel', cityMileage: 4.0, highwayMileage: 6.0, tankCapacity: 150 },
+      'truck_diesel': { type: 'truck', fuel: 'diesel', cityMileage: 4.0, highwayMileage: 6.0, tankCapacity: 200 },
+      'mini_truck_diesel': { type: 'truck', fuel: 'diesel', cityMileage: 8.0, highwayMileage: 12.0, tankCapacity: 60 },
+      
+      // Electric Vehicles
+      'tata_nexon_ev': { type: 'car', fuel: 'electric', cityMileage: 120.0, highwayMileage: 130.0, tankCapacity: 30.2 },
+      'mahindra_e2o_electric': { type: 'car', fuel: 'electric', cityMileage: 110.0, highwayMileage: 120.0, tankCapacity: 9.4 },
+      'hyundai_kona_electric': { type: 'car', fuel: 'electric', cityMileage: 140.0, highwayMileage: 150.0, tankCapacity: 39.2 },
+      'mg_zs_ev': { type: 'car', fuel: 'electric', cityMileage: 130.0, highwayMileage: 140.0, tankCapacity: 44.5 },
+      'ola_s1_electric': { type: 'scooter', fuel: 'electric', cityMileage: 85.0, highwayMileage: 90.0, tankCapacity: 2.98 },
+      'tvs_iqube_electric': { type: 'scooter', fuel: 'electric', cityMileage: 80.0, highwayMileage: 85.0, tankCapacity: 2.25 },
+      'generic_electric_car': { type: 'car', fuel: 'electric', cityMileage: 120.0, highwayMileage: 130.0, tankCapacity: 30.0 },
+      'generic_electric_bike': { type: 'bike', fuel: 'electric', cityMileage: 80.0, highwayMileage: 85.0, tankCapacity: 2.5 }
+    };
+    
+    // Fuel prices (₹/liter)
+    const fuelPrices = {
+      petrol: 103.50,
+      diesel: 89.50,
+      cng: 75.20
+    };
+    
+    // Regional price multipliers
+    const regionMultipliers = {
+      'karnataka': 1.01,
+      'maharashtra': 1.02,
+      'delhi': 1.00,
+      'tamil_nadu': 0.98,
+      'kerala': 1.03,
+      'gujarat': 0.97,
+      'rajasthan': 1.04,
+      'west_bengal': 0.99,
+      'andhra_pradesh': 0.99,
+      'telangana': 0.99
+    };
+    
+    // Road condition factors
+    const roadFactors = {
+      'excellent_highway': 1.10,
+      'good_highway': 1.00,
+      'average_road': 0.85,
+      'city_traffic': 0.70,
+      'hill_station': 0.75,
+      'rural_road': 0.80
+    };
+
+    async function calculateFuel() {
+      const distance = parseFloat(document.getElementById('distance').value);
+      const vehicleKey = document.getElementById('vehicle').value;
+      const location = document.getElementById('location').value;
+      const roadCondition = document.getElementById('roadCondition').value;
+      const cityPercent = parseFloat(document.getElementById('cityPercent').value);
+
+      if (!distance || !vehicleKey || distance <= 0) {
+        showError('Please enter distance and select a vehicle type.');
+        return;
+      }
+
+      showLoading();
+
+      try {
+        // Get vehicle data
+        const vehicle = vehicleData[vehicleKey];
+        if (!vehicle) {
+          showError('Vehicle not found in database');
+          return;
+        }
+        
+        // Calculate mileage with road condition factor
+        const roadFactor = roadFactors[roadCondition] || 1.0;
+        const cityMileage = vehicle.cityMileage * roadFactor;
+        const highwayMileage = vehicle.highwayMileage * roadFactor;
+        
+        // Calculate distance breakdown
+        const cityDistance = distance * (cityPercent / 100);
+        const highwayDistance = distance - cityDistance;
+        
+        // Calculate fuel consumption
+        const cityFuel = cityDistance / cityMileage;
+        const highwayFuel = highwayDistance / highwayMileage;
+        const totalFuel = cityFuel + highwayFuel;
+        
+        // Get fuel price with regional adjustment
+        const basePrice = fuelPrices[vehicle.fuel] || fuelPrices.petrol;
+        const multiplier = regionMultipliers[location] || 1.0;
+        const fuelPricePerLiter = basePrice * multiplier;
+        
+        // Calculate costs
+        const totalCost = totalFuel * fuelPricePerLiter;
+        const costPerKm = totalCost / distance;
+        
+        // Create result object
+        const result = {
+          distance_km: distance,
+          vehicle_type: vehicle.type,
+          fuel_type: vehicle.fuel,
+          city_distance_km: Math.round(cityDistance * 100) / 100,
+          highway_distance_km: Math.round(highwayDistance * 100) / 100,
+          city_mileage_kmpl: Math.round(cityMileage * 100) / 100,
+          highway_mileage_kmpl: Math.round(highwayMileage * 100) / 100,
+          fuel_consumed_liters: Math.round(totalFuel * 100) / 100,
+          fuel_price_per_liter: Math.round(fuelPricePerLiter * 100) / 100,
+          total_fuel_cost: Math.round(totalCost * 100) / 100,
+          cost_per_km: Math.round(costPerKm * 100) / 100,
+          location: location,
+          road_condition: roadCondition
+        };
+        
+        showResults(result);
+        
+      } catch (error) {
+        showError('Calculation failed. Please try again.');
+        console.error('Error:', error);
+      }
+    }
+
+    async function compareVehicles() {
+      const distance = parseFloat(document.getElementById('distance').value);
+      const location = document.getElementById('location').value;
+
+      if (!distance || distance <= 0) {
+        showError('Please enter distance to compare vehicles.');
+        return;
+      }
+
+      showLoading();
+
+      try {
+        const vehicleKeys = [
+          'hatchback_petrol', 'hatchback_diesel', 'sedan_petrol', 
+          'sedan_diesel', 'suv_diesel', 'bike_150cc', 'royal_enfield_350cc',
+          'honda_activa_110cc', 'auto_cng'
+        ];
+
+        const comparisons = [];
+        const roadCondition = document.getElementById('roadCondition').value;
+        const cityPercent = 30; // Default for comparison
+        
+        for (const vehicleKey of vehicleKeys) {
+          const vehicle = vehicleData[vehicleKey];
+          if (!vehicle) continue;
+          
+          // Calculate for this vehicle
+          const roadFactor = roadFactors[roadCondition] || 1.0;
+          const cityMileage = vehicle.cityMileage * roadFactor;
+          const highwayMileage = vehicle.highwayMileage * roadFactor;
+          
+          const cityDistance = distance * (cityPercent / 100);
+          const highwayDistance = distance - cityDistance;
+          
+          const cityFuel = cityDistance / cityMileage;
+          const highwayFuel = highwayDistance / highwayMileage;
+          const totalFuel = cityFuel + highwayFuel;
+          
+          const basePrice = fuelPrices[vehicle.fuel] || fuelPrices.petrol;
+          const multiplier = regionMultipliers[location] || 1.0;
+          const fuelPricePerLiter = basePrice * multiplier;
+          
+          const totalCost = totalFuel * fuelPricePerLiter;
+          const costPerKm = totalCost / distance;
+          
+          comparisons.push({
+            vehicle_key: vehicleKey,
+            vehicle_name: vehicleKey.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+            total_cost: Math.round(totalCost * 100) / 100,
+            cost_per_km: Math.round(costPerKm * 100) / 100,
+            fuel_type: vehicle.fuel,
+            mileage_city: Math.round(cityMileage * 100) / 100,
+            mileage_highway: Math.round(highwayMileage * 100) / 100
+          });
+        }
+        
+        // Sort by total cost
+        comparisons.sort((a, b) => a.total_cost - b.total_cost);
+        
+        const result = {
+          distance_km: distance,
+          comparisons: comparisons,
+          most_economical: comparisons[0] || null
+        };
+        
+        showComparison(result);
+        
+      } catch (error) {
+        showError('Failed to compare vehicles. Please try again.');
+        console.error('Error:', error);
+      }
+    }
+
+    function showResults(result) {
+      const resultsDiv = document.getElementById('results');
+      resultsDiv.innerHTML = `
+        <div class="result-card">
+          <h3><i class="fas fa-receipt"></i> Trip Summary</h3>
+          <div class="result-item">
+            <span>Distance:</span>
+            <span>${result.distance_km} km</span>
+          </div>
+          <div class="result-item">
+            <span>Vehicle:</span>
+            <span>${result.vehicle_type} (${result.fuel_type})</span>
+          </div>
+          <div class="result-item">
+            <span>City Distance:</span>
+            <span>${result.city_distance_km} km</span>
+          </div>
+          <div class="result-item">
+            <span>Highway Distance:</span>
+            <span>${result.highway_distance_km} km</span>
+          </div>
+        </div>
+
+        <div class="result-card">
+          <h3><i class="fas fa-tachometer-alt"></i> Mileage Details</h3>
+          <div class="result-item">
+            <span>City Mileage:</span>
+            <span>${result.city_mileage_kmpl} kmpl</span>
+          </div>
+          <div class="result-item">
+            <span>Highway Mileage:</span>
+            <span>${result.highway_mileage_kmpl} kmpl</span>
+          </div>
+          <div class="result-item">
+            <span>Fuel Required:</span>
+            <span>${result.fuel_consumed_liters} L</span>
+          </div>
+          <div class="result-item">
+            <span>Fuel Price:</span>
+            <span>₹${result.fuel_price_per_liter}/L</span>
+          </div>
+        </div>
+
+        <div class="result-card">
+          <h3><i class="fas fa-rupee-sign"></i> Cost Breakdown</h3>
+          <div class="result-item">
+            <span>Cost per km:</span>
+            <span>₹${result.cost_per_km}</span>
+          </div>
+          <div class="result-item">
+            <span><strong>Total Fuel Cost:</strong></span>
+            <span><strong>₹${result.total_fuel_cost}</strong></span>
+          </div>
+        </div>
+      `;
+    }
+
+    function showComparison(result) {
+      const resultsDiv = document.getElementById('results');
+      
+      let comparisonHtml = `
+        <div class="result-card">
+          <h3><i class="fas fa-balance-scale"></i> Vehicle Comparison (${result.distance_km} km)</h3>
+          <div class="comparison-grid">
+      `;
+
+      result.comparisons.forEach((vehicle, index) => {
+        const isBest = index === 0;
+        comparisonHtml += `
+          <div class="vehicle-card ${isBest ? 'best' : ''}">
+            ${isBest ? '<div class="best-badge">Most Economical</div>' : ''}
+            <h4>${vehicle.vehicle_name}</h4>
+            <div class="vehicle-cost">₹${Math.round(vehicle.total_cost)}</div>
+            <div style="font-size: 0.9rem; opacity: 0.8; margin-top: 0.5rem;">
+              <div>₹${vehicle.cost_per_km}/km</div>
+              <div>${vehicle.fuel_type}</div>
+              <div>${vehicle.mileage_city} kmpl (city)</div>
+            </div>
+          </div>
+        `;
+      });
+
+      comparisonHtml += `
+          </div>
+          <div style="margin-top: 1.5rem; padding: 1rem; background: rgba(76, 175, 80, 0.1); border-radius: 10px; border: 1px solid #4CAF50;">
+            <strong style="color: #4CAF50;">💡 Recommendation:</strong> 
+            ${result.most_economical.vehicle_name} is the most economical choice at ₹${Math.round(result.most_economical.total_cost)}
+          </div>
+        </div>
+      `;
+
+      resultsDiv.innerHTML = comparisonHtml;
+    }
+
+    function showLoading() {
+      document.getElementById('results').innerHTML = `
+        <div class="loading">
+          <i class="fas fa-spinner fa-spin" style="font-size: 2rem; margin-bottom: 1rem;"></i>
+          <p>Calculating fuel costs...</p>
+        </div>
+      `;
+    }
+
+    function showError(message) {
+      document.getElementById('results').innerHTML = `
+        <div class="error">
+          <i class="fas fa-exclamation-triangle"></i> ${message}
+        </div>
+      `;
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+<style>
+  .so-header { display:flex; align-items:center; justify-content:space-between; padding:0.75rem 1rem; background:#111827; color:#ffd600; box-shadow:0 2px 8px rgba(0,0,0,0.35); position:relative; z-index:100; }
+  .so-brand { display:flex; align-items:center; font-weight:900; letter-spacing:2px; }
+  .so-brand i { margin-right:8px; }
+  .so-nav { display:flex; gap:0.5rem; flex-wrap:wrap; }
+  .so-btn { background:#ffd600; color:#111827; border:none; border-radius:8px; padding:0.5rem 0.8rem; font-weight:700; cursor:pointer; }
+  .so-btn.alt { background:transparent; color:#fff; border:1px solid #374151; }
+  .so-btn:hover { filter:brightness(0.95); }
+</style>
+<header class="so-header" role="banner" aria-label="Primary Navigation">
+  <div class="so-brand"><i class="fas fa-globe-americas"></i> STEP OUT</div>
+  <nav class="so-nav" role="navigation">
+    <button class="so-btn alt" onclick="location.href='{{ url_for('index') }}'">Home</button>
+    <button class="so-btn alt" onclick="location.href='{{ url_for('maps') }}'">Map</button>
+    <button class="so-btn alt" onclick="location.href='{{ url_for('transport') }}'">Transport</button>
+    <button class="so-btn alt" onclick="location.href='{{ url_for('rentals') }}'">Rentals</button>
+    <button class="so-btn alt" onclick="location.href='{{ url_for('packages') }}'">Packages</button>
+    <button class="so-btn alt" onclick="location.href='{{ url_for('fuel_calculator') }}'">Fuel Calculator</button>
+    <button class="so-btn alt" onclick="location.href='{{ url_for('services') }}'">Services</button>
+    <button class="so-btn alt" onclick="location.href='{{ url_for('render_template_page', page='Contact_Us') }}'">Contact</button>
+    <button class="so-btn" onclick="location.href='{{ url_for('auth') }}'">Sign In</button>
+  </nav>
+</header>

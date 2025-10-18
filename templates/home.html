@@ -174,38 +174,10 @@
 
   <div class="overlay" aria-hidden="true"></div>
 
-  <header role="banner" aria-label="Primary Navigation">
-    <div class="brand">
-      <i class="fas fa-globe-americas"></i>
-      <span>STEP OUT</span>
-    </div>
-    <nav role="navigation" aria-label="Primary">
-      <a href="#">Home</a>
-<!-- Open in same tab -->
-<a class="btn btn-primary" href="{{ url_for('maps') }}">Map</a>
-
-
-<!-- replace your old transport link with this -->
-<a href="{{ url_for('transport') }}">Transport</a>
-  <a href="#">Rentals</a>
-  <a href="packages.html">Packages</a>
-  <a href="{{ url_for('services') }}">Services</a>
-  <a href="{{ url_for('render_template_page', page='Contact_Us') }}">Contact Us</a>
-  <a href="auth.html" title="Logout" id="logout-btn">
-  <i class="fas fa-sign-out-alt"></i>
-</a>
-    </nav>
-  </header>
+  {% include 'partials/header_authenticated.html' %}
   <main role="main">
     <h1>ADVENTURE IS WORTHWHILE</h1>
     <p>Discover New Places With Us, Adventure Awaits</p>
-    
-    <!-- Developer Credit -->
-    <div class="developer-credit" style="position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); text-align: center;">
-      <p style="font-size: 0.9rem; color: rgba(255,255,255,0.7); text-shadow: 0 2px 4px rgba(0,0,0,0.3);">
-        Developed with <i class="fas fa-heart" style="color: #ff4444;"></i> by <span style="color: #ffd600;">GitHub Copilot</span>
-      </p>
-    </div>
   </main>
 </body>
 </html>
@@ -327,19 +299,7 @@
       </div>
     </div>
 
-    <!-- Developer Credit -->
-    <div class="text-center mt-16 mb-4">
-      <div class="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-gray-900 to-gray-800 border border-gray-700 shadow-lg">
-        <span class="text-sm text-gray-400">
-          Developed with 
-          <i class="fas fa-code text-yellow-400 mx-1"></i>
-          by 
-          <span class="text-yellow-400 font-semibold">GitHub Copilot</span>
-          <span class="mx-2">|</span>
-          <i class="fas fa-heart text-red-500"></i>
-        </span>
-      </div>
-    </div>
+    
   </section>
 
   <script>
