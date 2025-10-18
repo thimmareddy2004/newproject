@@ -10,10 +10,13 @@ from datetime import datetime
 
 # ---------- START: your original app code (unchanged) ----------
 app = Flask(__name__)
-app.secret_key = 'your_secret_key_here'  # Needed for flashing messages
 
-# Update with your MySQL credentials and database name
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///userlogins.db'
+# Use environment variables for production
+import os
+app.secret_key = os.environ.get('SECRET_KEY', 'your_secret_key_here')
+
+# Database configuration with environment variable support
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///userlogins.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -669,4 +672,7 @@ print("Fuel calculator API routes added successfully!")
 
 # keep app run as before
 if __name__ == '__main__':
-    app.run(debug=True)
+    # Use environment variables for production deployment
+    port = int(os.environ.get('PORT', 5000))
+    debug = os.environ.get('FLASK_ENV') != 'production'
+    app.run(host='0.0.0.0', port=port, debug=debug)
